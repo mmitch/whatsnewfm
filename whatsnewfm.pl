@@ -79,7 +79,7 @@ my $date_cmd="/bin/date";
 my $mail_cmd="/usr/lib/sendmail";
 #
 #
-# *==> Collect updates in a single mail or send multiple mails?
+# *==> Collect "hot" updates in a single mail or send multiple mails?
 #
 my $update_mail="single";
 #my $update_mail="multiple";
@@ -91,7 +91,7 @@ my $update_mail="single";
 #############################################################################
 
 
-# $Id: whatsnewfm.pl,v 1.9 2000/08/22 20:57:13 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.10 2000/08/22 21:13:59 mitch Exp $
 
 
 ###########################[ main routine ]##################################
@@ -153,20 +153,18 @@ sub add_entry
 
     if (@_) {
 
-	my $number = shift @_;
+	my $project = shift @_;
 	my $comment = join " ", @_;
 	$comment = "" unless $comment;
-	$hot{$number} = $comment;
+	$hot{$project} = $comment;
 
     } else {
 
 	while (my $line=<STDIN>) {
 	    chomp $line;
-	    my ($number, $comment) = split /\s/, $line, 2;
-	    if ($number =~ /^[0-9]+$/) {
-		$comment = "" unless $comment;
-		$hot{$number} = $comment;
-	    }
+	    my ($project, $comment) = split /\s/, $line, 2;
+	    $comment = "" unless $comment;
+	    $hot{$project} = $comment;
 	}
 	
     }
@@ -188,17 +186,17 @@ sub remove_entry
 
     if (@_) {
 
-	foreach my $number (@_) {
-	    delete $hot{$number} if exists $hot{$number};
+	foreach my $project (@_) {
+	    delete $hot{$project} if exists $hot{$project};
 	}
 
     } else {
 
 	while (my $line=<STDIN>) {
 	    chomp $line;
-	    my @numbers = split /\s/, $line;
-	    foreach my $number (@numbers) {
-		delete $hot{$number} if exists $hot{$number};
+	    my @projects = split /\s/, $line;
+	    foreach my $project (@projects) {
+		delete $hot{$project} if exists $hot{$project};
 	    }
 	}
 
@@ -603,9 +601,9 @@ sub read_hot
     open DB, "<$db_hot" or die "couldn't open 'hot' database \"$db_hot\": $!";
     while (my $line=<DB>) {
 	chomp $line;
-	my ($number, $comment) = split /\s/, $line, 2;
-	if ($number =~ /^[0-9]+$/) {
-	    $db{$number} = $comment;
+	my ($project, $comment) = split /\s/, $line, 2;
+	if (defined $project) {
+	    $db{$project} = $comment;
 	}
     }
     close DB or die "couldn't close 'hot' database \"$db_hot\": $!";
@@ -624,9 +622,9 @@ sub read_old
     open DB, "<$db_old" or die "couldn't open 'old' database \"$db_old\": $!";
     while (my $line=<DB>) {
 	chomp $line;
-	my ($number, $addition) = split /\s/, $line;
-	if (defined $number) {
-	    $db{$number} = $addition;
+	my ($project, $addition) = split /\s/, $line;
+	if (defined $project) {
+	    $db{$project} = $addition;
 	}
     }
     close DB or die "couldn't close 'old' database \"$db_old\": $!";
@@ -645,7 +643,7 @@ sub write_old
     rename $db_old, "$db_old~" or die "couldn't back up 'old' database \"$db_old\": $!";
     open DB, ">$db_old" or die "couldn't open 'old' database \"$db_old\": $!";
     foreach my $key (sort keys %db) {
-	print DB "$key\t$db{$key}\n";
+	print DB (lc $key) . "\t$db{$key}\n";
 	$written++;
     }
     close DB or die "couldn't close 'old' database \"$db_old\": $!";
@@ -663,7 +661,8 @@ sub write_hot
     rename $db_hot, "$db_hot~" or die "couldn't back up 'hot' database \"$db_hot\": $!";
     open DB, ">$db_hot" or die "couldn't open 'hot' database \"$db_hot\": $!";
     foreach my $key (sort { $db{$a} cmp $db{$b} } keys %db) {
-	print DB "$key\t$db{$key}\n";
+	$key = lc $key;
+	print DB (lc $key) . "\t$db{$key}\n";
 	$written++;
     }
     close DB or die "couldn't close 'hot' database \"$db_hot\": $!";

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.0.2  2000-08-03";
+my $id="whatsnewfm.pl  v0.0.3  2000-08-04";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -266,13 +266,6 @@ sub parse_newsletter
     }
 
 
-### open mailers
-
-
-    open MAIL_NEW, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
-    open MAIL_HOT, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
-
-
 ### process email body
 
 
@@ -354,6 +347,7 @@ sub parse_newsletter
 
 		    if ($first_hot == 1) {
 			$first_hot=0;
+			open MAIL_HOT, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
 			print MAIL_HOT "To: $mailto\n";
 			print MAIL_HOT "Subject: whatsnewfm.pl: Updates of interesting applications\n";
 			print MAIL_HOT "X-Loop: sent by whatsnewfm.pl daemon\n";
@@ -419,6 +413,7 @@ sub parse_newsletter
 		    
 		    if ($first_new == 1) {
 			$first_new=0;
+			open MAIL_NEW, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
 			print MAIL_NEW "To: $mailto\n";
 			print MAIL_NEW $subject;
 			print MAIL_NEW "X-Loop: sent by whatsnewfm.pl daemon\n";
@@ -494,16 +489,17 @@ sub parse_newsletter
 ### unlock databases
 
 
-    relase_hot();
+    release_hot();
     release_old();
 
 
 ### print statistics
 
 
-    my $difference=$letter-$letter_new;
-    print MAIL_NEW << "EOF";
-
+    if ($first_new == 0) {
+	my $difference=$letter-$letter_new;
+	print MAIL_NEW << "EOF";
+	
     This newsletter has been filtered by:
     $id
 	
@@ -516,23 +512,21 @@ sub parse_newsletter
     while $db_new items were added.
     Your databases now have $db_written entries.
 EOF
-
-    print MAIL_NEW "\n*" . "=" x 76 . "*\n";
+	    
+        print MAIL_NEW "\n*" . "=" x 76 . "*\n";
+	close MAIL_NEW or die "can't close mailer \"$mail_cmd\": $!";
+    }
     
-
-    print MAIL_HOT << "EOF";
+    if ($first_hot == 0) {
+	print MAIL_HOT << "EOF";
     
     This information has been brought to you by:
     $id
 	
 EOF
 
-	    
-### close mailers
-
-    
-    close MAIL_NEW or die "can't close mailer \"$mail_cmd\": $!";
-    close MAIL_HOT or die "can't close mailer \"$mail_cmd\": $!";
+        close MAIL_HOT or die "can't close mailer \"$mail_cmd\": $!";
+    }
 
 }
 

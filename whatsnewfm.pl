@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.66 2002/12/03 08:49:07 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.67 2002/12/03 09:10:21 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.1-pre  2002-11-24";
+my $id="whatsnewfm.pl  v0.5.1  2002-12-03";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,7 @@ my $id="whatsnewfm.pl  v0.5.1-pre  2002-11-24";
 #
 #############################################################################
 #
+# v0.5.1
 # 2002/12/03--> Inclusion of manpage from Debian package.
 # 2002/11/26--> Removed DATE_CMD backwards compatibility.
 #
@@ -155,7 +156,7 @@ my $id="whatsnewfm.pl  v0.5.1-pre  2002-11-24";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.66 2002/12/03 08:49:07 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.67 2002/12/03 09:10:21 mastermitch Exp $
 #
 #
 #############################################################################

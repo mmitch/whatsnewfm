@@ -1,12 +1,14 @@
-<<$Id: HISTORY,v 1.26 2002/12/03 08:46:49 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.27 2002/12/03 09:07:47 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
 
 
-2002/xx/xx  -  0.5.1
+2002/12/03  -  0.5.1
 ~~~~~~~~~~~~~~~~~~~~
 - Added a manpage.
+- Instructions on how to import old databases from v0.4.x.
+- DATE_CMD configuration variable mustn't be used any more.
 
 
 

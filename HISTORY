@@ -1,5 +1,15 @@
 whatsnewfm HISTORY
 
+2000/09/10  -  0.2.1
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Statistic calculations at the end of a parsed newsletter
+  were broken.
+- Configuration is read from a configuration file (you don't need to
+  edit the script any more).
+- You can print the contents of your 'hot' database.
+
+
+
 2000/08/22  -  0.2.0
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: freshmeat has changed the syntax of the newsletter.

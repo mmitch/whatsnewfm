@@ -64,3 +64,11 @@ SCORE_MIN=-999
 DATE_CMD=/bin/date
 MAIL_CMD=/usr/lib/sendmail
 COPY_CMD=/bin/cp
+
+
+#
+# *==> Show list of skipped items?
+#
+LIST_SKIPPED=no
+# LIST_SKIPPED=bottom
+# LIST_SKIPPED=top

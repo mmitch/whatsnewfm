@@ -1,3 +1,5 @@
+<<$Id: README,v 1.7 2000/08/24 16:42:57 mitch Exp $>>
+
 
   whatsnewfm 0.2.0
   ~~~~~~~~~~~~~~~~
@@ -6,16 +8,17 @@
 
  (c) 2000 by Christian Garbs <mitch@uni.de>
 
- Licensed under Gnu GPL (see COPYING for details)
+ Licensed under GNU GPL (see COPYING for details)
 
 
 
  <IMPORTANT!>
 
- If you've already used older versions of whatsnewfm: 
+ If you've already used older versions of whatsnewfm:
  Freshmeat has changed the newsletter format. There is no
- converter for yet. I'll write one if it is possible.
- Just back up your old databases and start with empty new ones.
+ converter for your old databases yet. I'll write one if it is
+ possible. Just back up your old databases and start with empty
+ new ones.
 
  </IMPORTANT!>
 

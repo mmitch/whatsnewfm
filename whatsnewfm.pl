@@ -149,7 +149,7 @@ my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.59.2.4 2002/11/24 20:15:33 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59.2.5 2002/11/24 20:49:18 mitch Exp $
 #
 #
 #############################################################################
@@ -159,8 +159,9 @@ my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
 ##########################[ import modules ]#################################
 
 
-use strict;                     # strict syntax checking
-use BerkeleyDB::Hash;           # Database access
+use strict;
+use warnings;
+use BerkeleyDB::Hash;
 
 
 #####################[ declare global variables ]############################
@@ -171,6 +172,9 @@ my $configfile = "~/.whatsnewfmrc-dev";
 
 # global configuration hash:
 my $config;
+
+# global database environment
+my $db_env;
 
 # information
 my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
@@ -206,7 +210,7 @@ my $separator = "*" . "="x76 . "*\n";
 ########################[ display help text ]################################
 
 
-sub display_help
+sub display_help()
 {
     print << "EOF";
 $id
@@ -233,9 +237,9 @@ EOF
 ##############[	view the entries in the 'hot' database ]#####################
 
 
-sub view_entries
+sub view_entries(@)
 {
-    my $db = read_hot();
+    my $db = open_hot_db();
 
     if ($_[0]) {
 
@@ -253,6 +257,8 @@ sub view_entries
 	}
 
     }
+
+    close_hot_db();
 
 }
 
@@ -287,10 +293,9 @@ sub do_scoring($)
 ################[ add an entry to the 'hot' database ]#######################
 
 
-sub add_entry
+sub add_entry(@)
 {
-
-    my $hot = read_hot();
+    my $hot = open_hot_db();
 
     if (@_) {
 
@@ -321,7 +326,7 @@ sub add_entry
 	
     }
     
-    my $hot_written = write_hot($hot);
+    my $hot_written = close_hot_db($hot);
 
     print "You now have $hot_written entries in your hot database.\n";
 }
@@ -330,10 +335,9 @@ sub add_entry
 #############[ remove an entry from the 'hot' database ]#####################
 
 
-sub remove_entry
+sub remove_entry(@)
 {
-
-    my $hot = read_hot();
+    my $hot = open_hot_db();
 
     if (@_) {
 
@@ -365,7 +369,7 @@ sub remove_entry
 
     }
 
-    my $hot_written = write_hot($hot);
+    my $hot_written = close_hot_db($hot);
 
     print "You now have $hot_written entries in your hot database.\n";
 }
@@ -374,9 +378,8 @@ sub remove_entry
 ########################[ parse a newsletter ]###############################
 
 
-sub parse_newsletter
+sub parse_newsletter()
 {
-
     my $database;
     my $new_app;
     my $interesting;
@@ -422,8 +425,9 @@ sub parse_newsletter
 
 ### read databases
 
-    $database    = read_old();
-    $interesting = read_hot();
+
+    $database    = open_old_db();
+    $interesting = open_hot_db();
 
 
 ### expire 'old' entries
@@ -749,10 +753,10 @@ sub parse_newsletter
 ### write databases
 
 
-    $db_written = write_old($database);
+    $db_written = close_old_db($database);
     $db_new -= keys (%{$database}) - $db_written;
 
-    $hot_written = write_hot($interesting);
+    $hot_written = close_hot_db($interesting);
     
 
 ### send mails
@@ -763,12 +767,27 @@ sub parse_newsletter
 }
 
 
-#####################[ read the 'hot' database ]#############################
+#################[ initialize database environment ]#########################
 
 
-sub read_hot
+sub initialize_db_env()
+{
+    if (! defined $db_env) {
+	$db_env = new BerkeleyDB::Env,
+	{ -Flags => BerkeleyDB::DB_INIT_CDB
+	  }
+    }
+}
+
+
+#######################[ open 'hot' database ]###############################
+
+
+sub open_hot_db()
 {
     my %hash;
+
+    initialize_db_env();
 
     tie %hash, 'BerkeleyDB::Hash',
     { -Filename => $config->{DB_NAME},
@@ -780,12 +799,14 @@ sub read_hot
 }
 
 
-#####################[ read the 'old' database ]#############################
+#######################[ open 'old' database ]###############################
 
 
-sub read_old
+sub open_old_db()
 {
     my %hash;
+
+    initialize_db_env();
 
     tie %hash, 'BerkeleyDB::Hash',
     { -Filename => $config->{DB_NAME},
@@ -800,7 +821,7 @@ sub read_old
 #####################[ write the 'old' database ]############################
 
 
-sub write_old
+sub close_old_db()
 {
     my $db = shift;
     my $written = keys %{$db};
@@ -812,7 +833,7 @@ sub write_old
 #####################[ write the 'hot' database ]############################
 
 
-sub write_hot
+sub close_hot_db()
 {
     my $db = shift;
     my $written = keys %{$db};
@@ -824,7 +845,7 @@ sub write_hot
 ######################[	close an "update" mail ]#############################
 
     
-sub close_hot
+sub close_hot()
 {
     print MAIL_HOT << "EOF";
 	
@@ -840,7 +861,7 @@ EOF
 ##################[ format summary of a "new" mail ]#########################
 
 
-sub get_summary
+sub get_summary($$$$$$$$)
 {
     my ($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
@@ -916,7 +937,7 @@ EOF
 ######################[	open an "update" mail ]##############################
 
 
-sub open_hot
+sub open_hot_mail($)
 {
     my $new_app = shift;
 
@@ -937,7 +958,7 @@ sub open_hot
 ########################[ open a "new" mail ]################################
 
 
-sub open_new
+sub open_new_mail($)
 {
     my $subject = $_[0];
     open MAIL_NEW, "|$config->{'MAIL_CMD'} $config->{'MAILTO'}" or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
@@ -1078,7 +1099,6 @@ sub read_config($)
 
 sub mail_hot_apps()
 {
-    
     my $hot_applications = shift;
     my $new_app;
     my $first_hot = 1;
@@ -1090,7 +1110,7 @@ sub mail_hot_apps()
 	
 	if ($first_hot == 1) {
 	    $first_hot=0;
-	    open_hot($new_app);
+	    open_hot_mail($new_app);
 	}
 	
 	if (defined $new_app->{'subject'}) {
@@ -1222,9 +1242,8 @@ sub get_warnings()
 ######################[ mail all 'new' entries ]#############################
 
 
-sub mail_new_apps()
+sub mail_new_apps($$$$$$$$$)
 {
-
     my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications) = @_;
     my $new_app;
 
@@ -1252,7 +1271,7 @@ sub mail_new_apps()
 
 
 ### open mailer
-    open_new($subject);
+    open_new_mail($subject);
 
 
 ### print warnings (if any)

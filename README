@@ -1,4 +1,4 @@
-<<$Id: README,v 1.46.2.5 2002/12/28 23:12:25 mastermitch Exp $>>
+<<$Id: README,v 1.46.2.6 2002/12/28 23:18:57 mastermitch Exp $>>
 
 
   whatsnewfm 0.4.13
@@ -271,6 +271,9 @@ it with the pod2* commands.  For example:
 
   [8] Thanks
   ~~~~~~~~~~
+
+* Roger H. Goun <rgoun at sourceforge> reported a bug in the RPMs of
+  v0.4.12.
 
 * Matthias Kluwe <mkluwe@web.de> discovered and fixed the warnings
   under Perl 5.8.0 (fixed in v0.4.11).  He also made some annotations

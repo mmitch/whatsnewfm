@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.87 2003/08/19 08:19:20 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.88 2003/08/24 12:54:39 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# 2003/08/24--> Fix typo in manpage.
 #
 # v0.6.3
 # 2003/08/07--> Parameters of sendmail(1) call can be configured via MAIL_OPT
@@ -186,7 +188,7 @@ my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.87 2003/08/19 08:19:20 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.88 2003/08/24 12:54:39 mastermitch Exp $
 #
 #
 #############################################################################
@@ -205,7 +207,7 @@ whatsnewfm - filter the daily newsletter from freshmeat.net
 
 B<whatsnewfm.pl> [ B<-c> F<config file> ]
 
-B<whatsnewfm.pl> [ B<-c> F<config file> ] B<view> [ I<regexp> ]>
+B<whatsnewfm.pl> [ B<-c> F<config file> ] B<view> [ I<regexp> ]
 
 B<whatsnewfm.pl> [ B<-c> F<config file> ] B<add> [ I<project id> [ I<comment> ] ]
 

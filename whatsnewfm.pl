@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
+my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2001  Christian Garbs <mitch@uni.de>
@@ -24,6 +24,9 @@ my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.4.5
+# 2001/07/19--> BUGFIX: Newsletter format has changed.
 #
 # v0.4.4
 # 2001/06/23--> BUGFIX: Warning message about changed newsletter format
@@ -111,7 +114,7 @@ my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.41 2001/06/23 15:53:32 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.42 2001/07/19 19:27:26 mitch Exp $
 #
 #
 #############################################################################
@@ -555,6 +558,7 @@ sub parse_newsletter
 		chomp $line;
 	    }
 	    next unless defined $line;
+	    $line =~ s/^\s+//;
 	    $new_app{'date'} = $line;
 	    $line=<STDIN>;
 	    next unless defined $line;
@@ -565,13 +569,37 @@ sub parse_newsletter
 	    }
 	    next unless defined $line;
 
-	    # text
-	    $new_app{'description'} = $line;
-	    $line =~ s/^\.$/. /; # sendmail fix
-	    while ($line=<STDIN>) {
-		last if $line =~ /^\s*$/;
+	    # Category
+	    if ($line =~ /^\s*Categor(y|ies): /) {
+		$line =~ s/^\s*Categor(y|ies): //;
+		chomp $line;
+		$new_app{'category'} = $line;
+		while ($line=<STDIN>) {
+		    last if $line =~ /^\s*$/;
+		    chomp $line;
+		    $new_app{'category'} .= " " . $line;
+		}
+		$new_app{'category'} = $line unless $line =~ /^\s*$/;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
+
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
+
+	    # about
+	    if ($line =~ /^About: /) {
+		$line =~ s/^About: //;
 		$line =~ s/^\.$/. /; # sendmail fix
-		$new_app{'description'} .= $line;
+		$new_app{'description'} = $line;
+		while ($line=<STDIN>) {
+		    last if $line =~ /^\s*$/;
+		    $line =~ s/^\.$/. /; # sendmail fix
+		    $new_app{'description'} .= $line;
+		}
 	    }
 
 	    # empty line
@@ -1089,7 +1117,13 @@ sub mail_hot_apps()
 	}
 	
 	if (defined $new_app{'category'}) {
-	    print MAIL_HOT "    category: $new_app{'category'}\n";
+	    my @categories = split /,/, $new_app{'category'};
+	    my $category = shift @categories;
+	    print MAIL_NEW "    category: $category\n";
+	    foreach my $category ( @categories ) {
+		$category =~ s/^\s+// ;
+		print MAIL_NEW "              $category\n";
+	    }
 	}
 	
 	if (defined $new_app{'project_link'}) {
@@ -1204,9 +1238,15 @@ sub mail_new_apps()
 	}
 
 	if (defined $new_app{'category'}) {
-	    print MAIL_NEW "    category: $new_app{'category'}\n";
+	    my @categories = split /,/, $new_app{'category'};
+	    my $category = shift @categories;
+	    print MAIL_NEW "    category: $category\n";
+	    foreach my $category ( @categories ) {
+		$category =~ s/^\s+// ;
+		print MAIL_NEW "              $category\n";
+	    }
 	}
-
+	
 	if (defined $new_app{'project_link'}) {
 	    print MAIL_NEW "project page: $new_app{'project_link'}\n";
 	}

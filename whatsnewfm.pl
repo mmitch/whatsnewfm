@@ -130,7 +130,7 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.49 2001/10/13 16:07:34 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.50 2001/10/13 16:12:20 mitch Exp $
 #
 #
 #############################################################################
@@ -1237,13 +1237,13 @@ sub get_skipped()
 
     if (@skipped_items > 0) {
 
-	$warnings .= "\n These news items are not shown in this mail:\n\n";
+	$skipped .= "\n These news items are not shown in this mail:\n\n";
 
 	foreach my $item (@skipped_items) {
-	    $warnings .= " *  $item\n";
+	    $skipped .= " *  $item\n";
 	}
 
-	$warnings .= "\n$separator";
+	$skipped .= "\n$separator";
     }
 
     return $skipped;

@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 #
 #############################################################################
 #
+# 2002/11/24--> Simpler computation of timestamp.  DATE_CMD not needed
+#               any more.
 # 2002/11/23--> Help text updates.
 #
 # v0.4.11
@@ -143,7 +145,7 @@ my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.61 2002/11/24 19:20:31 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.62 2002/11/24 23:24:23 mitch Exp $
 #
 #
 #############################################################################
@@ -173,14 +175,20 @@ my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file
 my @cfg_allowed_keys  = (
-			 "MAILTO",      "DB_OLD",
-			 "DB_HOT",      "EXPIRE",
-			 "DATE_CMD",    "MAIL_CMD",
-			 "UPDATE_MAIL", "SCORE_MIN",
-			 "SUMMARY_AT",  "LIST_SKIPPED"
+			 "DB_HOT",
+			 "DB_OLD",
+			 "EXPIRE",
+			 "LIST_SKIPPED",
+			 "MAILTO",
+			 "MAIL_CMD",
+			 "SCORE_MIN",
+			 "SUMMARY_AT",
+			 "UPDATE_MAIL"
 			 );
 my @cfg_optional_keys = (
-			 "LIST_SKIPPED", "SUMMARY_AT"
+			 "DATE_CMD",     # for backwards compatibility
+			 "LIST_SKIPPED",
+			 "SUMMARY_AT"
 			 );
 my @cfg_warnings;
 
@@ -396,22 +404,14 @@ sub parse_newsletter
     my @hot_applications = ();
     my @new_applications = ();
 
+
 ### generate current timestamp
 
 
-    my $year = `$config{'DATE_CMD'} +%Y`;
-    if ($? >> 8) {
-	die "Could not get current date";
-    }
-    chomp $year;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+	localtime(time);
 
-    my $month = `$config{'DATE_CMD'} +%m`;
-    if ($? >> 8) {
-	die "Could not get current date";
-    }
-    chomp $month;
-
-    my $timestamp = $month + $year*12;
+    my $timestamp = ($mon+1) + ($year+1900)*12;
 
 
 ### lock databases
@@ -1149,7 +1149,6 @@ sub read_config($)
 ### expand ~ to home directory
     $config{'DB_HOT'}   =~ s/^~/$ENV{'HOME'}/;
     $config{'DB_OLD'}   =~ s/^~/$ENV{'HOME'}/;
-    $config{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
     $config{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
 
     $config{'SCORE'}    = \@scores;

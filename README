@@ -1,4 +1,4 @@
-<<$Id: README,v 1.45 2002/11/21 17:11:18 mitch Exp $>>
+<<$Id: README,v 1.46 2002/11/24 23:24:23 mitch Exp $>>
 
 
   whatsnewfm 0.4.11
@@ -142,9 +142,6 @@ You need to specify the following keywords:
   This is the location of your sendmail command (or any command
   that can be called in the same way as sendmail).
 
-* DATE_CMD=/bin/date
-  This is the location of your date command.
-
 * SCORE=<score> <TAB> <regexp>
   This enables scoring of newsletter items (release text and
   articles).  This keyword can appear multiple times (it may also be
@@ -165,6 +162,9 @@ You need to specify the following keywords:
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be
   displayed.
+
+Additionally, the keyword DATE_CMD is allowed for backwards
+compatibility.  The value of this key is not used.
 
 
 

@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 #
 #############################################################################
 #
+# 2001/10/19--> BUGFIX: Corrected calculation of value $db_new in summary.
+#                       (Bug is result of changes on 2001/10/01)
 # 2001/10/13--> Configuration file warnings are included in 'new' mails.
 # 2001/10/01--> A news item that got filtered out because of a low score
 #               is not added to the 'old' database so it will "reappear"
@@ -130,7 +132,7 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.50 2001/10/13 16:12:20 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.51 2001/10/19 10:28:01 mitch Exp $
 #
 #
 #############################################################################
@@ -700,11 +702,11 @@ sub parse_newsletter
 	    elsif (((! exists $database{$new_app{'project_id'}}) or (exists $this_time_new{$new_app{'project_id'}})) and (! exists $interesting{$new_app{'project_id'}})) {
 		
 		$releases_new++;
-		$db_new++;
 		if ($new_app{'score'} >= $config{'SCORE_MIN'}) {
 		    # only add when not scored out
 		    $database{$new_app{'project_id'}} = $timestamp;
 		    $this_time_new{$new_app{'project_id'}} = $timestamp;
+		    $db_new++;
 		}
 		push @new_applications, { %new_app };
 	    

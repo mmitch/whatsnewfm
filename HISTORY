@@ -1,7 +1,13 @@
-<<$Id: HISTORY,v 1.20 2001/08/10 16:52:13 mitch Exp $>>
+<<$Id: HISTORY,v 1.21 2001/08/15 20:26:14 mitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2001/08/15  -  0.4.8
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Categories were missing in 'hot' mails.
+
 
 
 2001/08/10  -  0.4.7

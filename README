@@ -1,4 +1,4 @@
-<<$Id: README,v 1.37 2001/10/19 15:35:55 mitch Exp $>>
+<<$Id: README,v 1.38 2001/10/19 15:39:20 mitch Exp $>>
 
 
   whatsnewfm 0.4.8
@@ -257,6 +257,8 @@ separated by whitespaces.
 
   [7] Thanks
   ~~~~~~~~~~
+
+* Nikolaus Filus <NFilus@gmx.net> requested the new features in v0.4.9.
 
 * Jost Krieger <Jost.Krieger@ruhr-uni-bochum.de> noticed and fixed the
   missing Categories in the 'hot' mails (fixes in v0.4.7).

@@ -4,7 +4,7 @@
 my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
-#   Copyright (C) 2000,2001  Christian Garbs <mitch@uni.de>
+#   Copyright (C) 2000-2001  Christian Garbs <mitch@uni.de>
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
@@ -25,6 +25,9 @@ my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 #
 #############################################################################
 #
+# 2001/05/31--> "view" accepts optional regexp to filter the output
+#
+# v0.4.3
 # 2001/02/11--> Summary can be printed at top or bottom of a parsed
 #               newsletter.
 # 2001/02/08--> Comments from 'hot' database are included in 'hot' mails.
@@ -105,7 +108,7 @@ my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.36 2001/02/12 17:32:35 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.37 2001/05/31 19:56:57 mitch Exp $
 #
 #
 #############################################################################
@@ -188,7 +191,7 @@ filter mode for newsletters (stdin -> stdout):
     whatsnewfm.pl
 
 print the "hot" list to stdout:
-    whatsnewfm.pl view
+    whatsnewfm.pl view [regexp]
 
 add one new application to the "hot" list:
     whatsnewfm.pl add <magic-id> [comment]
@@ -210,9 +213,20 @@ sub view_entries
 {
     my %db = read_hot();
 
-    foreach my $project (keys %db) {
+    if ($_[0]) {
 
-	print "$project\t$db{$project}\n";
+	foreach my $project (keys %db) {
+	    my $line = "$project\t$db{$project}";
+	    if ($line =~ /$_[0]/) {
+		print "$line\n";
+	    }
+	}
+	
+    } else {
+	
+	foreach my $project (keys %db) {
+	    print "$project\t$db{$project}\n";
+	}
 
     }
 

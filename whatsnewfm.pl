@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.71 2003/01/04 20:44:47 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.72 2003/01/04 20:50:11 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.0  2003-01-04";
@@ -167,7 +167,7 @@ my $id="whatsnewfm.pl  v0.6.0  2003-01-04";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.71 2003/01/04 20:44:47 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.72 2003/01/04 20:50:11 mastermitch Exp $
 #
 #
 #############################################################################
@@ -313,8 +313,8 @@ $config->{CONFIGFILE} = "~/.whatsnewfmrc";
 # information
 my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
 			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html",
-			     "http://sourceforge.net/projects/whatsnewfm",
-			     "http://home.t-online.de/home/dietmar.garbs/download/whatsnewfm/" ];
+			     "http://sourceforge.net/projects/whatsnewfm/",
+			     "http://whatsnewfm.sourceforge.net/" ];
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file

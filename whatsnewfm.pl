@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.82 2003/08/07 10:39:41 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.83 2003/08/18 19:23:40 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
+my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,7 @@ my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
 #
 #############################################################################
 #
+# v0.6.3
 # 2003/08/07--> Parameters of sendmail(1) call can be configured via MAIL_OPT
 #               as wanted in Sourceforge bug #728895.
 #
@@ -185,7 +186,7 @@ my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.82 2003/08/07 10:39:41 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.83 2003/08/18 19:23:40 mastermitch Exp $
 #
 #
 #############################################################################

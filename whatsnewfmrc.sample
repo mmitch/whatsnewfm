@@ -38,7 +38,14 @@ UPDATE_MAIL=single
 
 
 #
+# *==> Items with a score less than this are ignored:
+#
+SCORE_MIN=-999
+
+
+#
 # *==> Location of external programs:
 #
 DATE_CMD=/bin/date
 MAIL_CMD=/usr/lib/sendmail
+COPY_CMD=/bin/cp

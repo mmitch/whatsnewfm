@@ -1,22 +1,15 @@
-<<$Id: README,v 1.20 2001/01/10 13:30:52 mitch Exp $>>
+<<$Id: README,v 1.21 2001/01/30 22:18:24 mitch Exp $>>
 
 
-  whatsnewfm 0.2.5
+  whatsnewfm 0.2.6
   ~~~~~~~~~~~~~~~~
 
- 2000/11/25
+ 2001/01/30
 
- (c) 2000 by Christian Garbs <mitch@uni.de>
+ (c) 2000-2001 by Christian Garbs <mitch@uni.de>
 
  Licensed under GNU GPL (see COPYING for details)
 
-
-   >
-  <   Important changes from version 0.2.0:
-   >  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  <   whatsnewfm needs a configuration file ~/.whatsnewfmrc
-   >  See [4] for details.
-  <  
 
 
   Contents
@@ -153,6 +146,9 @@ You need to specify the following keywords:
   to their score values. To learn more about perl regexps, confer the
   "perldoc perlre" help page.
 
+* SCORE_MIN=-999
+  Newsletter items with a score lower than this value will not be
+  displayed.
 
 
   [5] The "hot" database
@@ -241,7 +237,8 @@ separated by whitespaces.
   warnings with Perl 5.6 (fixed in v0.2.4).
 
 * Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> maintains the
-  whatsnewfm RPM and .deb packages.
+  whatsnewfm RPM and .deb packages. He also suggested the SCORE_MIN
+  feature.
 
 * All those people who told me that whatsnewfm didn't work any more
   when freshmeat changed the newsletter format. Apparently someone

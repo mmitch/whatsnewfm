@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
+my $id="whatsnewfm.pl  v0.4.6  2001-07-28";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2001  Christian Garbs <mitch@cgarbs.de>
@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
 #
 #############################################################################
 #
+# v0.4.6
+# 2001/07/28--> Scoring of Freshmeat Categories added.
 # 2001/07/21--> Updated help text.
 #
 # v0.4.5
@@ -116,7 +118,7 @@ my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.44 2001/07/22 10:02:21 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.45 2001/07/28 15:47:31 mitch Exp $
 #
 #
 #############################################################################
@@ -1001,6 +1003,7 @@ sub read_config($)
     my @allowed_keys = ("MAILTO", "DB_OLD", "DB_HOT", "EXPIRE", "DATE_CMD",
 			"MAIL_CMD", "UPDATE_MAIL", "SCORE_MIN", "SUMMARY_AT");
     my @scores = ();
+    my @catscores = ();
 
 ### look for config file
     $config_file =~ s/^~/$ENV{'HOME'}/;
@@ -1034,6 +1037,20 @@ sub read_config($)
 		    }
 		    elsif ($score =~ /[+-]\d+/) {
 			push @scores, { 'score' => $score, 'regexp' => $regexp };
+		    } else {
+			warn "$0 warning:\n";
+			warn "SCORE value not numeric in configuration file at line $.\n";
+		    }
+		    
+		} elsif ($key eq "CATSCORE") {
+		    
+		    my ($score, $regexp) = split /\t/, $value, 2;
+		    if ((! defined $regexp) or ($regexp eq "")) {
+			warn "$0 warning:\n";
+			warn "no REGEXP given in configuration file at line $.\n";
+		    }
+		    elsif ($score =~ /[+-]\d+/) {
+			push @catscores, { 'score' => $score, 'regexp' => $regexp };
 		    } else {
 			warn "$0 warning:\n";
 			warn "SCORE value not numeric in configuration file at line $.\n";
@@ -1077,7 +1094,8 @@ sub read_config($)
     $config{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
     $config{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
 
-    $config{'SCORE'} = \@scores;
+    $config{'SCORE'}    = \@scores;
+    $config{'CATSCORE'} = \@catscores;
 
 }
 
@@ -1193,11 +1211,17 @@ sub mail_new_apps()
 		}
 	    }
 	}
+
+	if (defined $app->{'category'}) {
+	    foreach my $score ( @{$config{'CATSCORE'}}) {
+		if ($app->{'category'} =~ /$score->{'regexp'}/i) {
+		    $app->{'score'} += $score->{'score'};
+		}
+	    }
+	}
     }
 
-
 ### only keep applications with at least minimum score
-
     my $score_killed = @new_applications;
     @new_applications = grep {$_->{'score'} >= $config{'SCORE_MIN'}} @new_applications;
     $score_killed -= @new_applications;

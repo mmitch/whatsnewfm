@@ -1,4 +1,4 @@
-<<$Id: README,v 1.26 2001/02/11 11:47:28 mitch Exp $>>
+<<$Id: README,v 1.27 2001/02/12 17:29:30 mitch Exp $>>
 
 
   whatsnewfm 0.4.3
@@ -227,6 +227,8 @@ separated by whitespaces.
 
 * The homepage of whatsnewfm is here:
   http://www.cgarbs.de/whatsnewfm.en.html
+   or
+  http://www.h.shuttle.de/mitch/whatsnewfm.en.html
 
 * whatsnewfm is mirrored here:
   http://wombat.eu.org/linux/whatsnewfm/

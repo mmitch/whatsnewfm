@@ -1,4 +1,4 @@
-<<$Id: README,v 1.47 2002/11/25 00:27:55 mitch Exp $>>
+<<$Id: README,v 1.48 2002/11/25 23:04:01 mitch Exp $>>
 
 
   |"""""""""""""""""""""""""""""""""""""""""""""""|
@@ -165,9 +165,6 @@ You need to specify the following keywords:
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be
   displayed.
-
-Additionally, the keyword DATE_CMD is allowed for backwards
-compatibility.  The value of this key is not used.
 
 
 

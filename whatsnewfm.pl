@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-24";
 #
 #############################################################################
 #
+# 2002/11/26--> Removed DATE_CMD backwards compatibility.
+#
 # v0.5.0
 # 2002/11/24--> Removed file locking code.
 #           |-> Changed all @arrays and %hashs to corresponding $references.
@@ -151,7 +153,7 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-24";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.63 2002/11/25 00:27:55 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.64 2002/11/25 23:04:01 mitch Exp $
 #
 #
 #############################################################################
@@ -195,7 +197,6 @@ my $cfg_allowed_keys  = [
 			 "UPDATE_MAIL"
 			 ];
 my $cfg_optional_keys = [
-			 "DATE_CMD",     # for backwards compatibility
 			 "LIST_SKIPPED",
 			 "SUMMARY_AT"
 			 ];

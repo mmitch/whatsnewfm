@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.9  2001-10-19";
+my $id="whatsnewfm.pl  v0.4.10  2001-11-07";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2001  Christian Garbs <mitch@cgarbs.de>
@@ -24,6 +24,9 @@ my $id="whatsnewfm.pl  v0.4.9  2001-10-19";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.4.10
+# 2001/11/07--> BUGFIX: Newsletter format has changed.
 #
 # v0.4.9
 # 2001/10/19--> BUGFIX: Corrected calculation of value $db_new in summary.
@@ -135,7 +138,7 @@ my $id="whatsnewfm.pl  v0.4.9  2001-10-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.53 2001/10/19 16:17:35 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.54 2001/11/07 22:04:32 mitch Exp $
 #
 #
 #############################################################################
@@ -602,25 +605,24 @@ sub parse_newsletter
 	    next unless defined $line;
 
 	    # Category
-	    if ($line =~ /^\s*Categor(y|ies): /) {
-		$line =~ s/^\s*Categor(y|ies): //;
+	    if ($line !~ /^About: /) {
 		chomp $line;
 		$new_app{'category'} = $line;
 		while ($line=<STDIN>) {
 		    last if $line =~ /^\s*$/;
 		    chomp $line;
-		    $new_app{'category'} .= " " . $line;
+		    $new_app{'category'} .= "," . $line;
 		}
 		$new_app{'category'} = $line unless $line =~ /^\s*$/;
 		$line=<STDIN>;
 		next unless defined $line;
-	    }
 
-	    # empty line
-	    while ((defined $line) and ($line =~ /^\s*$/)) {
-		$line=<STDIN>;
+		# empty line
+		while ((defined $line) and ($line =~ /^\s*$/)) {
+		    $line=<STDIN>;
+		}
+		next unless defined $line;
 	    }
-	    next unless defined $line;
 
 	    # about
 	    if ($line =~ /^About: /) {

@@ -12,8 +12,7 @@ MAILTO=
 #
 # *==> Where are the databases located?
 #
-DB_OLD=~/.whatsnewfm.db.old
-DB_HOT=~/.whatsnewfm.db.hot
+DB_NAME=~/.whatsnewfm.db
 
 
 #

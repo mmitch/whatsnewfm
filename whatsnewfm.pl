@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.68 2002/12/04 08:55:06 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.69 2002/12/29 15:57:59 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.2  2002-12-04";
+my $id="whatsnewfm.pl  v0.5.3-pre1  2002-12-29";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,8 @@ my $id="whatsnewfm.pl  v0.5.2  2002-12-04";
 #
 #############################################################################
 #
+# 2002/12/29--> Configuration file can be selected.
+#
 # v0.5.2
 # 2002/12/04--> BUGFIX: 0.5.1 didn't run at all.  Silly mistake :-(
 #
@@ -42,6 +44,8 @@ my $id="whatsnewfm.pl  v0.5.2  2002-12-04";
 # 2002/11/24--> Simpler computation of timestamp.  DATE_CMD not needed
 #               any more.
 # 2002/11/23--> Help text updates.
+#
+# >> 0.4.x branch forked off
 #
 # v0.4.11
 # 2002/11/19--> Removed warnings under Perl 5.8.0
@@ -159,7 +163,7 @@ my $id="whatsnewfm.pl  v0.5.2  2002-12-04";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.68 2002/12/04 08:55:06 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.69 2002/12/29 15:57:59 mastermitch Exp $
 #
 #
 #############################################################################
@@ -176,13 +180,13 @@ whatsnewfm - filter the daily newsletter from freshmeat.net
 
 =head1 SYNOPSIS
 
-B<whatsnewfm.pl>
+B<whatsnewfm.pl> [ B<-c> F<config file> ]
 
-B<whatsnewfm.pl> B<view> [ I<regexp> ]
+B<whatsnewfm.pl> [ B<-c> F<config file> ] B<view> [ I<regexp> ]>
 
-B<whatsnewfm.pl> B<add> [ I<project id> [ I<comment> ] ]
+B<whatsnewfm.pl> [ B<-c> F<config file> ] B<add> [ I<project id> [ I<comment> ] ]
 
-B<whatsnewfm.pl> B<del> [ I<project id> ] [ I<project id> ] [ ... ]
+B<whatsnewfm.pl> [ B<-c> F<config file> ] B<del> [ I<project id> ] [ I<project id> ] [ ... ]
 
 =head1 DESCRIPTION
 
@@ -203,6 +207,11 @@ that you don't miss anything about your favourite programs.
 =head1 OPTIONS
 
 =over 5
+
+=item B<-c> F<config file>
+
+This optional parameter selects a different configuration file.
+Default is F<~/.whatsnewfmrc>.
 
 =item B<whatsnewfm.pl>
 
@@ -288,14 +297,14 @@ use BerkeleyDB::Hash;
 #####################[ declare global variables ]############################
 
 
-# where to look for the configuration file:
-my $configfile = "~/.whatsnewfmrc-dev";
-
 # global configuration hash:
 my $config;
 
 # global database environment
 my $db_env;
+
+# where to look for the configuration file (default):
+$config->{CONFIGFILE} = "~/.whatsnewfmrc";
 
 # information
 my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
@@ -337,20 +346,23 @@ sub display_help()
 $id
 
 filter mode for newsletters (reads from stdin):
-    whatsnewfm.pl
+    whatsnewfm.pl [-c <configfile>]
 
 print the "hot" list to stdout:
-    whatsnewfm.pl view [regexp]
+    whatsnewfm.pl [-c <configfile>] view [regexp]
 
 add one new application to the "hot" list:
-    whatsnewfm.pl add <project id> [comment]
+    whatsnewfm.pl [-c <configfile>] add <project id> [comment]
 add multiple new applications to the "hot" list (from stdin):
-    whatsnewfm.pl add
+    whatsnewfm.pl [-c <configfile>] add
 
 remove applications from the "hot" list:
-    whatsnewfm.pl del <project id> [project id] [project id] [...]
+    whatsnewfm.pl [-c <configfile>] del <project id> [project id] [project id] [...]
 or a list from stdin:
-    whatsnewfm.pl del
+    whatsnewfm.pl [-c <configfile>] del
+
+the optional parameter -c <configfile> selects the configuration file to use
+(default: ~/.whatsnewfmrc)
 EOF
 }
 
@@ -1087,9 +1099,9 @@ sub open_new_mail($)
 ###################[ read the configuration file ]###########################
 
 
-sub read_config($)
+sub read_config()
 {
-    my $config_file = $_[0];
+    my $config_file = $config->{CONFIGFILE};
     my @scores = ();
     my @catscores = ();
 
@@ -1473,24 +1485,31 @@ sub mail_new_apps($$$$$$$$$)
 ###########################[ main routine ]##################################
 
 
+if (@ARGV>1) {
+    if ($ARGV[0] eq "-c") {
+	shift @ARGV;
+	$config->{CONFIGFILE} = shift @ARGV;
+    }
+}
+
 if ($ARGV[0]) {
 
     if ($ARGV[0] eq "add") {
 
 	shift @ARGV;
-	read_config($configfile);
+	read_config();
 	add_entry(@ARGV);
 
     } elsif ($ARGV[0] eq "del") {
 
 	shift @ARGV;
-	read_config($configfile);
+	read_config();
 	remove_entry(@ARGV);
 
     } elsif ($ARGV[0] eq "view") {
 
 	shift @ARGV;
-	read_config($configfile);
+	read_config();
 	view_entries(@ARGV);
 
     } else {
@@ -1501,7 +1520,7 @@ if ($ARGV[0]) {
 
 } else {
 
-    read_config($configfile);
+    read_config();
     parse_newsletter();
 
 }

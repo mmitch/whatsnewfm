@@ -1,4 +1,4 @@
-<<$Id: README,v 1.56 2002/12/27 12:53:56 mastermitch Exp $>>
+<<$Id: README,v 1.57 2002/12/29 15:57:59 mastermitch Exp $>>
 
 
   !!  When upgrading from a 0.4.x version, be sure to remove
@@ -110,8 +110,9 @@ that you don't miss anything about your favourite programs.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The configuration file is a plain text file in your home directory
-named "./whatsnewfmrc".  Lines beginning with "#" are treated as
-comments.  Other lines consist of keywords and values:
+named ".whatsnewfmrc".  The location and name of the configuration
+file can be changed with the -c option.  Lines beginning with "#" are
+treated as comments.  Other lines consist of keywords and values:
 
   KEYWORD=VALUE
 
@@ -311,8 +312,12 @@ it with the pod2* commands.  For example:
   http://home.t-online.de/home/dietmar.garbs/download/whatsnewfm/
 
 
+
   [9] Thanks
   ~~~~~~~~~~
+
+* Roger H. Goun <rgoun at sourceforge> reported a bug in the RPMs of
+  v0.4.12.
 
 * Matthias Kluwe <mkluwe@web.de> discovered and fixed the warnings
   under Perl 5.8.0 (fixed in v0.4.11).  He also made some annotations

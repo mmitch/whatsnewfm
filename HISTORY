@@ -1,7 +1,14 @@
-<<$Id: HISTORY,v 1.28 2002/12/04 08:56:14 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.29 2002/12/29 15:57:58 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2002/12/xx  -  0.5.3
+~~~~~~~~~~~~~~~~~~~~
+- Location and name of configuration file can be changed.
+- Small documentation updates.
+
 
 
 2002/12/04  -  0.5.2

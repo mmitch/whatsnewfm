@@ -1,4 +1,4 @@
-<<$Id: README,v 1.54 2002/12/04 08:56:14 mastermitch Exp $>>
+<<$Id: README,v 1.55 2002/12/27 00:19:12 mastermitch Exp $>>
 
 
   |"""""""""""""""""""""""""""""""""""""""""""""""|
@@ -247,7 +247,7 @@ separated by whitespaces.
 
 To import your "hot" database from an older version, run this small
 shell script.  Replace ~/.whatsnewfm.db.hot with the filename of your
-hot database.
+"hot" database from version 0.4.x.
 
   while read LINE ; do
     ./whatsnewfm.pl add $LINE
@@ -255,7 +255,7 @@ hot database.
 
 
 To import your "old" database, use this Perl script.  Change
-$new_database and $old_database to the filenames you use.
+$new_database and $old_database to the filenames you actually use.
 
 #!/usr/bin/perl
 use warnings;
@@ -292,7 +292,7 @@ print "$count old projects imported.\n";
 A manpage is included in the whatsnewfm Perl script.  You can extract
 it with the pod2* commands.  For example:
 
-  pod2man whatsnewfm.pl whatsnewfm.pl.1
+  pod2man  whatsnewfm.pl whatsnewfm.pl.1
   pod2text whatsnewfm.pl whatsnewfm.txt
   pod2html whatsnewfm.pl whatsnewfm.html
 
@@ -301,13 +301,13 @@ it with the pod2* commands.  For example:
   [8] Download
   ~~~~~~~~~~~~
 
-* The homepage of whatsnewfm is here:
-  http://www.cgarbs.de/whatsnewfm.en.html
-   or
-  http://www.h.shuttle.de/mitch/whatsnewfm.en.html
-   or
-  http://sourceforge.net/projects/whatsnewfm
+* You can download new and old versions of whatsnewfm from these
+  locations:
 
+  http://www.cgarbs.de/whatsnewfm.en.html
+  http://sourceforge.net/projects/whatsnewfm/
+  http://www.h.shuttle.de/mitch/whatsnewfm.en.html
+  http://home.t-online.de/home/dietmar.garbs/download/whatsnewfm/
 
 
   [9] Thanks

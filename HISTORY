@@ -1,5 +1,16 @@
 whatsnewfm HISTORY
 
+
+2001/06/23  -  0.4.4
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Welcome message was not working correctly.
+- BUGFIX: Warning message about changed newsletter format was not
+  generated correctly.
+- "view" accepts optional regexp to filter the output.
+- Minor documentation updates.
+
+
+
 2001/02/11  -  0.4.3
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: Existing comments in 'hot' database could not be updated.

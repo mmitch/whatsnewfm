@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
+# $Id: whatsnewfm.pl,v 1.62.2.4 2002/12/02 22:14:10 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.12-pre  2002-12-02";
+my $id="whatsnewfm.pl  v0.4.12  2002-12-02";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -25,6 +26,7 @@ my $id="whatsnewfm.pl  v0.4.12-pre  2002-12-02";
 #
 #############################################################################
 #
+# v0.4.12
 # 2002/12/02--> BUGFIX: Locking had race conditions, thus the
 #               lockfiles aren't deleted any more.
 # 2002/11/25--> Inclusion of manpage from Debian package.
@@ -148,7 +150,7 @@ my $id="whatsnewfm.pl  v0.4.12-pre  2002-12-02";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.62.2.3 2002/12/02 21:59:32 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.62.2.4 2002/12/02 22:14:10 mastermitch Exp $
 #
 #
 #############################################################################
@@ -284,7 +286,8 @@ my %config;
 
 # information
 my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
-			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html");
+			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html",
+			     "http://sourceforge.net/projects/whatsnewfm");
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file

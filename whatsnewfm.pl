@@ -56,16 +56,13 @@ use Fcntl ':flock';             # import LOCK_* constants
 # *==> Who should get the mail with new programs?
 #      Remember: write \@ instead of @   
 #
-#my $mailto="joe.user\@some.host";
-my $mailto="mitch\@localhost";
+my $mailto="joe.user\@some.host";
 #
 #
 # *==> Where are the databases located?
 #
-#my $db_old="/home/joeuser/database-old";
-#my $db_hot="/home/joeuser/database-hot";
-my $db_old="/home/mitch/perl/whatsnewfm/database-old";
-my $db_hot="/home/mitch/perl/whatsnewfm/database-hot";
+my $db_old="/home/joeuser/database-old";
+my $db_hot="/home/joeuser/database-hot";
 #
 #
 # *==> After how many months does an entry in the "old" database expire?

@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.81 2003/04/27 09:22:53 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.82 2003/08/07 10:39:41 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
@@ -25,6 +25,9 @@ my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# 2003/08/07--> Parameters of sendmail(1) call can be configured via MAIL_OPT
+#               as wanted in Sourceforge bug #728895.
 #
 # v0.6.2
 # 2003/04/27--> Changed expiration algorithm for 'old' entries.
@@ -182,7 +185,7 @@ my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.81 2003/04/27 09:22:53 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.82 2003/08/07 10:39:41 mastermitch Exp $
 #
 #
 #############################################################################
@@ -331,6 +334,7 @@ my $cfg_allowed_keys  = {
     "LIST_SKIPPED" => 0,
     "MAILTO"       => 0,
     "MAIL_CMD"     => 0,
+    "MAIL_OPT"     => 0,
     "SCORE_MIN"    => 0,
     "SUMMARY_AT"   => 0,
     "UPDATE_MAIL"  => 0,
@@ -1081,7 +1085,7 @@ sub open_hot_mail($)
 {
     my $new_app = shift;
 
-    open MAIL_HOT, "| $config->{'MAIL_CMD'} -oi -t"
+    open MAIL_HOT, "| $config->{'MAIL_CMD'} $config-{'MAIL_OPT'}"
 	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_HOT "To: $config->{'MAILTO'}\n";
@@ -1102,7 +1106,7 @@ sub open_hot_mail($)
 sub open_new_mail($)
 {
     my $subject = $_[0];
-    open MAIL_NEW, "| $config->{'MAIL_CMD'} -oi -t"
+    open MAIL_NEW, "| $config->{'MAIL_CMD'} $config->{'MAIL_OPT'}"
 	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_NEW "To: $config->{'MAILTO'}\n";
@@ -1209,20 +1213,23 @@ sub read_config()
 	}
     }
 
-### default values
-    $config->{'SUMMARY_AT'} = 'bottom' unless exists $config->{'SUMMARY_AT'}
-                                                && $config->{'SUMMARY_AT'} 
-                                                && lc($config->{'SUMMARY_AT'}) eq 'top';
-    $config->{'LIST_SKIPPED'} = 'no'   unless exists $config->{'LIST_SKIPPED'}
-                                                && $config->{'LIST_SKIPPED'} 
-                                                && (
-						    lc($config->{'LIST_SKIPPED'}) eq 'top' ||
-						    lc($config->{'LIST_SKIPPED'}) eq 'bottom'
-						    );
-
 ### lowercase some values
     $config->{'SUMMARY_AT'} = lc $config->{'SUMMARY_AT'};
     $config->{'LIST_SKIPPED'} = lc $config->{'LIST_SKIPPED'};
+
+
+### default values
+    $config->{'SUMMARY_AT'} = 'bottom' unless exists $config->{'SUMMARY_AT'}
+                                                && $config->{'SUMMARY_AT'} 
+                                                && $config->{'SUMMARY_AT'} eq 'top';
+    $config->{'LIST_SKIPPED'} = 'no'   unless exists $config->{'LIST_SKIPPED'}
+                                                && $config->{'LIST_SKIPPED'} 
+                                                && (
+						    $config->{'LIST_SKIPPED'} eq 'top' ||
+						    $config->{'LIST_SKIPPED'} eq 'bottom'
+						    );
+    $config->{'MAIL_OPT'} = '-oi -t'   unless exists $config->{'MAIL_OPT'}
+                                                && $config->{'MAIL_OPT'} ;
 
 
 ### expand ~ to home directory

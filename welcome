@@ -19,9 +19,9 @@ URL: http://freshmeat.net/projects/whatsnewfm/
   by mastermitch (http://freshmeat.net/users/mastermitch/)
   Saturday, June 21th 2001 17:30
 
-This is a second welcome message because a freshmeat newsletter with
-less than two releases is considered broken and will bring up an error
-message.
+About: This is a second welcome message because a freshmeat newsletter
+with less than two releases is considered broken and will bring up an
+error message.
 
 License: GNU General Public License (GPL)
 
@@ -33,7 +33,7 @@ URL: http://freshmeat.net/projects/whatsnewfm/
   by mastermitch (http://freshmeat.net/users/mastermitch/)
   Saturday, June 21th 2001 17:30
 
-Congratulations!
+About: Congratulations!
 whatsnewfm.pl and your .procmailrc have been installed properly.
 Once you have subscribed to the freshmeat newsletter, you will be
 informed of any updates concerning whatsnewfm.
@@ -42,3 +42,4 @@ Don't forget to add whatsnewfm to your 'hot' database!
 License: GNU General Public License (GPL)
 
 URL: http://freshmeat.net/projects/whatsnewfm/
+

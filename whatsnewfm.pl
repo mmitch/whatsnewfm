@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.7  2001-08-10";
+my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2001  Christian Garbs <mitch@cgarbs.de>
@@ -24,6 +24,9 @@ my $id="whatsnewfm.pl  v0.4.7  2001-08-10";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.4.8
+# 2001/08/15--> BUGFIX: Categories were missing in 'hot' mails.
 #
 # v0.4.7
 # 2001/08/10--> BUGFIX: Newsletter format has changed.
@@ -121,7 +124,7 @@ my $id="whatsnewfm.pl  v0.4.7  2001-08-10";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.46 2001/08/10 16:52:54 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.47 2001/08/15 20:26:47 mitch Exp $
 #
 #
 #############################################################################
@@ -1146,10 +1149,10 @@ sub mail_hot_apps()
 	if (defined $new_app{'category'}) {
 	    my @categories = split /,/, $new_app{'category'};
 	    my $category = shift @categories;
-	    print MAIL_NEW "    category: $category\n";
+	    print MAIL_HOT "    category: $category\n";
 	    foreach my $category ( @categories ) {
 		$category =~ s/^\s+// ;
-		print MAIL_NEW "              $category\n";
+		print MAIL_HOT "              $category\n";
 	    }
 	}
 	

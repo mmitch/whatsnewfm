@@ -1,4 +1,4 @@
-<<$Id: README,v 1.68 2004/02/15 14:34:22 mastermitch Exp $>>
+<<$Id: README,v 1.69 2004/04/13 14:45:45 mastermitch Exp $>>
 
 
 
@@ -11,10 +11,10 @@
 
 
 
-  whatsnewfm 0.6.4
+  whatsnewfm 0.6.5
   ~~~~~~~~~~~~~~~~
 
- 2004/02/15
+ 2004/04/13
 
  (c) 2000-2004 by Christian Garbs <mitch@cgarbs.de>
 
@@ -329,6 +329,9 @@ it with the pod2* commands.  For example:
 
   [9] Thanks
   ~~~~~~~~~~
+
+* Dave Woolaway suggested the use of multiline regexp matches for
+  scoring (sourceforge feature request #930403, included in v0.6.5).
 
 * Matthew Gabeler-Lee <msg2@po.cwru.edu> wrote a patch to fix '=20'
   appearing in mails sent by whatsnewfm (sourceforge bug #891520,

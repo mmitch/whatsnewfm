@@ -1,7 +1,14 @@
-<<$Id: HISTORY,v 1.36 2004/02/15 14:31:22 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.37 2004/04/13 14:45:45 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2004/04/13  -  0.6.5
+~~~~~~~~~~~~~~~~~~~~
+- Regular expressions for scoring the releases now match
+  over multiple lines.
+
 
 
 2004/02/15  -  0.6.4

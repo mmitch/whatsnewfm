@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.93 2004/04/11 17:10:43 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.94 2004/04/13 14:45:45 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.5-pre  2004-04-11";
+my $id="whatsnewfm.pl  v0.6.5 2004-04-13";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2004  Christian Garbs <mitch@cgarbs.de>
@@ -27,6 +27,7 @@ my $id="whatsnewfm.pl  v0.6.5-pre  2004-04-11";
 #
 #############################################################################
 #
+# v0.6.5
 # 2004/04/11--> Make score regexp match multiline as proposed in
 #               Sourceforge request #930403.
 #
@@ -195,7 +196,7 @@ my $id="whatsnewfm.pl  v0.6.5-pre  2004-04-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.93 2004/04/11 17:10:43 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.94 2004/04/13 14:45:45 mastermitch Exp $
 #
 #
 #############################################################################

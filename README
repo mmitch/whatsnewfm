@@ -1,4 +1,4 @@
-<<$Id: README,v 1.46.2.3 2002/12/03 09:05:19 mastermitch Exp $>>
+<<$Id: README,v 1.46.2.4 2002/12/27 13:10:06 mastermitch Exp $>>
 
 
   whatsnewfm 0.4.12
@@ -104,7 +104,8 @@ that you don't miss anything about your favourite programs.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The configuration file is a plain text file in your home directory
-named "./whatsnewfmrc".  Lines beginning with "#" are treated as
+named "./whatsnewfmrc".  The location of the configuration file can be
+changed with the -c option.  Lines beginning with "#" are treated as
 comments.  Other lines consist of keywords and values:
 
   KEYWORD=VALUE
@@ -249,7 +250,7 @@ separated by whitespaces.
 A manpage is included in the whatsnewfm Perl script.  You can extract
 it with the pod2* commands.  For example:
 
-  pod2man whatsnewfm.pl whatsnewfm.pl.1
+  pod2man  whatsnewfm.pl whatsnewfm.pl.1
   pod2text whatsnewfm.pl whatsnewfm.txt
   pod2html whatsnewfm.pl whatsnewfm.html
 
@@ -317,20 +318,8 @@ it with the pod2* commands.  For example:
   [9] Future Plans
   ~~~~~~~~~~~~~~~~
 
-Items marked with ? mean "Does anybody need this?".  If you want to
-have this feature, then please contact me and I'll include it in one
-of the next versions.
-
-? Compress the databases using gzip, bzip2 or the like.
-
-? Save the application names in the "old" database (like comments in
-  the "hot" database).
-
-? Provide an option that always shows messages with high urgency (or a
-  corresponding release focus).
-
-* Create backup files only when there have been changes (like watchfm).
-
-* Use a database like gdbm, ndbm or dbm instead of plain ascii files
-  (this will only happen on a boring, cold and rainy sunday afternoon
-   when I don't have anything better to do).
+Future plans aren't listed here any more.  Version 0.5.0 and up are
+already available, look there for further improvements.  Changes from
+the newer versions will be backported to the 0.4.x branch when I can
+find the time.  This should allow people to use whatsnewfm without the
+need for BerkeleyDB.

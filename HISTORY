@@ -1,0 +1,10 @@
+whatsnewfm HISTORY
+
+2000/08/04  -  0.0.3
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Empty update mail were sent when there were no updates.
+- BUGFIX: Comments in the "hot" database were deleted every time.
+- Entries can be added or removed from the "hot" database.
+- A help text is shown when wrong command line arguments are given.
+- *Major* code cleanup (even subroutines now!).
+- added this HISTORY file

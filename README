@@ -1,4 +1,4 @@
-<<$Id: README,v 1.31 2001/07/19 19:30:24 mitch Exp $>>
+<<$Id: README,v 1.32 2001/07/28 15:33:00 mitch Exp $>>
 
 
   whatsnewfm 0.4.5
@@ -140,8 +140,8 @@ You need to specify the following keywords:
   This is the location of your date command.
 
 * SCORE=<score> <TAB> <regexp>
-  This enables scoring of newsletter items. It is the only keyword
-  that is both allowed to be missing or to appear multiple times.
+  This enables scoring of newsletter items (release text). This
+  keyword can appear multiple times (it may also be omitted).
   Each value consists of a score (either a negative or positive
   integer value) and a regular expression, both separated by a
   tabulator (\t). If the regular expression is found within the
@@ -150,6 +150,10 @@ You need to specify the following keywords:
   case-insensitive. The news items then are listed according to their
   score values. To learn more about perl regexps, confer the
   "perldoc perlre" help page.
+
+* CATSCORE=<score> <TAB> <regexp>
+  This works exactly like the SCORE keyword, except that not the
+  release text but the Freshmeat Category fields are scored.
 
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be
@@ -245,6 +249,9 @@ separated by whitespaces.
 
   [7] Thanks
   ~~~~~~~~~~
+
+* Francisco <frandebo@latt.if.usp.br> suggested the scoring of
+  Freshmeat categories (included in v0.4.6).
 
 * Matthias Kluwe <mkluwe@web.de> made some annotations to the README
   (included in v0.4.4).

@@ -37,11 +37,19 @@ SUMMARY_AT=bottom
 
 
 #
-# *==> Scoring: score_value <TAB> regexp
+# *==> Scoring (release text): score_value <TAB> regexp
 #      (see "perldoc perlre" for help on regexp's)
 #
 #SCORE=+50	mp3
 #SCORE=-999	usb
+
+
+#
+# *==> Category Scoring: score_value <TAB> regexp
+#      (see "perldoc perlre" for help on regexp's)
+#
+#CATSCORE=+50	Multimedia
+#CATSCORE=-999	WWW
 
 
 #

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.6  2001-07-28";
+my $id="whatsnewfm.pl  v0.4.7  2001-08-10";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2001  Christian Garbs <mitch@cgarbs.de>
@@ -24,6 +24,9 @@ my $id="whatsnewfm.pl  v0.4.6  2001-07-28";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.4.7
+# 2001/08/10--> BUGFIX: Newsletter format has changed.
 #
 # v0.4.6
 # 2001/07/28--> Scoring of Freshmeat Categories added.
@@ -118,7 +121,7 @@ my $id="whatsnewfm.pl  v0.4.6  2001-07-28";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.45 2001/07/28 15:47:31 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.46 2001/08/10 16:52:54 mitch Exp $
 #
 #
 #############################################################################
@@ -427,7 +430,7 @@ sub parse_newsletter
 	chomp $line;
 	if (($position == 3) and ($line =~ /^::: A R T I C L E S \(\d+\) :::/)) {
 	    $position = 2;
-	} elsif (($position > 0) and ($line =~ /^::: R E L E A S E   D E T A I L S \(\d+\) :::/)) {
+	} elsif (($position > 0) and ($line =~ /^::: R E L E A S E   D E T A I L S :::/)) {
 	    $position = 0;
 	} elsif ($position == 2) {
 	    

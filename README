@@ -194,6 +194,9 @@ in the next version.
 
 ? Provide an option that always shows messages with high urgency.
 
+* Provide a scoring mechanism to move interesting applications to the
+  top of the new item list.
+
 * Create backup only when there have been changes (like watchfm).
 
 * What to do when the same item appears twice in one letter?

@@ -1,10 +1,10 @@
-<<$Id: README,v 1.10 2000/09/19 16:01:10 mitch Exp $>>
+<<$Id: README,v 1.11 2000/09/22 18:11:39 mitch Exp $>>
 
 
-  whatsnewfm 0.2.1
+  whatsnewfm 0.2.2
   ~~~~~~~~~~~~~~~~
 
- 2000/09/10
+ 2000/09/22
 
  (c) 2000 by Christian Garbs <mitch@uni.de>
 
@@ -142,6 +142,17 @@ You need to specify the following keyswords:
 * DATE_CMD=/bin/date
   This is the location of your date command.
 
+* SCORE=<score> <TAB> <regexp>
+  This enables scoring of newsletter items. It is the only keyword
+  that is both allowed to be missing or to appear multiple times.
+  Each value consists of a score (either a negative or positive
+  integer value) and a regular expression, both separated by a
+  tabulator (\t). If the regular expression is found within the
+  descriptive text of a news item, the score value is added to the
+  score of that news item. The news items then are listed according
+  to their score values. To learn more about perl regexps, confer the
+  "perldoc perlre" help page.
+
 
 
   [5] The "hot" database
@@ -249,11 +260,6 @@ of the next versions.
 
 ? Provide an option that always shows messages with high urgency.
 
-* Display affirmative messages after 'add' or 'del' commands.
-
-* Provide a scoring mechanism to move interesting applications to the
-  top of the new item list.
-
 * Create backup files only when there have been changes (like watchfm).
 
 * What to do when the same item appears twice in one letter?
@@ -262,4 +268,4 @@ of the next versions.
   (this will only happen on a boring, cold and rainy sunday afternoon).
 
 - Looks like it's impossible to migrate version 0.0.x databases to the
-  new 0.2.x format. As of now, no converter will be written.
+  new 0.2.x format. As far of now, no converter will be written.

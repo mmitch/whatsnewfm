@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
+my $id="whatsnewfm.pl  v0.4.12-pre  2002-12-02";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 #
 #############################################################################
 #
+# 2002/12/02--> BUGFIX: Locking had race conditions, thus the
+#               lockfiles aren't deleted any more.
 # 2002/11/25--> Inclusion of manpage from Debian package.
 # 2002/11/24--> Simpler computation of timestamp.  DATE_CMD not needed
 #               any more.
@@ -146,7 +148,7 @@ my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.62.2.2 2002/12/02 21:57:27 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.62.2.3 2002/12/02 21:59:32 mastermitch Exp $
 #
 #
 #############################################################################
@@ -924,7 +926,6 @@ sub release_hot
 {
     flock(LOCK_HOT,LOCK_UN)          or die "can't unlock lockfile: $!";
     close LOCK_HOT                   or die "can't close lockfile: $!";
-    unlink "$config{'DB_HOT'}.LOCK"  or die "can't remove lockfile: $!";
 }
 
 
@@ -935,7 +936,6 @@ sub release_old
 {
     flock(LOCK_OLD,LOCK_UN)          or die "can't unlock lockfile: $!";
     close LOCK_OLD                   or die "can't close lockfile: $!";
-    unlink "$config{'DB_OLD'}.LOCK"  or die "can't remove lockfile: $!";
 }
 
 

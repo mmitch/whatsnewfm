@@ -23,8 +23,8 @@ my $id="watchfm_convert.pl  v0.2.0  2000-08-22";
 #############################################################################
 #
 # v0.2.0
-# 2000/08/22 -> not included in whatsnewfm because of the new newsletter
-#               format (there is no converter old->new format yet)
+# 2000/08/22 -> no changes
+#
 # v0.0.3
 # 2000/08/03 -> First piece of code.
 #

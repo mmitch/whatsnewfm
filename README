@@ -1,10 +1,10 @@
-<<$Id: README,v 1.23 2001/02/02 20:09:10 mitch Exp $>>
+<<$Id: README,v 1.24 2001/02/05 21:33:06 mitch Exp $>>
 
 
-  whatsnewfm 0.4.1
+  whatsnewfm 0.4.2
   ~~~~~~~~~~~~~~~~
 
- 2001/02/02
+ 2001/02/05
 
  (c) 2000-2001 by Christian Garbs <mitch@uni.de>
 
@@ -265,8 +265,6 @@ of the next versions.
 ? Provide an option that always shows messages with high urgency.
 
 * Create backup files only when there have been changes (like watchfm).
-
-* What to do when the same item appears twice in one letter?
 
 * Use a database like gdbm, ndbm or dbm instead of plain ascii files
   (this will only happen on a boring, cold and rainy sunday afternoon).

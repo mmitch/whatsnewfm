@@ -1,5 +1,14 @@
 whatsnewfm HISTORY
 
+2001/02/05  -  0.4.2
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: freshmeat has changed the syntax of the newsletter.
+- Improved detection of changes in newsletter format.
+- Two releases of the same project within one newsletter are handled
+  correctly.
+
+
+
 2001/02/02  -  0.4.1
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: A line with a single dot "." within freetext fields

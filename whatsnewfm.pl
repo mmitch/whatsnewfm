@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.78 2003/04/23 21:21:57 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.79 2003/04/27 07:45:17 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.2-pre  2003-03-09";
+my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,7 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-03-09";
 #
 #############################################################################
 #
+# v0.6.2
 # 2003/04/23--> BUGFIX: Multiline release subjects were not handled
 #                       correctly (Sourceforge bug #726261).
 # 2003/03/09--> Call sendmail(1) as advised in `perldoc -q "send mail"`.
@@ -179,7 +180,7 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-03-09";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.78 2003/04/23 21:21:57 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.79 2003/04/27 07:45:17 mastermitch Exp $
 #
 #
 #############################################################################

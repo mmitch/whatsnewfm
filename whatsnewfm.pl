@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.0  2001-01-31";
+my $id="whatsnewfm.pl  v0.4.1  2001-02-02";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000,2001  Christian Garbs <mitch@uni.de>
@@ -24,6 +24,10 @@ my $id="whatsnewfm.pl  v0.4.0  2001-01-31";
 #
 #############################################################################
 #
+# v0.4.1
+# 2001/02/02--> BUGFIX: A line with a single dot "." within freetext
+#               fields (e.g. release details) caused sendmail to end
+#               the mail at that point.
 # 2001/01/31--> Changes in the newsletter format should be detected and
 #               the user gets a warning mail telling him to update
 #               whatsnewfm.
@@ -86,7 +90,7 @@ my $id="whatsnewfm.pl  v0.4.0  2001-01-31";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.29 2001/02/01 10:59:58 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.30 2001/02/02 20:06:47 mitch Exp $
 #
 #
 #############################################################################
@@ -428,9 +432,11 @@ sub parse_newsletter
 	    next unless defined $line;
 
 	    # text
+	    $line =~ s/^\.$/. /; # sendmail fix
 	    $new_app{'description'} = $line;
 	    while (my $line=<STDIN>) {
 		last if $line =~ /^\s$/;
+		$line =~ s/^\.$/. /; # sendmail fix
 		$new_app{'description'} .= $line;
 	    }
 
@@ -515,8 +521,10 @@ sub parse_newsletter
 
 	    # text
 	    $new_app{'description'} = $line;
+	    $line =~ s/^\.$/. /; # sendmail fix
 	    while ($line=<STDIN>) {
 		last if $line =~ /^\s*$/;
+		$line =~ s/^\.$/. /; # sendmail fix
 		$new_app{'description'} .= $line;
 	    }
 
@@ -529,9 +537,11 @@ sub parse_newsletter
 	    # changes
 	    if ($line =~ /^Changes: /) {
 		$line =~ s/^Changes: //;
+		$line =~ s/^\.$/. /; # sendmail fix
 		$new_app{'changes'} = $line;
 		while ($line=<STDIN>) {
 		    last if $line =~ /^\s*$/;
+		    $line =~ s/^\.$/. /; # sendmail fix
 		    $new_app{'changes'} .= $line;
 		}
 	    }

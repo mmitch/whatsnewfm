@@ -1,12 +1,12 @@
-<<$Id: README,v 1.30 2001/06/23 15:12:24 mitch Exp $>>
+<<$Id: README,v 1.31 2001/07/19 19:30:24 mitch Exp $>>
 
 
-  whatsnewfm 0.4.4
+  whatsnewfm 0.4.5
   ~~~~~~~~~~~~~~~~
 
- 2001/06/23
+ 2001/07/19
 
- (c) 2000-2001 by Christian Garbs <mitch@uni.de>
+ (c) 2000-2001 by Christian Garbs <mitch@cgarbs.de>
 
  Licensed under GNU GPL (see COPYING for details)
 
@@ -26,8 +26,8 @@
 
 
 
-     Feel free to contact the author at <mitch@uni.de> for any
-     questions or suggestions.
+     Feel free to contact the author at <mitch@cgarbs.de>
+     for any questions or suggestions.
 
 
 

@@ -138,7 +138,7 @@ my $id="whatsnewfm.pl  v0.4.10  2001-11-07";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.54 2001/11/07 22:04:32 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.55 2002/11/19 21:48:47 mitch Exp $
 #
 #
 #############################################################################
@@ -1095,7 +1095,7 @@ sub read_config($)
 			push @cfg_warnings, "SCORE value not numeric at line $.";
 		    }
 		    
-		} elsif (grep {/$key/} @cfg_allowed_keys) {
+		} elsif (grep {$_ eq $key} @cfg_allowed_keys) {
 		    $config{$key} = $value;
 		} else {
 		    warn "$0 warning:\n";

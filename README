@@ -1,18 +1,18 @@
-<<$Id: README,v 1.58 2002/12/29 16:17:07 mastermitch Exp $>>
+<<$Id: README,v 1.59 2003/01/04 20:46:37 mastermitch Exp $>>
 
 
-  !!  When upgrading from a 0.4.x version, be sure to remove
-  !!  the DATE_CMD option from your configuration file.  See
-  ..  section [6] for how to import your data.
+   NN   When upgrading from a 0.4.x version, be sure to remove
+   NN   the DATE_CMD option from your configuration file.  See
+   oo   section [6] for how to import your data.
 
 
 
-  whatsnewfm 0.5.3
+  whatsnewfm 0.6.0
   ~~~~~~~~~~~~~~~~
 
- 2002/12/29
+ 2003/01/04
 
- (c) 2000-2002 by Christian Garbs <mitch@cgarbs.de>
+ (c) 2000-2003 by Christian Garbs <mitch@cgarbs.de>
 
  Licensed under GNU GPL (see COPYING for details)
 

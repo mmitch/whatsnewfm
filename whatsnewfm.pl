@@ -1,11 +1,11 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.70 2002/12/29 16:15:22 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.71 2003/01/04 20:44:47 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.3  2002-12-29";
+my $id="whatsnewfm.pl  v0.6.0  2003-01-04";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
-#   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
+#   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
@@ -25,6 +25,9 @@ my $id="whatsnewfm.pl  v0.5.3  2002-12-29";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.6.0
+# 2003/01/04--> No changes, v0.5.3 seems stable enough to be released.
 #
 # v0.5.3
 # 2002/12/29--> Configuration file can be selected.
@@ -164,7 +167,7 @@ my $id="whatsnewfm.pl  v0.5.3  2002-12-29";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.70 2002/12/29 16:15:22 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.71 2003/01/04 20:44:47 mastermitch Exp $
 #
 #
 #############################################################################

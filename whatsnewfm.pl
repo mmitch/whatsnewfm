@@ -4,7 +4,7 @@
 my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
-#   Copyright (C) 2000-2001  Christian Garbs <mitch@uni.de>
+#   Copyright (C) 2000-2001  Christian Garbs <mitch@cgarbs.de>
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
@@ -114,7 +114,7 @@ my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.42 2001/07/19 19:27:26 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.43 2001/07/19 19:58:25 mitch Exp $
 #
 #
 #############################################################################
@@ -142,9 +142,10 @@ my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
 			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html" ,
 			     "http://wombat.eu.org/linux/whatsnewfm/" );
 
-my $whatsnewfm_author = "Christian Garbs <mitch\@uni.de>";
+my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 sub read_config ($);
+
 
 ###########################[ main routine ]##################################
 
@@ -512,7 +513,8 @@ sub parse_newsletter
 			if (($line =~ tr/. -//c) == 0) {
 			    $position = 1;
 			    $end = 1;
-			}		    }
+			}		    
+		    }
 		}
 		$line=<STDIN>;
 		$end = 1 unless defined $line;
@@ -531,14 +533,16 @@ sub parse_newsletter
 	    my $release_nr;
 
 	    # title
-	    if ($line =~ /^\[\d+\] - /) {
-		$line =~ s/^(\[\d+\]) - //;
-		$release_nr = $1;
-		chomp $line;
-		$new_app{'subject'} = $line;
+	    while ($line !~ /^\[\d+\] - /) {
 		$line=<STDIN>;
 		next unless defined $line;
 	    }
+	    $line =~ s/^(\[\d+\]) - //;
+	    $release_nr = $1;
+	    chomp $line;
+	    $new_app{'subject'} = $line;
+	    $line=<STDIN>;
+	    next unless defined $line;
 	    
 	    # from
 	    if ($line =~ /^\s+by /) {
@@ -666,8 +670,8 @@ sub parse_newsletter
 
 		push @hot_applications, { %new_app };
 		
-	    }
-	    
+	    } # LOOKOUT, there's an elsif coming!
+
 	    ### save a 'new' entry if it is not already in the 'hot' list
 	    ### if the same project appears twice in a newsletter, it is found
 	    ### with %this_time_new (although %database is already set)

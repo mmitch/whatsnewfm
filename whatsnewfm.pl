@@ -91,7 +91,7 @@ my $update_mail="single";
 #############################################################################
 
 
-# $Id: whatsnewfm.pl,v 1.11 2000/08/22 21:19:48 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.12 2000/09/08 19:06:46 mitch Exp $
 
 
 ###########################[ main routine ]##################################
@@ -222,12 +222,12 @@ sub parse_newsletter
     my %new_app;
     my %interesting;
 
-    my $db_read    = 0;
-    my $db_written = 0;
-    my $db_expired = 0;
-    my $db_new     = 0;
-    my $letter     = 0;
-    my $letter_new = 0;
+    my $hot_written = 0;
+    my $db_written  = 0;
+    my $db_expired  = 0;
+    my $db_new      = 0;
+    my $letter      = 0;
+    my $letter_new  = 0;
 
 
 ### generate current timestamp
@@ -265,22 +265,9 @@ sub parse_newsletter
 
     
     foreach my $number (keys %database) {
-	$db_read++;
 	if (($database{$number}+$expire) < $timestamp) {
 	    $db_expired++;
 	    delete $database{$number};
-	}
-    }
-
-
-### remove 'hot' entries from 'old' database
-
-
-    foreach my $number (keys %interesting) {
-	$db_read++;
-	if (exists $database{$number}) {
-	    delete $database{$number};
-	    $db_read--;
 	}
     }
 
@@ -433,13 +420,13 @@ sub parse_newsletter
 
 		}
 
-### print a 'new' entry
+### print a 'new' entry if it is not already in the 'hot' list
 
-		elsif ((! $new_app{'project_id'}) || (! defined $database{$new_app{'project_id'}})) {
+		elsif ((! $new_app{'project_id'}) || ((! defined $database{$new_app{'project_id'}}) && (! exists $interesting{$new_app{'project_id'}}))) {
 
-		    $db_new++;
 		    $letter_new++;
 		    if (defined $new_app{'project_id'}) {
+			$db_new++;
 			$database{$new_app{'project_id'}} = $timestamp;
 		    }
 		    
@@ -512,8 +499,8 @@ sub parse_newsletter
     $db_written = write_old(%database);
     $db_new -= keys (%database) - $db_written;
 
-    write_hot(%interesting);
-
+    $hot_written = write_hot(%interesting);
+    
 
 ### unlock databases
 
@@ -526,7 +513,7 @@ sub parse_newsletter
 
 
     if ($first_new == 0) {
-	close_new($letter, $letter_new, $db_read, $db_new, $db_written, $db_expired);
+	close_new($letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired);
     }
     
     if ($first_hot == 0) {
@@ -691,7 +678,7 @@ EOF
 
 sub close_new
 {
-    my ($letter, $letter_new, $db_read, $db_new, $db_written, $db_expired) = @_;
+    my ($letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired) = @_;
 
     my $difference=$letter-$letter_new;
     print MAIL_NEW << "EOF";
@@ -703,10 +690,11 @@ sub close_new
     $difference items have been filtered out,
     so there are $letter_new items left in this mail.
 
-    Your databases had $db_read entries.
-    $db_expired entries have expired,
+    Your \'hot\' database has $hot_written entries.
+
+    $db_expired entries from your 'old' database have expired,
     while $db_new items were added.
-    Your databases now have $db_written entries.
+    Your 'old' now has $db_written entries.
 EOF
 	    
     print MAIL_NEW "\n*" . "=" x 76 . "*\n";

@@ -1,17 +1,10 @@
-<<$Id: README,v 1.47 2002/11/25 00:27:55 mitch Exp $>>
+<<$Id: README,v 1.46.2.1 2002/11/26 21:22:46 mitch Exp $>>
 
 
-  |"""""""""""""""""""""""""""""""""""""""""""""""|
-  |  This is a development release, so watch out! |
-  |  There is currently no way to import your     |
-  |  databases from older versions.               |
-  |_______________________________________________|
+  whatsnewfm 0.4.11
+  ~~~~~~~~~~~~~~~~~
 
-
-  whatsnewfm 0.5.0
-  ~~~~~~~~~~~~~~~~
-
- 2002/11/24
+ 2002/11/21
 
  (c) 2000-2002 by Christian Garbs <mitch@cgarbs.de>
 
@@ -66,9 +59,6 @@ that you don't miss anything about your favourite programs.
 * perl, sendmail, date
 
 
-* BerkeleyDB Perl module
-
-
 
   [3] Usage
   ~~~~~~~~~
@@ -78,7 +68,11 @@ that you don't miss anything about your favourite programs.
 2) Copy the file "whatsnewfmrc.sample" to "~/.whatsnewfmrc" and edit
    it to your needs.  See [4] for details.
 
-3) Add the following lines to your .procmailrc to send all newsletters
+3) Create the empty databases with "touch /path/to/database-hot" and
+   "touch /path/to/database-old".  Use the filenames specified in your
+   configuration file.
+
+4) Add the following lines to your .procmailrc to send all newsletters
    through the whatsnewfm filter:
 
 :0 w :
@@ -86,9 +80,9 @@ that you don't miss anything about your favourite programs.
 * !^X-Loop:.*whatsnewfm
 | /path/to/whatsnewfm.pl
 
-4) Add whatsnewfm to your hot database: "whatsnewfm.pl add whatsnewfm"
+5) Add whatsnewfm to your hot database: "whatsnewfm.pl add whatsnewfm"
 
-5) Check your setup by mailing the file "welcome" to yourself with
+6) Check your setup by mailing the file "welcome" to yourself with
    "[fm-news] newsletter TEST" as subject:
 
      mail -s "[fm-news] newsletter TEST" your@email < welcome
@@ -97,10 +91,10 @@ that you don't miss anything about your favourite programs.
    application.  This is good.  Otherwise, there is an error in your
    setup.
 
-6) If you're not yet subscribed to the freshmeat newsletter, do so at
+7) If you're not yet subscribed to the freshmeat newsletter, do so at
    http://freshmeat.net 
 
-7) If one of the new applications is interesting to you, then add
+8) If one of the new applications is interesting to you, then add
    it to your "hot" database. See [5] for details.
 
 
@@ -120,8 +114,11 @@ You need to specify the following keywords:
   This is the eMail address to which the filtered newsletter and the
   updates of "hot" programs are sent.
 
-* DB_NAME=~/.whatsnewfm.db
-  This is the filename where the "hot" and "old" databases are kept.
+* DB_OLD=~/.whatsnewfm.db.old
+  This is the filename of the "old" database.
+
+* DB_HOT=~/.whatsnewfm.db.hot
+  This is the filename of the "hot" database.
 
 * EXPIRE=12
   After this time (in months) an entry from the "old" database expires.
@@ -166,8 +163,8 @@ You need to specify the following keywords:
   Newsletter items with a score lower than this value will not be
   displayed.
 
-Additionally, the keyword DATE_CMD is allowed for backwards
-compatibility.  The value of this key is not used.
+The keyword DATE_CMD is not used any more.  For backwards
+compatibility you'll just get a warning and no fatal error.
 
 
 
@@ -309,8 +306,16 @@ Items marked with ? mean "Does anybody need this?".  If you want to
 have this feature, then please contact me and I'll include it in one
 of the next versions.
 
+? Compress the databases using gzip, bzip2 or the like.
+
 ? Save the application names in the "old" database (like comments in
   the "hot" database).
 
 ? Provide an option that always shows messages with high urgency (or a
   corresponding release focus).
+
+* Create backup files only when there have been changes (like watchfm).
+
+* Use a database like gdbm, ndbm or dbm instead of plain ascii files
+  (this will only happen on a boring, cold and rainy sunday afternoon
+   when I don't have anything better to do).

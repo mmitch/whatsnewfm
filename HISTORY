@@ -1,7 +1,16 @@
-<<$Id: HISTORY,v 1.32 2003/01/11 15:35:24 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.33 2003/04/27 08:24:21 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2003/04/27  -  0.6.2
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Multiline subjects in the newsletter were not handled
+  correctly.
+- Removed obsolete filenames from documentation.
+- Use different parameters for sending mail.
+
 
 
 2003/01/11  -  0.6.1

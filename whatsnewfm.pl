@@ -22,15 +22,17 @@ my $id="whatsnewfm.pl  v0.2.2  2000-09-22";
 #
 #############################################################################
 #
+# 2000/10/08--> "add" and "del" give more verbose messages.
+#
 # v0.2.2
 # 2000/09/20--> Added scoring of newsletters.
 # 2000/09/19--> "add" and "del" produce affirmative messages.
 #
 # v0.2.1
 # 2000/09/08--> BUGFIX: Statistic calculations at the end of a
-#           !   newsletter were broken.
-#           !-> You can "view" all entries in the 'hot' database.
-#           '-> Configuration is read from a configuration file. The
+#           |   newsletter were broken.
+#           |-> You can "view" all entries in the 'hot' database.
+#           `-> Configuration is read from a configuration file. The
 #               script doesn't need to be edited any more.
 #
 # v0.2.0
@@ -39,16 +41,16 @@ my $id="whatsnewfm.pl  v0.2.2  2000-09-22";
 #
 # v0.0.3
 # 2000/08/04--> BUGFIX: No empty mails are sent any more.
-#           '-> Display of help text
+#           `-> Display of help text
 # 2000/08/03--> BUGFIX: Comments in the 'hot' database were deleted
-#           !   after every run.
-#           !-> Major code cleanup.
-#           '-> You can "add" and "del" entries from the 'hot' database.
+#           |   after every run.
+#           |-> Major code cleanup.
+#           `-> You can "add" and "del" entries from the 'hot' database.
 #
 # v0.0.2
 # 2000/08/03--> A list of interesting applications is kept and you are
-#           !   informed of updates of these applications.
-#           '-> Databases are locked properly.
+#           |   informed of updates of these applications.
+#           `-> Databases are locked properly.
 #
 # v0.0.1
 # 2000/07/17--> generated Appindex link is wrong, thus it is removed.
@@ -63,7 +65,7 @@ my $id="whatsnewfm.pl  v0.2.2  2000-09-22";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.19 2000/09/22 17:44:40 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.20 2000/10/08 13:27:33 mitch Exp $
 #
 #
 #############################################################################
@@ -183,7 +185,12 @@ sub add_entry
 	my $project = lc shift @_;
 	my $comment = join " ", @_;
 	$comment = "" unless $comment;
-	$hot{$project} = $comment;
+	if (exists $hot{$project}) {
+	    print "$project updated.\n";
+	} else {
+	    $hot{$project} = $comment;
+	    print "$project added.\n";
+	}
 
     } else {
 
@@ -191,7 +198,13 @@ sub add_entry
 	    chomp $line;
 	    my ($project, $comment) = split /\s/, $line, 2;
 	    $comment = "" unless $comment;
-	    $hot{lc $project} = $comment;
+	    $project = lc $project;
+	    if (exists $hot{$project}) {
+		print "$project updated.\n";
+	    } else {
+		$hot{$project} = $comment;
+		print "$project added.\n";
+	    }
 	}
 	
     }
@@ -200,7 +213,7 @@ sub add_entry
 
     release_hot();
 
-    print "add OK. You now have $hot_written entries in your hot database.\n";
+    print "You now have $hot_written entries in your hot database.\n";
 }
 
 
@@ -216,7 +229,13 @@ sub remove_entry
     if (@_) {
 
 	foreach my $project (@_) {
-	    delete $hot{lc $project} if exists $hot{lc $project};
+	    $project = lc $project;
+	    if (exists $hot{$project}) {
+		delete $hot{$project};
+		print "$project deleted.\n";
+	    } else {
+		print "$project not in database.\n";
+	    }
 	}
 
     } else {
@@ -225,7 +244,13 @@ sub remove_entry
 	    chomp $line;
 	    my @projects = split /\s/, $line;
 	    foreach my $project (@projects) {
-		delete $hot{lc $project} if exists $hot{lc $project};
+		$project = lc $project;
+		if (exists $hot{$project}) {
+		    delete $hot{$project};
+		    print "$project deleted.\n";
+		} else {
+		    print "$project not in database.\n";
+		}
 	    }
 	}
 
@@ -235,7 +260,7 @@ sub remove_entry
 
     release_hot();
 
-    print "del OK. You now have $hot_written entries in your hot database.\n";
+    print "You now have $hot_written entries in your hot database.\n";
 }
 
 

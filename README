@@ -1,4 +1,4 @@
-<<$Id: README,v 1.24 2001/02/05 21:33:06 mitch Exp $>>
+<<$Id: README,v 1.25 2001/02/06 22:52:19 mitch Exp $>>
 
 
   whatsnewfm 0.4.2
@@ -224,6 +224,9 @@ separated by whitespaces.
 * The homepage of whatsnewfm is here:
   http://www.cgarbs.de/whatsnewfm.en.html
 
+* whatsnewfm is mirrored here:
+  http://wombat.eu.org/linux/whatsnewfm/
+
 
 
   [7] Thanks
@@ -238,7 +241,7 @@ separated by whitespaces.
 
 * Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> maintains the
   whatsnewfm RPM and .deb packages. He also suggested the SCORE_MIN
-  feature.
+  feature and maintains the mirror at wombat.eu.org
 
 * All those people who told me that whatsnewfm didn't work any more
   when freshmeat changed the newsletter format. Apparently someone

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.50 2002/12/03 08:45:10 mastermitch Exp $>>
+<<$Id: README,v 1.51 2002/12/03 09:02:51 mastermitch Exp $>>
 
 
   |"""""""""""""""""""""""""""""""""""""""""""""""|
@@ -254,8 +254,35 @@ hot database.
   done < ~/.whatsnewfm.db.hot
 
 
-To import your "old" database, SOMEBODY HAS TO WRITE A SCRIPT AND PUT
-IT HERE :-)
+To import your "old" database, use this Perl script.  Change
+$new_database and $old_database to the filenames you use.
+
+#!/usr/bin/perl
+use warnings;
+use strict;
+use BerkeleyDB::Hash;
+my $new_database = "~/.whatsnewfm.db";
+my $old_database = "~/.whatsnewfm.db.old";
+my $count = 0;
+$new_database =~ s/^~/$ENV{HOME}/;
+$old_database =~ s/^~/$ENV{HOME}/;
+my $db_env = new BerkeleyDB::Env, BerkeleyDB::DB_INIT_CDB;
+my %hash;
+tie %hash, 'BerkeleyDB::Hash',
+{ -Filename => $new_database,
+  -Subname => "old",
+  -Flags => BerkeleyDB::Hash::DB_CREATE
+  };
+open OLD, "<$old_database" or die "can't open `$old_database': $!";
+while (<OLD>) {
+    my ($p, $t) = split /\t/;
+    $hash{$p} = $t;
+    $count++;
+}
+close OLD or die "can't close `$old_database': $!";
+untie %hash;
+print "$count old projects imported.\n";
+
 
 
 

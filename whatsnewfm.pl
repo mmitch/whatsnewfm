@@ -1,10 +1,11 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.2.4  2000-11-10";
+my $id="whatsnewfm.pl  v0.2.5  2000-11-25";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
+#                       Dominik Brettnacher <dominik@brettnacher.org>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -21,6 +22,10 @@ my $id="whatsnewfm.pl  v0.2.4  2000-11-10";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.2.5
+# 2000/11/25--> Freshmeat editorials are included in the list of new
+#               applications.
 #
 # v0.2.4
 # 2000/11/10--> Removed warnings that only appeared on Perl 5.6
@@ -70,7 +75,7 @@ my $id="whatsnewfm.pl  v0.2.4  2000-11-10";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.22 2000/11/10 17:29:06 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.23 2000/11/25 10:54:13 mitch Exp $
 #
 #
 #############################################################################
@@ -288,6 +293,7 @@ sub parse_newsletter
     my $db_new      = 0;
     my $letter      = 0;
     my $letter_new  = 0;
+    my $letter_article = 0;
 
     my @hot_applications = ();
     my @new_applications = ();
@@ -405,6 +411,11 @@ sub parse_newsletter
 		    $new_app{'description'} .= $line;
 		}
 
+	    } elsif  ($line =~ /^body:$/) {
+		while (my $line=<STDIN>) {
+		    last if $line =~ /^$/;
+		    $new_app{'description'} .= $line;
+		}
 	    } elsif  ($line =~ /^changes:$/) {
 		while (my $line=<STDIN>) {
 		    last if $line =~ /^$/;
@@ -416,6 +427,17 @@ sub parse_newsletter
 		    chomp $line;
 		    $new_app{'urgency'} .= $line;
 		}
+
+### this is for news articles and editorials
+	    } elsif  ($line =~ /^\|\>\shttp:\/\/freshmeat.net\/news\//) {
+		$line =~ s/^\|\>\s//;
+		$new_app{'newslink'} = $line;
+		undef $new_app{'project_id'};
+		$letter_new++;
+		$letter_article++;
+
+		push @new_applications, { %new_app };
+		%new_app=();
 
 	    } elsif  ($line =~ /^\|\>\shttp:\/\/freshmeat.net\/projects\//) {
 		$line =~ s/^\|\>\s//;
@@ -469,7 +491,7 @@ sub parse_newsletter
 ### send mails
 
     mail_hot_apps(@hot_applications);
-    mail_new_apps($subject, $letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications);
+    mail_new_apps($subject, $letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired, @new_applications);
 
 }
 
@@ -629,7 +651,7 @@ EOF
 
 sub close_new
 {
-    my ($letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired) = @_;
+    my ($letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired) = @_;
 
     my $difference=$letter-$letter_new;
     print MAIL_NEW << "EOF";
@@ -638,7 +660,7 @@ sub close_new
     $id
 	
     The newsletter originally contained $letter news items,
-    $difference items have been filtered out,
+    $difference items have been filtered out, while $letter_article items were articles,
     so there are $letter_new items left in this mail.
 
     Your \'hot\' database has $hot_written entries.
@@ -858,7 +880,7 @@ sub mail_hot_apps()
 sub mail_new_apps()
 {
 
-    my ($subject, $letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
+    my ($subject, $letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
     my %new_app;
     my $first_new = 1;
 
@@ -946,7 +968,7 @@ sub mail_new_apps()
     
 ### close mailer
     if ($first_new == 0) {
-	close_new($letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired);
+	close_new($letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired);
     }
 
 }

@@ -26,7 +26,9 @@ my $id="whatsnewfm.pl  v0.4.2  2001-02-05";
 #
 # v0.4.2
 # 2001/02/05--> BUGFIX: freshmeat has changed the newsletter format.
-#           `-> Improved detection of changes in newsletter format.
+#           |-> Improved detection of changes in newsletter format.
+#           '-> Two releases of the same project within one newsletter
+#               are handled correctly.
 #
 # v0.4.1
 # 2001/02/02--> BUGFIX: A line with a single dot "." within freetext
@@ -61,7 +63,7 @@ my $id="whatsnewfm.pl  v0.4.2  2001-02-05";
 # 2000/09/08--> BUGFIX: Statistic calculations at the end of a
 #           |   newsletter were broken.
 #           |-> You can "view" all entries in the 'hot' database.
-#           `-> Configuration is read from a configuration file. The
+#           '-> Configuration is read from a configuration file. The
 #               script doesn't need to be edited any more.
 #
 # v0.2.0
@@ -70,16 +72,16 @@ my $id="whatsnewfm.pl  v0.4.2  2001-02-05";
 #
 # v0.0.3
 # 2000/08/04--> BUGFIX: No empty mails are sent any more.
-#           `-> Display of help text
+#           '-> Display of help text
 # 2000/08/03--> BUGFIX: Comments in the 'hot' database were deleted
 #           |   after every run.
 #           |-> Major code cleanup.
-#           `-> You can "add" and "del" entries from the 'hot' database.
+#           '-> You can "add" and "del" entries from the 'hot' database.
 #
 # v0.0.2
 # 2000/08/03--> A list of interesting applications is kept and you are
 #           |   informed of updates of these applications.
-#           `-> Databases are locked properly.
+#           '-> Databases are locked properly.
 #
 # v0.0.1
 # 2000/07/17--> generated Appindex link is wrong, thus it is removed.
@@ -94,7 +96,7 @@ my $id="whatsnewfm.pl  v0.4.2  2001-02-05";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.31 2001/02/05 21:26:17 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.32 2001/02/05 21:30:14 mitch Exp $
 #
 #
 #############################################################################

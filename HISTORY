@@ -1,5 +1,11 @@
 whatsnewfm HISTORY
 
+2001/01/31  -  0.4.0
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: freshmeat has changed the syntax of the newsletter.
+
+
+
 2001/01/30  -  0.2.6
 ~~~~~~~~~~~~~~~~~~~~
 - New items with less than a specified score will not be shown.

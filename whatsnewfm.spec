@@ -1,12 +1,12 @@
-Summary: A utility to filter the daily newsletter from www.freshmeat.net
+Summary: A utility to filter the daily newsletter from freshmeat.net
 Name: whatsnewfm
-Version: 0.2.6
+Version: 0.4.0
 Release: 1
 Copyright: GPL
 Group: Applications/Databases
-Source: whatsnewfm-0.2.6.tar.gz
+Source: whatsnewfm-0.4.0.tar.gz
 %description
-whatsnewfm is a utility to filter the daily newsletter from www.freshmeat.net
+whatsnewfm is a utility to filter the daily newsletter from freshmeat.net
 
 The main purpose is to cut the huge newsletter to a smaller size by
 only showing items that you didn't see before.

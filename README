@@ -1,4 +1,4 @@
-<<$Id: README,v 1.66 2003/08/18 19:23:43 mastermitch Exp $>>
+<<$Id: README,v 1.67 2003/08/18 19:29:12 mastermitch Exp $>>
 
 
 
@@ -329,6 +329,10 @@ it with the pod2* commands.  For example:
 
   [9] Thanks
   ~~~~~~~~~~
+
+* scottbbbb pointed out that the sendmail options should be
+  configurable (sourceforge bug #728895, fixed in v0.6.3,
+  backported to v0.4.15).
 
 * Scott reported a bug with multiline subjects within the newsletter
   (sourceforge bug #726261, fixed in v0.6.2, backported to v0.4.14).

@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.84 2003/08/18 19:37:26 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.85 2003/08/18 19:43:33 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
@@ -186,7 +186,7 @@ my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.84 2003/08/18 19:37:26 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.85 2003/08/18 19:43:33 mastermitch Exp $
 #
 #
 #############################################################################
@@ -1221,16 +1221,15 @@ sub read_config()
 
 ### default values
     $config->{'SUMMARY_AT'} = 'bottom' unless exists $config->{'SUMMARY_AT'}
-                                                && $config->{'SUMMARY_AT'} 
-                                                && $config->{'SUMMARY_AT'} eq 'top';
+                                                  && $config->{'SUMMARY_AT'} 
+                                                  && $config->{'SUMMARY_AT'} eq 'top';
     $config->{'LIST_SKIPPED'} = 'no'   unless exists $config->{'LIST_SKIPPED'}
-                                                && $config->{'LIST_SKIPPED'} 
-                                                && (
-						    $config->{'LIST_SKIPPED'} eq 'top' ||
-						    $config->{'LIST_SKIPPED'} eq 'bottom'
-						    );
-    $config->{'MAIL_OPT'} = '-oi -t'   unless exists $config->{'MAIL_OPT'}
-                                                && $config->{'MAIL_OPT'} ;
+                                                  && $config->{'LIST_SKIPPED'} 
+                                                  && (
+						      $config->{'LIST_SKIPPED'} eq 'top' ||
+						      $config->{'LIST_SKIPPED'} eq 'bottom'
+						     );
+    $config->{'MAIL_OPT'} = '-oi -t'   unless exists $config->{'MAIL_OPT'};
 
 
 ### expand ~ to home directory

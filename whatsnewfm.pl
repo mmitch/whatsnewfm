@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 #
 #############################################################################
 #
+# 2002/11/23--> Help text updates.
+#
 # v0.4.11
 # 2002/11/19--> Removed warnings under Perl 5.8.0
 #
@@ -141,7 +143,7 @@ my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.58 2002/11/21 17:13:46 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59 2002/11/23 14:26:06 mitch Exp $
 #
 #
 #############################################################################
@@ -166,8 +168,7 @@ my %config;
 
 # information
 my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
-			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html" ,
-			     "http://wombat.eu.org/linux/whatsnewfm/" );
+			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html");
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file
@@ -199,7 +200,7 @@ sub display_help
     print << "EOF";
 $id
 
-filter mode for newsletters (stdin -> stdout):
+filter mode for newsletters (reads from stdin):
     whatsnewfm.pl
 
 print the "hot" list to stdout:

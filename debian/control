@@ -1,0 +1,21 @@
+Source: whatsnewfm
+Section: mail
+Priority: optional
+Maintainer: Christian Garbs [Master Mitch] <mitch@yggdrasil.mitch.h.shuttle.de>
+Standards-Version: 3.2.1
+
+Package: whatsnewfm
+Architecture: all
+Depends: perl (>= 5.6.0-16)
+Description: A utility to filter the daily newsletter from freshmeat.net
+ whatsnewfm is a utility to filter the daily newsletter from freshmeat.net
+ .
+ The main purpose is to cut the huge newsletter to a smaller size by
+ only showing items that you didn't see before.
+ .
+ The items already seen will be stored in a database. After some time, the items
+ expire and will be shown again the next time they are included in a newsletter.
+ .
+ If you find an item that you consider particularly useful, you can add it to a
+ "hot" list. Items in the hot list are checked for updates so that you don't
+ miss anything about your favourite programs.

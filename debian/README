@@ -1,0 +1,5 @@
+The recommended method to generate a Debian package is running
+
+   $ fakeroot debian/rules binary
+   
+in the top directory.

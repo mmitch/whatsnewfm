@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.92 2004/02/15 15:22:45 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.93 2004/04/11 17:10:43 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.4  2004-02-15";
+my $id="whatsnewfm.pl  v0.6.5-pre  2004-04-11";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2004  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,9 @@ my $id="whatsnewfm.pl  v0.6.4  2004-02-15";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# 2004/04/11--> Make score regexp match multiline as proposed in
+#               Sourceforge request #930403.
 #
 # v0.6.4
 # 2004/02/13--> Copy Content-type etc. to output mails as proposed in
@@ -192,7 +195,7 @@ my $id="whatsnewfm.pl  v0.6.4  2004-02-15";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.92 2004/02/15 15:22:45 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.93 2004/04/11 17:10:43 mastermitch Exp $
 #
 #
 #############################################################################
@@ -430,7 +433,7 @@ sub do_scoring($)
 
     if (defined $app->{'description'}) {
 	foreach my $score ( @{$config->{'SCORE'}}) {
-	    if ($app->{'description'} =~ /$score->{'regexp'}/i) {
+	    if ($app->{'description'} =~ /$score->{'regexp'}/is) {
 		$app->{'score'} += $score->{'score'};
 	    }
 	}
@@ -438,7 +441,7 @@ sub do_scoring($)
     
     if (defined $app->{'category'}) {
 	foreach my $score ( @{$config->{'CATSCORE'}}) {
-	    if ($app->{'category'} =~ /$score->{'regexp'}/i) {
+	    if ($app->{'category'} =~ /$score->{'regexp'}/is) {
 		$app->{'score'} += $score->{'score'};
 	    }
 	}

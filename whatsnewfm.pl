@@ -135,7 +135,7 @@ my $id="whatsnewfm.pl  v0.4.9  2001-10-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.52 2001/10/19 16:04:00 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.53 2001/10/19 16:17:35 mitch Exp $
 #
 #
 #############################################################################
@@ -922,7 +922,8 @@ sub get_summary
 {
     my ($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
-    my $difference=$releases-$releases_new;
+    my $already_seen=@skipped_already_seen;
+    my $difference=$releases-$releases_new-$already_seen;
     my $remaining=$releases_new+$articles-$score_killed;
     my $summary = << "EOF";
 	
@@ -935,9 +936,10 @@ EOF
     if ($releases > 1) {    # 1 release is not enough to ensure proper operation!
 
 	$summary .= << "EOF";
-    $difference releases have been filtered out as 'already seen'.
-    $score_killed articles or releases have been filtered out as 'low score'.
-    $remaining articles and releases are shown in this mail.
+    $already_seen releases have been skipped as 'already seen'.
+    $score_killed articles or releases have been skipped as 'low score'.
+    $remaining articles and releases are shown in this mail,
+    while $difference releases have been sent separately as 'hot'.
 
 EOF
     ;

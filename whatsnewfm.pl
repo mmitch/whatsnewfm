@@ -145,7 +145,7 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.59.2.1 2002/11/24 19:21:07 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59.2.2 2002/11/24 19:31:26 mitch Exp $
 #
 #
 #############################################################################
@@ -225,12 +225,12 @@ EOF
 
 sub view_entries
 {
-    my %db = read_hot();
+    my $db = read_hot();
 
     if ($_[0]) {
 
-	foreach my $project (keys %db) {
-	    my $line = "$project\t$db{$project}";
+	foreach my $project (keys %{$db}) {
+	    my $line = "$project\t$db->{$project}";
 	    if ($line =~ /$_[0]/i) {
 		print "$line\n";
 	    }
@@ -238,8 +238,8 @@ sub view_entries
 	
     } else {
 	
-	foreach my $project (keys %db) {
-	    print "$project\t$db{$project}\n";
+	foreach my $project (keys %{$db}) {
+	    print "$project\t$db->{$project}\n";
 	}
 
     }
@@ -280,19 +280,19 @@ sub do_scoring($)
 sub add_entry
 {
 
-    my %hot = read_hot();
+    my $hot = read_hot();
 
     if (@_) {
 
 	my $project = lc shift @_;
 	my $comment = "";
 	$comment = join " ", @_ if @_;
-	if (exists $hot{$project}) {
+	if (exists $hot->{$project}) {
 	    print "$project updated.\n";
 	} else {
 	    print "$project added.\n";
 	}
-	$hot{$project} = $comment;
+	$hot->{$project} = $comment;
 
     } else {
 
@@ -301,19 +301,17 @@ sub add_entry
 	    my ($project, $comment) = split /\s/, $line, 2;
 	    $comment = "" unless $comment;
 	    $project = lc $project;
-	    if (exists $hot{$project}) {
+	    if (exists $hot->{$project}) {
 		print "$project updated.\n";
 	    } else {
 		print "$project added.\n";
 	    }
-	    $hot{$project} = $comment;
+	    $hot->{$project} = $comment;
 	}
 	
     }
     
-    my $hot_written = write_hot(%hot);
-
-    release_hot();
+    my $hot_written = write_hot($hot);
 
     print "You now have $hot_written entries in your hot database.\n";
 }
@@ -325,14 +323,14 @@ sub add_entry
 sub remove_entry
 {
 
-    my %hot = read_hot();
+    my $hot = read_hot();
 
     if (@_) {
 
 	foreach my $project (@_) {
 	    $project = lc $project;
-	    if (exists $hot{$project}) {
-		delete $hot{$project};
+	    if (exists $hot->{$project}) {
+		delete $hot->{$project};
 		print "$project deleted.\n";
 	    } else {
 		print "$project not in database.\n";
@@ -346,8 +344,8 @@ sub remove_entry
 	    my @projects = split /\s/, $line;
 	    foreach my $project (@projects) {
 		$project = lc $project;
-		if (exists $hot{$project}) {
-		    delete $hot{$project};
+		if (exists $hot->{$project}) {
+		    delete $hot->{$project};
 		    print "$project deleted.\n";
 		} else {
 		    print "$project not in database.\n";
@@ -357,9 +355,7 @@ sub remove_entry
 
     }
 
-    my $hot_written = write_hot(%hot);
-
-    release_hot();
+    my $hot_written = write_hot($hot);
 
     print "You now have $hot_written entries in your hot database.\n";
 }
@@ -762,18 +758,18 @@ sub parse_newsletter
 
 sub read_hot
 {
-    my %db;
+    my $db;
     open DB, "<$config{'DB_HOT'}" or die "couldn't open 'hot' database \"$config{'DB_HOT'}\": $!";
     while (my $line=<DB>) {
 	chomp $line;
 	my ($project, $comment) = split /\s/, $line, 2;
 	if (defined $project) {
-	    $db{lc $project} = $comment;
+	    $db->{lc $project} = $comment;
 	}
     }
     close DB or die "couldn't close 'hot' database \"$config{'DB_HOT'}\": $!";
 
-    return %db;
+    return $db;
 }
 
 
@@ -782,19 +778,19 @@ sub read_hot
 
 sub read_old
 {
-    my %db;
+    my $db = {};
 
     open DB, "<$config{'DB_OLD'}" or die "couldn't open 'old' database \"$config{'DB_OLD'}\": $!";
     while (my $line=<DB>) {
 	chomp $line;
 	my ($project, $addition) = split /\s/, $line;
 	if (defined $project) {
-	    $db{lc $project} = $addition;
+	    $db->{lc $project} = $addition;
 	}
     }
     close DB or die "couldn't close 'old' database \"$config{'DB_OLD'}\": $!";
 
-    return %db;
+    return $db;
 }
 
 
@@ -804,11 +800,11 @@ sub read_old
 sub write_old
 {
     my $written = 0;
-    my %db = @_;
+    my $db = shift;
     rename $config{'DB_OLD'}, "$config{'DB_OLD'}~" or die "couldn't back up 'old' database \"$config{'DB_OLD'}\": $!";
     open DB, ">$config{'DB_OLD'}" or die "couldn't open 'old' database \"$config{'DB_OLD'}\": $!";
-    foreach my $key (sort keys %db) {
-	print DB (lc $key) . "\t$db{$key}\n";
+    foreach my $key (sort keys %{$db}) {
+	print DB (lc $key) . "\t$db->{$key}\n";
 	$written++;
     }
     close DB or die "couldn't close 'old' database \"$config{'DB_OLD'}\": $!";
@@ -822,12 +818,12 @@ sub write_old
 sub write_hot
 {
     my $written = 0;
-    my %db = @_;
+    my $db = shift;
     rename $config{'DB_HOT'}, "$config{'DB_HOT'}~" or die "couldn't back up 'hot' database \"$config{'DB_HOT'}\": $!";
     open DB, ">$config{'DB_HOT'}" or die "couldn't open 'hot' database \"$config{'DB_HOT'}\": $!";
-    foreach my $key (sort { $db{$a} cmp $db{$b} } keys %db) {
+    foreach my $key (sort { $db->{$a} cmp $db->{$b} } keys %{$db}) {
 	$key = lc $key;
-	print DB (lc $key) . "\t$db{$key}\n";
+	print DB (lc $key) . "\t$db->{$key}\n";
 	$written++;
     }
     close DB or die "couldn't close 'hot' database \"$config{'DB_HOT'}\": $!";

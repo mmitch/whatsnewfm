@@ -1,5 +1,11 @@
 whatsnewfm HISTORY
 
+2000/11/10  -  0.2.4
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Perl 5.6 showed some warnings on startup.
+
+
+
 2000/10/30  -  0.2.3
 ~~~~~~~~~~~~~~~~~~~~
 - Reacted to a change in the newsletter format (item name).

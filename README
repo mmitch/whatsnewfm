@@ -1,10 +1,10 @@
-<<$Id: README,v 1.17 2000/11/10 17:33:01 mitch Exp $>>
+<<$Id: README,v 1.18 2000/11/25 11:05:51 mitch Exp $>>
 
 
-  whatsnewfm 0.2.4
+  whatsnewfm 0.2.5
   ~~~~~~~~~~~~~~~~
 
- 2000/11/10
+ 2000/11/25
 
  (c) 2000 by Christian Garbs <mitch@uni.de>
 
@@ -233,6 +233,10 @@ separated by whitespaces.
   [7] Thanks
   ~~~~~~~~~~
 
+* Dominik Brettnacher <dominik@brettnacher.org> sent a patch to
+  include the freshmeat editorials into the list of new applications
+  (included in v0.2.5).
+
 * Joerg Plate <Joerg@Plate.cx> sent a patch for those annoying
   warnings with Perl 5.6 (fixed in v0.2.4).
 
@@ -255,8 +259,6 @@ separated by whitespaces.
 Items marked with ? mean "Does anybody need this?". If you want to
 have this feature, then please contact me and I'll include it in one
 of the next versions.
-
-* List editorials, too.
 
 ? Compress the databases using gzip, bzip2 or the like.
 

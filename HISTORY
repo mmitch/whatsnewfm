@@ -1,5 +1,11 @@
 whatsnewfm HISTORY
 
+2000/11/25  -  0.2.5
+~~~~~~~~~~~~~~~~~~~~
+- Freshmeat editorials are included in the list of new applications.
+
+
+
 2000/11/10  -  0.2.4
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: Perl 5.6 showed some warnings on startup.

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.27 2001/02/12 17:29:30 mitch Exp $>>
+<<$Id: README,v 1.28 2001/05/31 20:00:18 mitch Exp $>>
 
 
   whatsnewfm 0.4.3
@@ -182,7 +182,13 @@ To view all applications that are in the database, just type this:
 
   whatsnewfm.pl view
 
-This just prints the whole database file on stdout.
+This just prints the whole database file on stdout. If you want to
+cut the output down to some entries, you can add a regular expression
+to the view command (instead of using grep):
+
+  whatsnewfm.pl view ^li
+
+This will print all entries entries starting with "li".
 
 
 

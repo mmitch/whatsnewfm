@@ -1,12 +1,12 @@
-<<$Id: README,v 1.42 2002/11/20 17:22:02 mitch Exp $>>
+<<$Id: README,v 1.43 2002/11/21 17:05:15 mitch Exp $>>
 
 
   whatsnewfm 0.4.11
   ~~~~~~~~~~~~~~~~~
 
- 2001/11/07
+ 2002/11/21
 
- (c) 2000-2001 by Christian Garbs <mitch@cgarbs.de>
+ (c) 2000-2002 by Christian Garbs <mitch@cgarbs.de>
 
  Licensed under GNU GPL (see COPYING for details)
 
@@ -249,9 +249,6 @@ separated by whitespaces.
   http://www.cgarbs.de/whatsnewfm.en.html
    or
   http://www.h.shuttle.de/mitch/whatsnewfm.en.html
-
-* whatsnewfm is mirrored here:
-  http://wombat.eu.org/linux/whatsnewfm/
 
 
 

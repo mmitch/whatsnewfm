@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.75 2003/02/03 22:14:58 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.76 2003/02/26 22:30:35 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.2-pre  2003-01-11";
@@ -26,6 +26,7 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-01-11";
 #
 #############################################################################
 #
+# 2003/02/26--> Removed old filenames from documentation.
 # 2003/02/03--> Use %hashes instead of @arrays for configuration file keys.
 #
 # v0.6.1
@@ -174,7 +175,7 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-01-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.75 2003/02/03 22:14:58 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.76 2003/02/26 22:30:35 mastermitch Exp $
 #
 #
 #############################################################################
@@ -263,17 +264,9 @@ from stdin.  Each line must consist of one or more I<project id>s
 
 Personal whatsnewfm configuration file.
 
-=item I<~/.whatsnewfm.db.old>
+=item I<~/.whatsnewfm.db>
 
-Personal database with "old" entries.
-
-=item I<~/.whatsnewfm.db.hot>
-
-Personal database with "hot" entries.
-
-=item I<~/.whatsnewfm.db.old.LOCK>, I<~/.whatsnewfm.db.hot.LOCK>
-
-Lock files for personal databases.
+Personal database with "hot" and "old" entries.
 
 =back
 

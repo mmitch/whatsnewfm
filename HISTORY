@@ -1,5 +1,15 @@
 whatsnewfm HISTORY
 
+2001/02/02  -  0.4.1
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: A line with a single dot "." within freetext fields
+  (e.g. release details) caused sendmail to end the mail at that
+  point.
+- Changes in the newsletter format should be detected and
+  the user gets a warning mail telling him to update whatsnewfm.
+
+
+
 2001/01/31  -  0.4.0
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: freshmeat has changed the syntax of the newsletter.

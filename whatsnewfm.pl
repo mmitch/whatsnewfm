@@ -27,7 +27,9 @@ my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
 #
 # 2002/11/24--> Removed file locking code.
 #           |-> Changed all @arrays and %hashs to corresponding $references.
-#           `-> Using BerkeleyDB::Hash for storage of databases.
+#           |-> Using BerkeleyDB::Hash for storage of databases.
+#           |-> Added function prototypes.
+#           `-> Added BerkeleyDB locking method.
 #
 #   DEVELOPMENT BRANCH TO 0.5.x
 #
@@ -149,7 +151,7 @@ my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.59.2.5 2002/11/24 20:49:18 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59.2.6 2002/11/24 20:50:45 mitch Exp $
 #
 #
 #############################################################################

@@ -22,6 +22,7 @@ my $id="whatsnewfm.pl  v0.2.1  2000-09-10";
 #
 #############################################################################
 #
+# 2000/09/20 -> Added a scoring for new applications.
 # 2000/09/19 -> "add" and "del" produce affirmative messages.
 # v0.2.1
 # 2000/09/08 -> BUGFIX: Statistic calculations at the end of a
@@ -56,7 +57,7 @@ my $id="whatsnewfm.pl  v0.2.1  2000-09-10";
 # 2000/07/06 -> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.17 2000/09/19 16:12:11 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.18 2000/09/20 15:48:15 mitch Exp $
 #
 #
 #############################################################################
@@ -240,8 +241,6 @@ sub parse_newsletter
 
     my $subject;
     my $header;
-    my $first_hot;
-    my $first_new;
     my %database;
     my %new_app;
     my %interesting;
@@ -253,6 +252,8 @@ sub parse_newsletter
     my $letter      = 0;
     my $letter_new  = 0;
 
+    my @hot_applications = ();
+    my @new_applications = ();
 
 ### generate current timestamp
 
@@ -311,8 +312,6 @@ sub parse_newsletter
 
 
     $header=1;
-    $first_hot=1;
-    $first_new=1;
 
     while (my $line=<STDIN>) {
 	chomp $line;
@@ -382,133 +381,26 @@ sub parse_newsletter
 		$new_app{'newslink'} = $line;
 		$letter++;
 
-### print a 'hot' entry
+### save a 'hot' entry
 
 		if (($new_app{'project_id'}) and (exists $interesting{$new_app{'project_id'}})) {
 
-		    if ($first_hot == 1) {
-			$first_hot=0;
-			open_hot(%new_app);
-		    }
-		    
-		    if (defined $new_app{'subject'}) {
-			print MAIL_HOT "\n   $new_app{'subject'}\n\n";
-		    }
-
-		    if (defined $new_app{'description'}) {
-			print MAIL_HOT "$new_app{'description'}\n";
-		    }
-
-		    if (defined $new_app{'changes'}) {
-			print MAIL_HOT "     changes:";
-			if (defined $new_app{'urgency'}) {
-			    print MAIL_HOT " ($new_app{'urgency'} urgency)";
-			}
-			print MAIL_HOT "\n$new_app{'changes'}\n";
-		    }
-
-		    if (defined $new_app{'author'}) {
-			print MAIL_HOT "    added by: $new_app{'author'}\n";
-		    }
-
-		    if (defined $new_app{'license'}) {
-			print MAIL_HOT "     license: $new_app{'license'}\n";
-		    }
-
-		    if (defined $new_app{'category'}) {
-			print MAIL_HOT "    category: $new_app{'category'}\n";
-		    }
-
-		    if (defined $new_app{'homepage'}) {
-			print MAIL_HOT "    homepage: $new_app{'homepage'}\n";
-		    }
-
-		    if (defined $new_app{'download'}) {
-			print MAIL_HOT "    download: $new_app{'download'}\n";
-		    }
-
-		    if (defined $new_app{'changelog'}) {
-			print MAIL_HOT "   changelog: $new_app{'changelog'}\n";
-		    }
-
-		    if (defined $new_app{'newslink'}) {
-			print MAIL_HOT "     details: $new_app{'newslink'}\n";
-		    }
-
-		    print MAIL_HOT "\n*" . "=" x 76 . "*\n";
-		    
-		    if ($config{'UPDATE_MAIL'} ne "single") {
-			close_hot();
-			$first_hot=1;
-		    }
+		    push @hot_applications, { %new_app };
 
 		}
 
-### print a 'new' entry if it is not already in the 'hot' list
+### save a 'new' entry if it is not already in the 'hot' list
 
 		elsif ((! $new_app{'project_id'}) or ((! defined $database{$new_app{'project_id'}}) and (! exists $interesting{$new_app{'project_id'}}))) {
 
 		    $letter_new++;
+
 		    if (defined $new_app{'project_id'}) {
 			$db_new++;
 			$database{$new_app{'project_id'}} = $timestamp;
-		    }
-		    
-		    if ($first_new == 1) {
-			$first_new=0;
-			open_new($subject);
-		    }
-		    
-		    if (defined $new_app{'subject'}) {
-			print MAIL_NEW "\n   $new_app{'subject'}\n\n";
+			push @new_applications, { %new_app };
 		    }
 
-		    if (defined $new_app{'description'}) {
-			print MAIL_NEW "$new_app{'description'}\n";
-		    }
-
-		    if (defined $new_app{'changes'}) {
-			print MAIL_NEW "     changes:";
-			if (defined $new_app{'urgency'}) {
-			    print MAIL_NEW " ($new_app{'urgency'} urgency)";
-			}
-			print MAIL_NEW "\n$new_app{'changes'}\n";
-		    }
-
-		    if (defined $new_app{'author'}) {
-			print MAIL_NEW "    added by: $new_app{'author'}\n";
-		    }
-
-		    if (defined $new_app{'license'}) {
-			print MAIL_NEW "     license: $new_app{'license'}\n";
-		    }
-
-		    if (defined $new_app{'category'}) {
-			print MAIL_NEW "    category: $new_app{'category'}\n";
-		    }
-
-		    if (defined $new_app{'homepage'}) {
-			print MAIL_NEW "    homepage: $new_app{'homepage'}\n";
-		    }
-
-		    if (defined $new_app{'download'}) {
-			print MAIL_NEW "    download: $new_app{'download'}\n";
-		    }
-
-		    if (defined $new_app{'changelog'}) {
-			print MAIL_NEW "   changelog: $new_app{'changelog'}\n";
-		    }
-
-		    if (defined $new_app{'newslink'}) {
-			print MAIL_NEW "   news item: $new_app{'newslink'}\n";
-		    }
-
-		    if (defined $new_app{'project_id'}) {
-			print MAIL_NEW "  project id: $new_app{'project_id'}\n";
-		    }
-			
-		    print MAIL_NEW "\n*" . "=" x 76 . "*\n";
-		    
 		}
 		
 		%new_app=();
@@ -533,16 +425,10 @@ sub parse_newsletter
     release_old();
 
 
-### close mailers
+### send mails
 
-
-    if ($first_new == 0) {
-	close_new($letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired);
-    }
-    
-    if ($first_hot == 0) {
-	close_hot();
-    }
+    mail_hot_apps(@hot_applications);
+    mail_new_apps($subject, $letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications);
 
 }
 
@@ -772,6 +658,7 @@ sub read_config()
     my $config_file = $_[0];
     my @allowed_keys = ("MAILTO", "DB_OLD", "DB_HOT", "EXPIRE", "DATE_CMD",
 			"MAIL_CMD", "UPDATE_MAIL");
+    my @scores = ();
 
 ### look for config file
     $config_file =~ s/^~/$ENV{'HOME'}/;
@@ -797,6 +684,20 @@ sub read_config()
 		$key = uc $key;
 		if (grep {/$key/} @allowed_keys) {
 		    $config{$key} = $value;
+		} elsif ($key eq "SCORE") {
+		    
+		    my ($score, $regexp) = split /\t/, $value, 2;
+		    if ((! defined $regexp) or ($regexp eq "")) {
+			warn "$0 warning:\n";
+			warn "no REGEXP given in configuration file at line $.\n";
+		    }
+		    elsif ($score =~ /[+-]\d+/) {
+			push @scores, { 'score' => $score, 'regexp' => $regexp };
+		    } else {
+			warn "$0 warning:\n";
+			warn "SCORE value not numeric in configuration file at line $.\n";
+		    }
+		    
 		} else {
 		    warn "$0 warning:\n";
 		    warn "unknown keyword \"$key\" in configuration file at line $.\n";
@@ -825,5 +726,186 @@ sub read_config()
     $config{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
     $config{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
 
+    $config{'SCORE'} = \@scores;
+
 }
 
+
+######################[ mail all 'hot' entries ]#############################
+
+
+sub mail_hot_apps()
+{
+    
+    my @hot_applications = @_;
+    my %new_app;
+    my $first_hot = 1;
+
+    while (@hot_applications) {
+	
+	%new_app = %{pop @hot_applications};
+    
+	
+	if ($first_hot == 1) {
+	    $first_hot=0;
+	    open_hot(%new_app);
+	}
+	
+	if (defined $new_app{'subject'}) {
+	    print MAIL_HOT "\n   $new_app{'subject'}\n\n";
+	}
+	
+	if (defined $new_app{'description'}) {
+	    print MAIL_HOT "$new_app{'description'}\n";
+	}
+	
+	if (defined $new_app{'changes'}) {
+	    print MAIL_HOT "     changes:";
+	    if (defined $new_app{'urgency'}) {
+		print MAIL_HOT " ($new_app{'urgency'} urgency)";
+	    }
+	    print MAIL_HOT "\n$new_app{'changes'}\n";
+	}
+	
+	if (defined $new_app{'author'}) {
+	    print MAIL_HOT "    added by: $new_app{'author'}\n";
+	}
+	
+	if (defined $new_app{'license'}) {
+	    print MAIL_HOT "     license: $new_app{'license'}\n";
+	}
+	
+	if (defined $new_app{'category'}) {
+	    print MAIL_HOT "    category: $new_app{'category'}\n";
+	}
+	
+	if (defined $new_app{'homepage'}) {
+	    print MAIL_HOT "    homepage: $new_app{'homepage'}\n";
+	}
+	
+	if (defined $new_app{'download'}) {
+	    print MAIL_HOT "    download: $new_app{'download'}\n";
+	}
+	
+	if (defined $new_app{'changelog'}) {
+	    print MAIL_HOT "   changelog: $new_app{'changelog'}\n";
+	}
+	
+	if (defined $new_app{'newslink'}) {
+	    print MAIL_HOT "     details: $new_app{'newslink'}\n";
+	}
+	
+	print MAIL_HOT "\n*" . "=" x 76 . "*\n";
+
+	if ($config{'UPDATE_MAIL'} ne "single") {
+	    close_hot();
+	    $first_hot=1;
+	}
+	
+    }
+
+### close mailer
+    if ($first_hot == 0) {
+	close_hot();
+    }
+}
+
+
+######################[ mail all 'new' entries ]#############################
+
+
+sub mail_new_apps()
+{
+
+    my ($subject, $letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
+    my %new_app;
+    my $first_new = 1;
+
+### do the scoring
+    foreach my $app (@new_applications) {
+
+	$app->{'score'} = 0;
+
+	if (defined $app->{'description'}) {
+	    foreach my $score ( @{$config{'SCORE'}}) {
+		if ($app->{'description'} =~ /$score->{'regexp'}/i) {
+		    $app->{'score'} += $score->{'score'};
+		}
+	    }
+	}
+    }
+
+### sort by score
+    @new_applications = sort { %{$a}->{'score'} <=> %{$b}->{'score'} } @new_applications;
+
+    while (@new_applications) {
+	
+	%new_app = %{pop @new_applications};
+	
+	if ($first_new == 1) {
+	    $first_new = 0;
+	    open_new($subject);
+	}
+
+	if (defined $new_app{'subject'}) {
+	    print MAIL_NEW "\n   $new_app{'subject'}\n\n";
+	}
+
+	if (defined $new_app{'description'}) {
+	    print MAIL_NEW "$new_app{'description'}\n";
+	}
+
+	if (defined $new_app{'changes'}) {
+	    print MAIL_NEW "     changes:";
+	    if (defined $new_app{'urgency'}) {
+		print MAIL_NEW " ($new_app{'urgency'} urgency)";
+	    }
+	    print MAIL_NEW "\n$new_app{'changes'}\n";
+	}
+
+	if (defined $new_app{'author'}) {
+	    print MAIL_NEW "    added by: $new_app{'author'}\n";
+	}
+
+	if (defined $new_app{'license'}) {
+	    print MAIL_NEW "     license: $new_app{'license'}\n";
+	}
+
+	if (defined $new_app{'category'}) {
+	    print MAIL_NEW "    category: $new_app{'category'}\n";
+	}
+
+	if (defined $new_app{'homepage'}) {
+	    print MAIL_NEW "    homepage: $new_app{'homepage'}\n";
+	}
+
+	if (defined $new_app{'download'}) {
+	    print MAIL_NEW "    download: $new_app{'download'}\n";
+	}
+
+	if (defined $new_app{'changelog'}) {
+	    print MAIL_NEW "   changelog: $new_app{'changelog'}\n";
+	}
+
+	if (defined $new_app{'newslink'}) {
+	    print MAIL_NEW "   news item: $new_app{'newslink'}\n";
+	}
+
+	if (defined $new_app{'project_id'}) {
+	    print MAIL_NEW "  project id: $new_app{'project_id'}\n";
+	}
+
+	if (defined $new_app{'score'}) {
+	    print MAIL_NEW "       score: $new_app{'score'}\n";
+	}
+
+	print MAIL_NEW "\n*" . "=" x 76 . "*\n";
+	     
+    }
+    
+### close mailer
+    if ($first_new == 0) {
+	close_new($letter, $letter_new, $hot_written, $db_new, $db_written, $db_expired);
+    }
+
+}

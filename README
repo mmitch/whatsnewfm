@@ -1,7 +1,7 @@
-<<$Id: README,v 1.40 2001/11/07 22:03:21 mitch Exp $>>
+<<$Id: README,v 1.41 2002/11/19 22:47:47 mitch Exp $>>
 
 
-  whatsnewfm 0.4.10
+  whatsnewfm 0.4.11
   ~~~~~~~~~~~~~~~~~
 
  2001/11/07
@@ -258,6 +258,10 @@ separated by whitespaces.
   [7] Thanks
   ~~~~~~~~~~
 
+* Matthias Kluwe <mkluwe@web.de> discovered and fixed the warnings
+  under Perl 5.8.0 (fixed in v0.4.11).  He also made some annotations
+  to the README (included in v0.4.4).  
+
 * Edelhard Becker <becker@edelhard.de> was the first to inform me
   about the format change that was fixed in v0.4.10.
 
@@ -268,9 +272,6 @@ separated by whitespaces.
 
 * Francisco <frandebo@latt.if.usp.br> suggested the scoring of
   Freshmeat categories (included in v0.4.6).
-
-* Matthias Kluwe <mkluwe@web.de> made some annotations to the README
-  (included in v0.4.4).
 
 * Pedro Melo Cunha <melo@isp.novis.pt> send a patch to move the
   newsletter summary to the top of the mail (included in v0.4.3).

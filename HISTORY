@@ -1,5 +1,12 @@
 whatsnewfm HISTORY
 
+2000/08/22  -  0.2.0
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: freshmeat has changed the syntax of the newsletter
+- Updates can be sent as one big or several small mails.
+
+
+
 2000/08/04  -  0.0.3
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: Empty update mail were sent when there were no updates.

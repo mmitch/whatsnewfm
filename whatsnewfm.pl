@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.2.3  2000-10-30";
+my $id="whatsnewfm.pl  v0.2.4  2000-11-10";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -21,6 +21,9 @@ my $id="whatsnewfm.pl  v0.2.3  2000-10-30";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.2.4
+# 2000/11/10--> Removed warnings that only appeared on Perl 5.6
 #
 # v0.2.3
 # 2000/10/30--> Reacted to a change in the newsletter format (item name).
@@ -67,7 +70,7 @@ my $id="whatsnewfm.pl  v0.2.3  2000-10-30";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.21 2000/10/30 20:49:05 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.22 2000/11/10 17:29:06 mitch Exp $
 #
 #
 #############################################################################
@@ -90,6 +93,7 @@ my $configfile = "~/.whatsnewfmrc";
 # global configuration hash:
 my %config;
 
+sub read_config ($);
 
 ###########################[ main routine ]##################################
 
@@ -690,7 +694,7 @@ sub open_new
 ###################[ read the configuration file ]###########################
 
 
-sub read_config()
+sub read_config($)
 {
     my $config_file = $_[0];
     my @allowed_keys = ("MAILTO", "DB_OLD", "DB_HOT", "EXPIRE", "DATE_CMD",

@@ -1,10 +1,10 @@
-<<$Id: README,v 1.46.2.6 2002/12/28 23:18:57 mastermitch Exp $>>
+<<$Id: README,v 1.46.2.7 2003/04/27 09:20:35 mastermitch Exp $>>
 
 
-  whatsnewfm 0.4.13
+  whatsnewfm 0.4.14
   ~~~~~~~~~~~~~~~~~
 
- 2002/12/28
+ 2003/04/27
 
  (c) 2000-2002 by Christian Garbs <mitch@cgarbs.de>
 
@@ -271,6 +271,13 @@ it with the pod2* commands.  For example:
 
   [8] Thanks
   ~~~~~~~~~~
+
+* Scott reported a bug with multiline subjects within the newsletter
+  (sourceforge bug #726261, fixed in v0.6.2, backported to v0.4.14).
+
+* Josef 'Jupp' Schugt <jupp@gmx.de> made some annotations to the
+  expire algorithm for the 'old' database (changes included on v0.6.2
+  and backported to v0.4.14).
 
 * Roger H. Goun <rgoun at sourceforge> reported a bug in the RPMs of
   v0.4.12.

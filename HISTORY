@@ -1,7 +1,17 @@
-<<$Id: HISTORY,v 1.24.2.2 2002/12/28 23:14:48 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.24.2.3 2003/04/27 09:24:52 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2003/04/27  -  0.4.14
+~~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Multiline subjects in the newsletter were not handled
+  correctly.
+- Changed expiration algorithm for old database.  Entries will stay at
+  least 15 days in the database.
+- Use different parameters for sending mail.
+
 
 
 2002/12/28  -  0.4.13

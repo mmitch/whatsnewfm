@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.73 2003/01/05 14:27:43 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.74 2003/01/11 15:31:23 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.1-pre  2003-01-04";
+my $id="whatsnewfm.pl  v0.6.1  2003-01-11";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
@@ -26,7 +26,7 @@ my $id="whatsnewfm.pl  v0.6.1-pre  2003-01-04";
 #
 #############################################################################
 #
-
+# v0.6.1
 # 2003/01/05--> BUGFIX: Number of added projects to old database in
 #           |           newsletter was wrong.
 #           `-> Changed open("<") call to more secure three-parameter form.
@@ -172,7 +172,7 @@ my $id="whatsnewfm.pl  v0.6.1-pre  2003-01-04";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.73 2003/01/05 14:27:43 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.74 2003/01/11 15:31:23 mastermitch Exp $
 #
 #
 #############################################################################

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.67 2003/08/18 19:29:12 mastermitch Exp $>>
+<<$Id: README,v 1.68 2004/02/15 14:34:22 mastermitch Exp $>>
 
 
 
@@ -11,12 +11,12 @@
 
 
 
-  whatsnewfm 0.6.3
+  whatsnewfm 0.6.4
   ~~~~~~~~~~~~~~~~
 
- 2003/08/18
+ 2004/02/15
 
- (c) 2000-2003 by Christian Garbs <mitch@cgarbs.de>
+ (c) 2000-2004 by Christian Garbs <mitch@cgarbs.de>
 
  Licensed under GNU GPL (see COPYING for details)
 
@@ -329,6 +329,10 @@ it with the pod2* commands.  For example:
 
   [9] Thanks
   ~~~~~~~~~~
+
+* Matthew Gabeler-Lee <msg2@po.cwru.edu> wrote a patch to fix '=20'
+  appearing in mails sent by whatsnewfm (sourceforge bug #891520,
+  fixed in v0.6.4).
 
 * scottbbbb pointed out that the sendmail options should be
   configurable (sourceforge bug #728895, fixed in v0.6.3,

@@ -1,7 +1,14 @@
-<<$Id: HISTORY,v 1.35 2003/08/18 19:29:39 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.36 2004/02/15 14:31:22 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2004/02/15  -  0.6.4
+~~~~~~~~~~~~~~~~~~~~
+- Fix rare problems with '=20' appearing in whatsnewfm mails.
+  Charset and encoding are now copied from the newsletter.
+
 
 
 2003/08/18  -  0.6.3

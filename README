@@ -1,10 +1,10 @@
-<<$Id: README,v 1.16 2000/10/30 20:53:07 mitch Exp $>>
+<<$Id: README,v 1.17 2000/11/10 17:33:01 mitch Exp $>>
 
 
-  whatsnewfm 0.2.3
+  whatsnewfm 0.2.4
   ~~~~~~~~~~~~~~~~
 
- 2000/10/30
+ 2000/11/10
 
  (c) 2000 by Christian Garbs <mitch@uni.de>
 
@@ -232,6 +232,9 @@ separated by whitespaces.
 
   [7] Thanks
   ~~~~~~~~~~
+
+* Joerg Plate <Joerg@Plate.cx> sent a patch for those annoying
+  warnings with Perl 5.6 (fixed in v0.2.4).
 
 * Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> maintains the
   whatsnewfm RPM and .deb packages.

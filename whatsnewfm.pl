@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.2.0  2000-08-22";
+my $id="whatsnewfm.pl  v0.2.1  2000-09-10";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -22,16 +22,21 @@ my $id="whatsnewfm.pl  v0.2.0  2000-08-22";
 #
 #############################################################################
 #
+# 2000/09/08 -> BUGFIX: Statistic calculations at the end of a
+#               newsletter were broken.
+#            -> You can "view" all entries in the 'hot' database.
+#            -> Configuration is read from a configuration file. The
+#               script doesn't need to be edited any more.
 # v0.2.0
 # 2000/08/22 -> BUGFIX: freshmeat has changed the newsletter format
 # 2000/08/05 -> Updates can be sent as one big or several small mails.
 # v0.0.3
 # 2000/08/04 -> BUGFIX: No empty mails are sent any more.
 #            -> Display of help text
-# 2000/08/03 -> BUGFIX: Comments in the "hot" database were deleted
+# 2000/08/03 -> BUGFIX: Comments in the 'hot' database were deleted
 #               after every run.
 #            -> Major code cleanup.
-#            -> You can "add" and "del" entries from the hot database.
+#            -> You can "add" and "del" entries from the 'hot' database.
 # v0.0.2
 # 2000/08/03 -> A list of interesting applications is kept and you are
 #               informed of updates of these applications.
@@ -49,7 +54,7 @@ my $id="whatsnewfm.pl  v0.2.0  2000-08-22";
 # 2000/07/06 -> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.14 2000/09/08 21:12:16 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.15 2000/09/10 14:56:29 mitch Exp $
 #
 #
 #############################################################################
@@ -122,6 +127,9 @@ $id
 
 filter mode for newsletters (stdin -> stdout):
     whatsnewfm.pl
+
+print the "hot" list to stdout:
+    whatsnewfm.pl view
 
 add one new application to the "hot" list:
     whatsnewfm.pl add <magic-id> [comment]
@@ -302,7 +310,7 @@ sub parse_newsletter
 
     while (my $line=<STDIN>) {
 	chomp $line;
-	if (($header == 1) && ($line =~ /[ article details ]/)) {
+	if (($header == 1) and ($line =~ /[ article details ]/)) {
 	    $header=0;
 	} else {
 	    
@@ -370,7 +378,7 @@ sub parse_newsletter
 
 ### print a 'hot' entry
 
-		if (($new_app{'project_id'}) && (exists $interesting{$new_app{'project_id'}})) {
+		if (($new_app{'project_id'}) and (exists $interesting{$new_app{'project_id'}})) {
 
 		    if ($first_hot == 1) {
 			$first_hot=0;
@@ -418,7 +426,7 @@ sub parse_newsletter
 		    }
 
 		    if (defined $new_app{'newslink'}) {
-			print MAIL_HOT "   news item: $new_app{'newslink'}\n";
+			print MAIL_HOT "     details: $new_app{'newslink'}\n";
 		    }
 
 		    print MAIL_HOT "\n*" . "=" x 76 . "*\n";
@@ -432,7 +440,7 @@ sub parse_newsletter
 
 ### print a 'new' entry if it is not already in the 'hot' list
 
-		elsif ((! $new_app{'project_id'}) || ((! defined $database{$new_app{'project_id'}}) && (! exists $interesting{$new_app{'project_id'}}))) {
+		elsif ((! $new_app{'project_id'}) or ((! defined $database{$new_app{'project_id'}}) and (! exists $interesting{$new_app{'project_id'}}))) {
 
 		    $letter_new++;
 		    if (defined $new_app{'project_id'}) {
@@ -728,7 +736,7 @@ sub open_hot
     } else {
 	print MAIL_HOT "Subject: whatsnewfm.pl: Update: $new_app{'subject'}\n";
     }
-    print MAIL_HOT "X-Loop: sent by whatsnewfm.pl daemon\n";
+    print MAIL_HOT "X-Loop: sent by whatsnewfm.pl script\n";
     print MAIL_HOT "\n";
     print MAIL_HOT "*" . "=" x 76 . "*\n";
 }
@@ -773,8 +781,12 @@ sub read_config()
 	chomp $line;
 	$line =~ s/\s+$//;
 	$line =~ s/^\s+//;
-	if (($line ne "") && ($line !~ /^\#/)) {
+	if (($line ne "") and ($line !~ /^\#/)) {
 	    my ($key, $value) = split /=/, $line, 2;
+	    if (exists $config{$key}) {
+		warn "$0 warning:\n";
+		warn "duplicate keyword \"$key\" in configuration file at line $.\n";
+	    }
 	    if ($value) {
 		$key = uc $key;
 		if (grep {/$key/} @allowed_keys) {
@@ -784,8 +796,8 @@ sub read_config()
 		    warn "unknown keyword \"$key\" in configuration file at line $.\n";
 		}
 	    } else {
-		warn "$0 warning:\n";
-		warn "keyword \"$key\" has no value configuration file at line $.\n";
+		warn "$0 fatal error:\n";
+		die "keyword \"$key\" has no value configuration file at line $.\n";
 	    }
 	}
 	    
@@ -802,13 +814,10 @@ sub read_config()
     }
 
 ### expand ~ to home directory
-    $config{'DB_HOT'}    =~ s/^~/$ENV{'HOME'}/;
-    $config{'DB_OLD'}    =~ s/^~/$ENV{'HOME'}/;
+    $config{'DB_HOT'}   =~ s/^~/$ENV{'HOME'}/;
+    $config{'DB_OLD'}   =~ s/^~/$ENV{'HOME'}/;
     $config{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
     $config{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
-
-### expand ~ to username
-    $config{'MAILTO'}   =~ s/^~/$ENV{'USER'}/;
 
 }
 

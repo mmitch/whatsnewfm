@@ -1,0 +1,116 @@
+
+  whatsnewfm 0.0.2
+  ~~~~~~~~~~~~~~~~
+
+ 2000/08/03
+
+ (c) 2000 by Christian Garbs <mitch@uni.de>
+
+ Licensed under Gnu GPL (see COPYING for details)
+
+
+
+  Contents
+  ~~~~~~~~
+
+  Description . . . . . . . . . . . . . .  1
+  Requirements  . . . . . . . . . . . . .  2
+  Usage . . . . . . . . . . . . . . . . .  3
+  Download  . . . . . . . . . . . . . . .  4
+  Thanks  . . . . . . . . . . . . . . . .  5
+  To do . . . . . . . . . . . . . . . . .  6
+
+
+
+     Feel free to contact the author at <mitch@uni.de> for any
+     questions or suggestions.
+
+
+
+  [1] Description
+  ~~~~~~~~~~~~~~~
+
+whatsnewfm is a utility to filter the daily newsletter from
+www.freshmeat.net
+
+The main purpose is to cut the hughe newsletter to a smaller size by
+only showing items that you didn't see before.
+
+The items already seen will be stored in a database. After some time,
+the items expire and will be shown again the next time they are
+included in a newsletter.
+
+If you find an item that you consider particularly useful, you can add
+it to a 'hot' list. Items in the hot list are checked for updates so
+that you don't miss anything about your favourite programs.
+
+
+
+  [2] Requirements
+  ~~~~~~~~~~~~~~~~
+
+* procmail or something else (otherwise you will have to send every
+                              newsletter through the filter by hand)
+
+* perl, sendmail, date
+
+
+
+  [3] Usage
+  ~~~~~~~~~
+
+1) Edit the variables at the top of the whatsnewfm.pl script.
+
+2) Create thw empty databases with
+   "touch /path/to/database-hot /path/to/database-old"
+
+3) Add the following lines to your .procmailrc to send all newsletters
+   through the whatsnewfm filter:
+
+:0 w :
+* ^Subject:.\[fm-news\].newsletter
+* !^X-Loop:.*whatsnewfm
+| /path/to/whatsnewfm.pl
+
+4) If you're not yet subscribed to the freshmeat newsletter, do so at
+   http://www.freshmeat.net 
+
+5) If one of the new applications is interesting to you, then add
+   it's "magic id" to the "hot" database. Just enter the number on a
+   new line. If you want to have comments in this database (eg the
+   names of the applications) then write a tab (\t) after "magic id"
+   followed by anything you want.
+
+
+
+  [4] Download
+  ~~~~~~~~~~~~
+
+* The homepage of whatsnewfm is here:
+  http://www.h.shuttle.de/mitch/whatsnewfm.en.html
+
+
+
+  [5] Thanks
+  ~~~~~~~~~~
+
+* Michael Reinsch <mr@uue.org> for keeping on asking and not being
+  convinced by my wrong thoughts. Only because of him there is a
+  version 0.0.2.
+  
+
+
+  [6] To do
+  ~~~~~~~~~
+
+* create backup only when there have been changes (like watchfm)
+
+* what to do when the same item is twice in a letter?
+
+* provide an option not to skip messages with high urgency
+
+* provide locking while entering new ids to the hot database
+
+* provide a CHANGELOG file
+
+* provide a PATCH file

@@ -1,10 +1,10 @@
-<<$Id: README,v 1.39 2001/10/19 16:18:39 mitch Exp $>>
+<<$Id: README,v 1.40 2001/11/07 22:03:21 mitch Exp $>>
 
 
-  whatsnewfm 0.4.9
-  ~~~~~~~~~~~~~~~~
+  whatsnewfm 0.4.10
+  ~~~~~~~~~~~~~~~~~
 
- 2001/10/19l
+ 2001/11/07
 
  (c) 2000-2001 by Christian Garbs <mitch@cgarbs.de>
 
@@ -258,10 +258,13 @@ separated by whitespaces.
   [7] Thanks
   ~~~~~~~~~~
 
+* Edelhard Becker <becker@edelhard.de> was the first to inform me
+  about the format change that was fixed in v0.4.10.
+
 * Nikolaus Filus <NFilus@gmx.net> requested the new features in v0.4.9.
 
 * Jost Krieger <Jost.Krieger@ruhr-uni-bochum.de> noticed and fixed the
-  missing Categories in the 'hot' mails (fixes in v0.4.7).
+  missing Categories in the 'hot' mails (fixed in v0.4.7).
 
 * Francisco <frandebo@latt.if.usp.br> suggested the scoring of
   Freshmeat categories (included in v0.4.6).

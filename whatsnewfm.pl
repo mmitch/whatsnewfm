@@ -138,7 +138,7 @@ my $id="whatsnewfm.pl  v0.4.10  2001-11-07";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.55 2002/11/19 21:48:47 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.56 2002/11/19 21:49:37 mitch Exp $
 #
 #
 #############################################################################
@@ -1317,7 +1317,7 @@ sub mail_new_apps()
 
 
 ### sort by score
-    @new_applications = sort { %{$a}->{'score'} <=> %{$b}->{'score'} } @new_applications;
+    @new_applications = sort { $a->{'score'} <=> $b->{'score'} } @new_applications;
 
 
 ### get summary

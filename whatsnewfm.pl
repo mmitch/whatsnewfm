@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.2.6  2001-01-30";
+my $id="whatsnewfm.pl  v0.4.0  2001-01-31";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000,2001  Christian Garbs <mitch@uni.de>
@@ -23,6 +23,9 @@ my $id="whatsnewfm.pl  v0.2.6  2001-01-30";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.4.0
+# 2000/01/31--> BUGFIX: freshmeat has changed the newsletter format.
 #
 # v0.2.6
 # 2000/01/30--> New items with less than a specified score will not be shown.
@@ -50,7 +53,7 @@ my $id="whatsnewfm.pl  v0.2.6  2001-01-30";
 #               script doesn't need to be edited any more.
 #
 # v0.2.0
-# 2000/08/22--> BUGFIX: freshmeat has changed the newsletter format
+# 2000/08/22--> BUGFIX: freshmeat has changed the newsletter format.
 # 2000/08/05--> Updates can be sent as one big or several small mails.
 #
 # v0.0.3
@@ -79,7 +82,7 @@ my $id="whatsnewfm.pl  v0.2.6  2001-01-30";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.26 2001/01/30 22:12:47 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.27 2001/01/31 15:47:59 mitch Exp $
 #
 #
 #############################################################################
@@ -285,19 +288,25 @@ sub remove_entry
 sub parse_newsletter
 {
 
-    my $subject;
-    my $header;
     my %database;
     my %new_app;
     my %interesting;
 
-    my $hot_written = 0;
-    my $db_written  = 0;
-    my $db_expired  = 0;
-    my $db_new      = 0;
-    my $letter      = 0;
-    my $letter_new  = 0;
-    my $letter_article = 0;
+    my $subject      = "Freshmeat Newsletter (no subject?)";
+    my $position     = 3;
+    # 3-> after mail header
+    # 2-> within articles
+    # 1-> after articles
+    # 0-> within releases
+
+    my $hot_written  = 0;
+    my $db_written   = 0;
+    my $db_expired   = 0;
+    my $db_new       = 0;
+
+    my $articles     = 0;
+    my $releases     = 0;
+    my $releases_new = 0;
 
     my @hot_applications = ();
     my @new_applications = ();
@@ -358,120 +367,228 @@ sub parse_newsletter
 ### process email body
 
 
-    $header=1;
-
     while (my $line=<STDIN>) {
 	chomp $line;
-	if (($header == 1) and ($line =~ /[ article details ]/)) {
-	    $header=0;
-	} else {
+	if (($position == 3) and ($line =~ /^::: A R T I C L E S \(\d+\) :::/)) {
+	    $position = 2;
+	} elsif (($position > 0) and ($line =~ /^::: R E L E A S E   D E T A I L S \(\d+\) :::/)) {
+	    $position = 0;
+	} elsif ($position == 2) {
 	    
-### parse an entry
+### parse an article entry
 
-	    if ($line =~ /subject:\s/) {
-		$line =~ s/^.*subject:\s//;
-		$new_app{'subject'} = $line;
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
 
-	    } elsif ($line =~ /name:\s/) {
-		$line =~ s/^.*name:\s//;
-		$new_app{'subject'} = $line;
-
-	    } elsif  ($line =~ /added\sby:\s/) {
-		$line =~ s/^.*added\sby:\s//;
+	    # title
+	    chomp $line;
+	    $new_app{'subject'} = $line;
+	    $line=<STDIN>;
+	    next unless defined $line;
+	    
+	    # from
+	    if ($line =~ /^by /) {
+		$line =~ s/^by //;
+		chomp $line;
 		$new_app{'author'} = $line;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
 
-	    } elsif  ($line =~ /license:\s/) {
-		$line =~ s/^.*license:\s//;
-		$new_app{'license'} = $line;
-
-	    } elsif  ($line =~ /category:\s/) {
-		$line =~ s/^.*category:\s//;
+	    # section
+	    if ($line =~ /^Section: /) {
+		$line =~ s/^Section: //;
+		chomp $line;
 		$new_app{'category'} = $line;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
 
-	    } elsif  ($line =~ /homepage:\s/) {
-		$line =~ s/^.*homepage:\s//;
-		$new_app{'homepage'} = lc $line;
-		$line =~ s/^.*freshmeat\.net\/projects\///;
-		$line =~ s/\/homepage\/$//;
-		$new_app{'project_id'} = $line;
+	    # date
+	    chomp $line;
+	    $new_app{'date'} = $line;
+	    $line=<STDIN>;
+	    next unless defined $line;
+	    
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
 
-	    } elsif  ($line =~ /download:\s/) {
-		$line =~ s/^.*download:\s//;
-		$new_app{'download'} = lc $line;
-		$line =~ s/^.*freshmeat\.net\/projects\///;
-		$line =~ s/\/download\/$//;
-		$new_app{'project_id'} = $line;
+	    # text
+	    $new_app{'description'} = $line;
+	    while (my $line=<STDIN>) {
+		last if $line =~ /^\s$/;
+		$new_app{'description'} .= $line;
+	    }
 
-	    } elsif  ($line =~ /changelog:\s/) {
-		$line =~ s/^.*changelog:\s//;
-		$new_app{'changelog'} = lc $line;
-		$line =~ s/^.*freshmeat\.net\/projects\///;
-		$line =~ s/\/changelog\/$//;
-		$new_app{'project_id'} = $line;
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
 
-	    } elsif  ($line =~ /^description:$/) {
-		while (my $line=<STDIN>) {
-		    last if $line =~ /^$/;
-		    $new_app{'description'} .= $line;
+	    # URL
+	    if ($line =~ /^URL: /) {
+		$line =~ s/^URL: //;
+		chomp $line;
+		$new_app{'newslink'} = $line;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
+
+	    # save it
+	    undef $new_app{'project_id'};
+	    $articles++;
+	    
+	    push @new_applications, { %new_app };
+	    %new_app=();
+
+	    # wait for separator  (UGLY, change this routine somehow)
+	    my $end = 0;
+	    while ($end == 0) {
+		chomp $line;
+		if ($line =~ /- % -/) {
+		    $end = 1;
+		} else {
+		    if ($line !~ /^\s*$/) {
+			if (($line =~ tr/. -//c) == 0) {
+			    $position = 1;
+			    $end = 1;
+			}		    }
 		}
+		$line=<STDIN>;
+		$end = 1 unless defined $line;
+	    }
 
-	    } elsif  ($line =~ /^body:$/) {
-		while (my $line=<STDIN>) {
-		    last if $line =~ /^$/;
-		    $new_app{'description'} .= $line;
-		}
-	    } elsif  ($line =~ /^changes:$/) {
-		while (my $line=<STDIN>) {
-		    last if $line =~ /^$/;
+	} elsif ($position == 0) {
+	    
+### parse an release entry
+
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
+
+	    # title
+	    if ($line =~ /^\[\d+\] - /) {
+		$line =~ s/^\[\d+\] - //;
+		chomp $line;
+		$new_app{'subject'} = $line;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
+	    
+	    # from
+	    if ($line =~ /^by /) {
+		$line =~ s/^by //;
+		chomp $line;
+		$new_app{'author'} = $line;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
+
+	    # date
+	    chomp $line;
+	    $new_app{'date'} = $line;
+	    $line=<STDIN>;
+	    next unless defined $line;
+	    
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
+
+	    # text
+	    $new_app{'description'} = $line;
+	    while ($line=<STDIN>) {
+		last if $line =~ /^\s*$/;
+		$new_app{'description'} .= $line;
+	    }
+
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
+
+	    # changes
+	    if ($line =~ /^Changes: /) {
+		$line =~ s/^Changes: //;
+		$new_app{'changes'} = $line;
+		while ($line=<STDIN>) {
+		    last if $line =~ /^\s*$/;
 		    $new_app{'changes'} .= $line;
 		}
+	    }
 
-	    } elsif  ($line =~ /^urgency:$/) {
-		if (defined (my $line=<STDIN>)) {
-		    chomp $line;
-		    $new_app{'urgency'} .= $line;
-		}
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
 
-### this is for news articles and editorials
-	    } elsif  ($line =~ /^\|\>\shttp:\/\/freshmeat.net\/news\//) {
-		$line =~ s/^\|\>\s//;
-		$new_app{'newslink'} = $line;
-		undef $new_app{'project_id'};
-		$letter_new++;
-		$letter_article++;
+	    # URL
+	    if ($line =~ /^URL: /) {
+		$line =~ s/^URL: //;
+		chomp $line;
+		$new_app{'project_link'} = $line;
+		$line =~ s!/$!!;
+		$line =~ s!^http://freshmeat.net/projects/!!;
+		$new_app{'project_id'} = $line;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
 
-		push @new_applications, { %new_app };
-		%new_app=();
-
-	    } elsif  ($line =~ /^\|\>\shttp:\/\/freshmeat.net\/projects\//) {
-		$line =~ s/^\|\>\s//;
-		$new_app{'newslink'} = $line;
-		$letter++;
-
-### save a 'hot' entry
-
-		if (($new_app{'project_id'}) and (exists $interesting{$new_app{'project_id'}})) {
-
-		    push @hot_applications, { %new_app };
-
-		}
-
-### save a 'new' entry if it is not already in the 'hot' list
-
-		elsif ((! $new_app{'project_id'}) or ((! defined $database{$new_app{'project_id'}}) and (! exists $interesting{$new_app{'project_id'}}))) {
-
-		    $letter_new++;
-
-		    if (defined $new_app{'project_id'}) {
-			$db_new++;
-			$database{$new_app{'project_id'}} = $timestamp;
-			push @new_applications, { %new_app };
-		    }
-
+	    $releases++;
+	    
+	    ### save a 'hot' entry
+	    
+	    if (($new_app{'project_id'}) and (exists $interesting{$new_app{'project_id'}})) {
+		
+		push @hot_applications, { %new_app };
+		
+	    }
+	    
+	    ### save a 'new' entry if it is not already in the 'hot' list
+	    
+	    elsif ((! $new_app{'project_id'}) or ((! defined $database{$new_app{'project_id'}}) and (! exists $interesting{$new_app{'project_id'}}))) {
+		
+		$releases_new++;
+		
+		if (defined $new_app{'project_id'}) {
+		    $db_new++;
+		    $database{$new_app{'project_id'}} = $timestamp;
+		    push @new_applications, { %new_app };
 		}
 		
-		%new_app=();
 	    }
+	    
+	    # wait for separator  (UGLY, change this routine somehow)
+	    my $end = 0;
+	    while ($end == 0) {
+		chomp $line;
+		if ($line =~ /- % -/) {
+		    $end = 1;
+		} else {
+		    if ($line !~ /^\s*$/) {
+			if (($line =~ tr/. -//c) == 0) {
+			    $position = 1;
+			    $end = 1;
+			}		    }
+		}
+		$line=<STDIN>;
+		$end = 1 unless defined $line;
+	    }
+
+	    %new_app=();
+
 	}
     }
 
@@ -495,7 +612,7 @@ sub parse_newsletter
 ### send mails
 
     mail_hot_apps(@hot_applications);
-    mail_new_apps($subject, $letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired, @new_applications);
+    mail_new_apps($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications);
 
 }
 
@@ -655,18 +772,18 @@ EOF
 
 sub close_new
 {
-    my ($letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired) = @_;
+    my ($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
-    my $difference=$letter-$letter_new;
+    my $difference=($releases-$releases_new);
     print MAIL_NEW << "EOF";
 	
     This newsletter has been filtered by:
     $id
-	
-    The newsletter originally contained $letter news items,
-    $difference items have been filtered out, while $letter_article items were articles,
-    so there are $letter_new items left in this mail.
 
+    It contained $articles articles and $releases releases.
+    $difference releases have been filtered out as 'already seen'.
+    $score_killed articles or releases have been filtered out as 'low score'.
+	
     Your \'hot\' database has $hot_written entries.
 
     $db_expired entries from your 'old' database have expired,
@@ -839,26 +956,18 @@ sub mail_hot_apps()
 	    print MAIL_HOT "    added by: $new_app{'author'}\n";
 	}
 	
-	if (defined $new_app{'license'}) {
-	    print MAIL_HOT "     license: $new_app{'license'}\n";
+	if (defined $new_app{'date'}) {
+	    print MAIL_HOT "        date: $new_app{'date'}\n";
 	}
 	
 	if (defined $new_app{'category'}) {
 	    print MAIL_HOT "    category: $new_app{'category'}\n";
 	}
 	
-	if (defined $new_app{'homepage'}) {
-	    print MAIL_HOT "    homepage: $new_app{'homepage'}\n";
+	if (defined $new_app{'project_link'}) {
+	    print MAIL_HOT "project page: $new_app{'project_link'}\n";
 	}
-	
-	if (defined $new_app{'download'}) {
-	    print MAIL_HOT "    download: $new_app{'download'}\n";
-	}
-	
-	if (defined $new_app{'changelog'}) {
-	    print MAIL_HOT "   changelog: $new_app{'changelog'}\n";
-	}
-	
+
 	if (defined $new_app{'newslink'}) {
 	    print MAIL_HOT "     details: $new_app{'newslink'}\n";
 	}
@@ -885,7 +994,7 @@ sub mail_hot_apps()
 sub mail_new_apps()
 {
 
-    my ($subject, $letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
+    my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
     my %new_app;
     my $first_new = 1;
 
@@ -905,7 +1014,10 @@ sub mail_new_apps()
 
 
 ### only keep applications with at least minimum score
+
+    my $score_killed = @new_applications;
     @new_applications = grep {$_->{'score'} >= $config{'SCORE_MIN'}} @new_applications;
+    $score_killed -= @new_applications;
 
 
 ### sort by score
@@ -940,24 +1052,16 @@ sub mail_new_apps()
 	    print MAIL_NEW "    added by: $new_app{'author'}\n";
 	}
 
-	if (defined $new_app{'license'}) {
-	    print MAIL_NEW "     license: $new_app{'license'}\n";
+	if (defined $new_app{'date'}) {
+	    print MAIL_NEW "        date: $new_app{'date'}\n";
 	}
-
+	
 	if (defined $new_app{'category'}) {
 	    print MAIL_NEW "    category: $new_app{'category'}\n";
 	}
 
-	if (defined $new_app{'homepage'}) {
-	    print MAIL_NEW "    homepage: $new_app{'homepage'}\n";
-	}
-
-	if (defined $new_app{'download'}) {
-	    print MAIL_NEW "    download: $new_app{'download'}\n";
-	}
-
-	if (defined $new_app{'changelog'}) {
-	    print MAIL_NEW "   changelog: $new_app{'changelog'}\n";
+	if (defined $new_app{'project_link'}) {
+	    print MAIL_NEW "project page: $new_app{'project_link'}\n";
 	}
 
 	if (defined $new_app{'newslink'}) {
@@ -978,7 +1082,7 @@ sub mail_new_apps()
     
 ### close mailer
     if ($first_new == 0) {
-	close_new($letter, $letter_new, $letter_article, $hot_written, $db_new, $db_written, $db_expired);
+	close_new($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
     }
 
 }

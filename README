@@ -27,7 +27,7 @@
   Importing a watchfm database  . . . . .  5
   Download  . . . . . . . . . . . . . . .  6
   Thanks  . . . . . . . . . . . . . . . .  7
-  To do . . . . . . . . . . . . . . . . .  8
+  Future Plans  . . . . . . . . . . . . .  8
 
 
 
@@ -180,13 +180,24 @@ the applications that are 'yours':
   
 
 
-  [8] To do
-  ~~~~~~~~~
+  [8] Future Plans
+  ~~~~~~~~~~~~~~~~
 
-* option: updates in one mail or in several small mails
+Items marked with ? mean "Does anybody need this?". If you want to
+have this feature, then please write a mail to me and I'll include it
+in the next version.
 
-* create backup only when there have been changes (like watchfm)
+? Compress the databases using gzip, bzip2 or the like.
 
-* what to do when the same item is twice in a letter?
+? Save the application names in the "old" database (like comments in
+  the "hot" database).
 
-* provide an option not to skip messages with high urgency
+? Provide an option that always shows messages with high urgency.
+
+* Create backup only when there have been changes (like watchfm).
+
+* What to do when the same item appears twice in one letter?
+
+* Use a database like gdbm, ndbm or dbm instead of plain ascii files
+  (this will only happen on a boring, cold and rainy sunday
+afternoon).

@@ -1,12 +1,13 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.3pre  2001-02-08";
+my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000,2001  Christian Garbs <mitch@uni.de>
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
+#                            Pedro Melo Cunha <melo@isp.novis.pt>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -24,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.3pre  2001-02-08";
 #
 #############################################################################
 #
+# 2001/02/11--> Summary can be printed at top or bottom of a parsed
+#               newsletter.
 # 2001/02/08--> Comments from 'hot' database are included in 'hot' mails.
 #           `-> BUGFIX: Existing comments in 'hot' database could not
 #               be updated.
@@ -102,7 +105,7 @@ my $id="whatsnewfm.pl  v0.4.3pre  2001-02-08";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.34 2001/02/08 11:26:15 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.35 2001/02/11 11:37:58 mitch Exp $
 #
 #
 #############################################################################
@@ -827,13 +830,13 @@ EOF
 ########################[ close a "new" mail ]###############################
 
 
-sub close_new
+sub get_summary
 {
     my ($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
     my $difference=$releases-$releases_new;
     my $remaining=$releases_new+$articles-$score_killed;
-    print MAIL_NEW << "EOF";
+    my $summary = << "EOF";
 	
     This newsletter has been filtered by:
     $id
@@ -843,7 +846,7 @@ EOF
     
     if ($releases > 1) {    # 1 release is not enough to ensure proper operation!
 
-	print MAIL_NEW << "EOF";
+	$summary .= << "EOF";
     $difference releases have been filtered out as 'already seen'.
     $score_killed articles or releases have been filtered out as 'low score'.
     $remaining articles and releases are shown in this mail.
@@ -852,7 +855,7 @@ EOF
     ;
 	
     } else {
-	print MAIL_NEW << "EOF";
+	$summary .= << "EOF";
 
  !! This mail did not contain more than 1 release.
  !! This is looks like an error.
@@ -875,7 +878,7 @@ EOF
     ;
     }
 	
-    print MAIL_NEW << "EOF";
+    $summary .= << "EOF";
     Your \'hot\' database has $hot_written entries.
 
     $db_expired entries from your 'old' database have expired,
@@ -883,9 +886,10 @@ EOF
     Your 'old' database now has $db_written entries.
 EOF
 	    
-    print MAIL_NEW "\n*" . "=" x 76 . "*\n";
+    $summary .= "\n*" . "=" x 76 . "*\n";
     
-    close MAIL_NEW or die "can't close mailer \"$config{'MAIL_CMD'}\": $!";
+
+    return $summary
 }
 
 
@@ -933,7 +937,7 @@ sub read_config($)
 {
     my $config_file = $_[0];
     my @allowed_keys = ("MAILTO", "DB_OLD", "DB_HOT", "EXPIRE", "DATE_CMD",
-			"MAIL_CMD", "UPDATE_MAIL", "SCORE_MIN");
+			"MAIL_CMD", "UPDATE_MAIL", "SCORE_MIN", "SUMMARY_AT");
     my @scores = ();
 
 ### look for config file
@@ -981,13 +985,21 @@ sub read_config($)
 		}
 	    } else {
 		warn "$0 fatal error:\n";
-		die "keyword \"$key\" has no value configuration file at line $.\n";
+		die "keyword \"$key\" has no value in configuration file at line $.\n";
 	    }
 	}
 	    
     }
 
     close CONF or die "could not close configuration file \"$config_file\": $!";
+
+### default values
+    $config{'SUMMARY_AT'} = 'bottom' unless exists $config{'SUMMARY_AT'}
+                                                && $config{'SUMMARY_AT'} 
+                                                && lc($config{'SUMMARY_AT'}) eq 'top';
+
+### lowercase some value
+    $config{'SUMMARY_AT'} = lc $config{'SUMMARY_AT'};
 
 ### is the config file complete?
     foreach my $key (@allowed_keys) {
@@ -1127,8 +1139,17 @@ sub mail_new_apps()
     @new_applications = sort { %{$a}->{'score'} <=> %{$b}->{'score'} } @new_applications;
 
 
+### get summary
+    my $summary = get_summary($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
+
+
 ### open mailer
     open_new($subject);
+
+
+### print summary if you want it at the beggining
+    print MAIL_NEW $summary if $config{'SUMMARY_AT'} eq 'top';
+
 
     while (@new_applications) {
 	
@@ -1186,7 +1207,10 @@ sub mail_new_apps()
 	     
     }
     
-### close mailer
-    close_new($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
+### print summary if you want it at the end
+    print MAIL_NEW $summary if $config{'SUMMARY_AT'} eq 'bottom';
 
+
+### close mailer
+    close MAIL_NEW or die "can't close mailer \"$config{'MAIL_CMD'}\": $!";
 }

@@ -30,6 +30,13 @@ UPDATE_MAIL=single
 
 
 #
+# *==> Where in the mail message should we place the summary of new apps?
+#
+SUMMARY_AT=bottom
+# SUMMARY_AT=top
+
+
+#
 # *==> Scoring: score_value <TAB> regexp
 #      (see "perldoc perlre" for help on regexp's)
 #

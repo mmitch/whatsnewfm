@@ -1,8 +1,8 @@
 
-  whatsnewfm 0.0.3
+  whatsnewfm 0.2.0
   ~~~~~~~~~~~~~~~~
 
- 2000/08/04
+ 2000/08/22
 
  (c) 2000 by Christian Garbs <mitch@uni.de>
 
@@ -11,8 +11,12 @@
 
 
  <IMPORTANT!>
- If you've already used older versions of whatsnewfm: Don't edit the
- "hot" database directly any more. See [4] for more details.
+
+ If you've already used older versions of whatsnewfm: 
+ Freshmeat has changed the newsletter format. There is no
+ converter for yet. I'll write one if it is possible.
+ Just back up your old databases and start with empty new ones.
+
  </IMPORTANT!>
 
 
@@ -94,8 +98,8 @@ that you don't miss anything about your favourite programs.
 
 This database contains the applications that you are interested
 in. You will be informed of every update within these applications.
-The applications are identified by the "magic id" that is shown in the
-parsed freshmeat newsletter.
+The applications are identified by the "project id" that is shown in
+the parsed freshmeat newsletter.
 
 To see what is in the database, just use "less" or "cat" on the
 database file. To edit the database, please use the whatsnewfm
@@ -104,19 +108,18 @@ editor. Some strange things might happen when you edit the database
 while whatsnewfm is running in the background (your text editor won't
 recognize a lock on the database).
 
-These examples use the magic id 964023450 - it's the id of whatsnewfm
-itself.
+These examples use the project "whatsnewfm" - thats this program.
 
 
 
 To add an application to the database, just type this:
 
-  whatsnewfm.pl add 964023450
+  whatsnewfm.pl add whatsnewfm
 
-You can enter a comment (eg the name of the application) to help you
-remembering which id is which application:
+You can enter a comment to help you remember what this application
+does (good for project ids that are acronymns):
 
-  whatsnewfm.pl add 964023450 whatsnewfm
+  whatsnewfm.pl add whatsnewfm Parses the freshmeat newsletter.
 
 If you want to enter multiple applications (eg copy'n'paste while
 reading the new freshmeat newsletter) you can start whatsnewfm like
@@ -132,9 +135,9 @@ applications will be added to the "hot" database.
 
 
 Deleting applications is as easy as adding applications. You can give
-the magic id's directly (just one or even more):
+the project id's directly (just one or even more):
 
-  whatsnewfm.pl del 964023450
+  whatsnewfm.pl del whatsnewfm
 
 You can also give the ids on stdin (like the add command):
 
@@ -147,6 +150,14 @@ by whitespaces.
 
   [5] Importing a watchfm database
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Importing a watchfm database is not useful because the database will
+be in the "old" database format of whatsnewfm 0.0.x
+I plan to write a converter from whatsnewfm 0.0.x to 0.2.x, so that
+importing a watchfm database will work again. Anywhay, here's how it
+goes:
+
+
 
 You can use the watchfm_convert.pl script to insert your watchfm
 database into your whatsnewfm database.
@@ -174,6 +185,10 @@ the applications that are 'yours':
   [7] Thanks
   ~~~~~~~~~~
 
+* All those people who told me that whatsnewfm didn't work anymore
+  when freshmeat changed the newsletter format. Apparently someone
+  really uses this piece of software :-)
+
 * Michael Reinsch <mr@uue.org> for keeping on asking and not being
   convinced by my wrong thoughts. Only because of him versions beyond
   v0.0.1 do exist.
@@ -186,6 +201,9 @@ the applications that are 'yours':
 Items marked with ? mean "Does anybody need this?". If you want to
 have this feature, then please write a mail to me and I'll include it
 in the next version.
+
+* Provide a utility to convert existing databases to the new freshmeat
+  newletter format.
 
 ? Compress the databases using gzip, bzip2 or the like.
 

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.94 2004/04/13 14:45:45 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.95 2004/04/13 14:49:37 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.5 2004-04-13";
+my $id="whatsnewfm.pl  v0.6.5  2004-04-13";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2004  Christian Garbs <mitch@cgarbs.de>
@@ -196,7 +196,7 @@ my $id="whatsnewfm.pl  v0.6.5 2004-04-13";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.94 2004/04/13 14:45:45 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.95 2004/04/13 14:49:37 mastermitch Exp $
 #
 #
 #############################################################################

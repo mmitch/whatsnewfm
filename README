@@ -1,4 +1,4 @@
-<<$Id: README,v 1.63 2003/04/27 09:16:48 mastermitch Exp $>>
+<<$Id: README,v 1.64 2003/08/07 10:30:00 mastermitch Exp $>>
 
 
 
@@ -171,6 +171,13 @@ You need to specify the following keywords:
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be
   displayed.
+
+
+If an essential keyword is missing, you will get a message like this:
+
+ *  using default value for "MAIL_OPT"
+
+Add the keyword to your configuration file to get rid of the message.
 
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.83 2003/08/18 19:23:40 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.84 2003/08/18 19:37:26 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
@@ -186,7 +186,7 @@ my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.83 2003/08/18 19:23:40 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.84 2003/08/18 19:37:26 mastermitch Exp $
 #
 #
 #############################################################################
@@ -1086,7 +1086,7 @@ sub open_hot_mail($)
 {
     my $new_app = shift;
 
-    open MAIL_HOT, "| $config->{'MAIL_CMD'} $config-{'MAIL_OPT'}"
+    open MAIL_HOT, "| $config->{'MAIL_CMD'} $config->{'MAIL_OPT'}"
 	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_HOT "To: $config->{'MAILTO'}\n";

@@ -67,7 +67,7 @@ SCORE_MIN=-999
 
 
 #
-# *==> Hot to send mail (mail program and parameters):
+# *==> How to send mail (mail program and parameters):
 #
 MAIL_CMD=/usr/lib/sendmail
 MAIL_OPT=-oi -t

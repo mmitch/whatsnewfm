@@ -1,7 +1,13 @@
-<<$Id: HISTORY,v 1.22 2001/10/19 16:18:02 mitch Exp $>>
+<<$Id: HISTORY,v 1.23 2001/11/07 22:03:59 mitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2001/11/07  -  0.4.10
+~~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Newsletter format has changed.
+
 
 
 2001/10/19  -  0.4.9

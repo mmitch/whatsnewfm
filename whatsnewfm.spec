@@ -1,5 +1,5 @@
 %define	name	whatsnewfm
-%define version 0.4.10
+%define version 0.4.11pre1
 %define release 1
 
 Summary:	A utility to filter the daily newsletter from freshmeat.net

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.43 2002/11/21 17:05:15 mitch Exp $>>
+<<$Id: README,v 1.44 2002/11/21 17:08:26 mitch Exp $>>
 
 
   whatsnewfm 0.4.11
@@ -284,9 +284,10 @@ separated by whitespaces.
 * Joerg Plate <Joerg@Plate.cx> sent a patch for those annoying
   warnings with Perl 5.6 (fixed in v0.2.4).
 
-* Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> maintains the
-  whatsnewfm RPM and .deb packages. He also suggested the SCORE_MIN
-  feature and maintains the mirror at wombat.eu.org
+* Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> provided the initial
+  version of the whatsnewfm RPM and .deb packages. He also suggested
+  the SCORE_MIN feature and maintained the mirror at wombat.eu.org for
+  some time.
 
 * All those people who told me that whatsnewfm didn't work any more
   when freshmeat changed the newsletter format. Apparently someone

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.28 2001/05/31 20:00:18 mitch Exp $>>
+<<$Id: README,v 1.29 2001/05/31 20:10:33 mitch Exp $>>
 
 
   whatsnewfm 0.4.3
@@ -189,6 +189,7 @@ to the view command (instead of using grep):
   whatsnewfm.pl view ^li
 
 This will print all entries entries starting with "li".
+The regular expression is always matched case-insensitive.
 
 
 

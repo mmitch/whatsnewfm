@@ -108,7 +108,7 @@ my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.37 2001/05/31 19:56:57 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.38 2001/05/31 20:10:33 mitch Exp $
 #
 #
 #############################################################################
@@ -217,7 +217,7 @@ sub view_entries
 
 	foreach my $project (keys %db) {
 	    my $line = "$project\t$db{$project}";
-	    if ($line =~ /$_[0]/) {
+	    if ($line =~ /$_[0]/i) {
 		print "$line\n";
 	    }
 	}

@@ -88,7 +88,7 @@ if ($ARGV[0]) {
 	add_entry(@ARGV);
     } elsif ($ARGV[0] eq "del") {
 	shift @ARGV;
-	del_entry(@ARGV);
+	remove_entry(@ARGV);
     } else {
 	display_help();
     }
@@ -123,6 +123,7 @@ sub add_entry
 
 	my $number = shift @_;
 	my $comment = join " ", @_;
+	$comment = "" unless $comment;
 	$hot{$number} = $comment;
 
     } else {
@@ -131,6 +132,7 @@ sub add_entry
 	    chomp $line;
 	    my ($number, $comment) = split /\s/, $line, 2;
 	    if ($number =~ /^[0-9]+$/) {
+		$comment = "" unless $comment;
 		$hot{$number} = $comment;
 	    }
 	}
@@ -155,7 +157,7 @@ sub remove_entry
     if (@_) {
 
 	foreach my $number (@_) {
-	    delete $hot($number) if exists $hot($number);
+	    delete $hot{$number} if exists $hot{$number};
 	}
 
     } else {
@@ -164,7 +166,7 @@ sub remove_entry
 	    chomp $line;
 	    my @numbers = split /\s/, $line;
 	    foreach my $number (@numbers) {
-		delete $hot($number) if exists $hot($number);
+		delete $hot{$number} if exists $hot{$number};
 	    }
 	}
 

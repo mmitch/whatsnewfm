@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.72 2003/01/04 20:50:11 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.73 2003/01/05 14:27:43 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.0  2003-01-04";
+my $id="whatsnewfm.pl  v0.6.1-pre  2003-01-04";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
@@ -25,6 +25,11 @@ my $id="whatsnewfm.pl  v0.6.0  2003-01-04";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+
+# 2003/01/05--> BUGFIX: Number of added projects to old database in
+#           |           newsletter was wrong.
+#           `-> Changed open("<") call to more secure three-parameter form.
 #
 # v0.6.0
 # 2003/01/04--> No changes, v0.5.3 seems stable enough to be released.
@@ -167,7 +172,7 @@ my $id="whatsnewfm.pl  v0.6.0  2003-01-04";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.72 2003/01/04 20:50:11 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.73 2003/01/05 14:27:43 mastermitch Exp $
 #
 #
 #############################################################################
@@ -882,10 +887,7 @@ sub parse_newsletter()
 
 ### write databases
 
-
-    $db_written = close_old_db($database);
-    $db_new -= keys (%{$database}) - $db_written;
-
+    $db_written  = close_old_db($database);
     $hot_written = close_hot_db($interesting);
     
 
@@ -1071,7 +1073,8 @@ sub open_hot_mail($)
 {
     my $new_app = shift;
 
-    open MAIL_HOT, "|$config->{'MAIL_CMD'} $config->{'MAILTO'}" or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
+    open MAIL_HOT, "| $config->{'MAIL_CMD'} $config->{'MAILTO'}"
+	or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_HOT "To: $config->{'MAILTO'}\n";
     if ($config->{'UPDATE_MAIL'} eq "single") {
@@ -1091,7 +1094,8 @@ sub open_hot_mail($)
 sub open_new_mail($)
 {
     my $subject = $_[0];
-    open MAIL_NEW, "|$config->{'MAIL_CMD'} $config->{'MAILTO'}" or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
+    open MAIL_NEW, "| $config->{'MAIL_CMD'} $config->{'MAILTO'}"
+	or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_NEW "To: $config->{'MAILTO'}\n";
     print MAIL_NEW $subject;
@@ -1117,8 +1121,8 @@ sub read_config()
     }
 
 ### read the config file
-    open CONF, "<$config_file" or
-	die "could not open configuration file \"$config_file\": $!";
+    open CONF, "<", "$config_file"
+	or die "could not open configuration file \"$config_file\": $!";
 
     while (my $line = <CONF>) {
 	chomp $line;

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.76 2003/02/26 22:30:35 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.77 2003/03/09 16:38:50 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.2-pre  2003-01-11";
+my $id="whatsnewfm.pl  v0.6.2-pre  2003-03-09";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,8 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-01-11";
 #
 #############################################################################
 #
+# 2003/03/09--> Call sendmail(1) as advised in `perldoc -q "send mail"`.
+#               No need for the "sendmail fixes" regarding dot-lines any more.
 # 2003/02/26--> Removed old filenames from documentation.
 # 2003/02/03--> Use %hashes instead of @arrays for configuration file keys.
 #
@@ -175,7 +177,7 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-01-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.76 2003/02/26 22:30:35 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.77 2003/03/09 16:38:50 mastermitch Exp $
 #
 #
 #############################################################################
@@ -638,11 +640,9 @@ sub parse_newsletter()
 	    next unless defined $line;
 
 	    # text
-	    $line =~ s/^\.$/. /; # sendmail fix
 	    $new_app->{'description'} = $line;
 	    while ($line=<STDIN>) {
 		last if $line =~ /^\s$/;
-		$line =~ s/^\.$/. /; # sendmail fix
 		$new_app->{'description'} .= $line;
 	    }
 
@@ -764,11 +764,9 @@ sub parse_newsletter()
 	    # about
 	    if ($line =~ /^About: /) {
 		$line =~ s/^About: //;
-		$line =~ s/^\.$/. /; # sendmail fix
 		$new_app->{'description'} = $line;
 		while ($line=<STDIN>) {
 		    last if $line =~ /^\s*$/;
-		    $line =~ s/^\.$/. /; # sendmail fix
 		    $new_app->{'description'} .= $line;
 		}
 	    }
@@ -782,11 +780,9 @@ sub parse_newsletter()
 	    # changes
 	    if ($line =~ /^Changes: /) {
 		$line =~ s/^Changes: //;
-		$line =~ s/^\.$/. /; # sendmail fix
 		$new_app->{'changes'} = $line;
 		while ($line=<STDIN>) {
 		    last if $line =~ /^\s*$/;
-		    $line =~ s/^\.$/. /; # sendmail fix
 		    $new_app->{'changes'} .= $line;
 		}
 	    }
@@ -1068,8 +1064,8 @@ sub open_hot_mail($)
 {
     my $new_app = shift;
 
-    open MAIL_HOT, "| $config->{'MAIL_CMD'} $config->{'MAILTO'}"
-	or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
+    open MAIL_HOT, "| $config->{'MAIL_CMD'} -oi -t"
+	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_HOT "To: $config->{'MAILTO'}\n";
     if ($config->{'UPDATE_MAIL'} eq "single") {
@@ -1089,8 +1085,8 @@ sub open_hot_mail($)
 sub open_new_mail($)
 {
     my $subject = $_[0];
-    open MAIL_NEW, "| $config->{'MAIL_CMD'} $config->{'MAILTO'}"
-	or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
+    open MAIL_NEW, "| $config->{'MAIL_CMD'} -oi -t"
+	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_NEW "To: $config->{'MAILTO'}\n";
     print MAIL_NEW $subject;

@@ -1,10 +1,10 @@
-<<$Id: README,v 1.46.2.1 2002/11/26 21:22:46 mitch Exp $>>
+<<$Id: README,v 1.46.2.2 2002/12/02 22:12:50 mastermitch Exp $>>
 
 
-  whatsnewfm 0.4.11
+  whatsnewfm 0.4.12
   ~~~~~~~~~~~~~~~~~
 
- 2002/11/21
+ 2002/12/02
 
  (c) 2000-2002 by Christian Garbs <mitch@cgarbs.de>
 
@@ -20,9 +20,10 @@
   Usage . . . . . . . . . . . . . . . . .  3
   The configuration file  . . . . . . . .  4
   The "hot" database  . . . . . . . . . .  5
-  Download  . . . . . . . . . . . . . . .  6
-  Thanks  . . . . . . . . . . . . . . . .  7
-  Future Plans  . . . . . . . . . . . . .  8
+  Manpage . . . . . . . . . . . . . . . .  6
+  Download  . . . . . . . . . . . . . . .  7
+  Thanks  . . . . . . . . . . . . . . . .  8
+  Future Plans  . . . . . . . . . . . . .  9
 
 
 
@@ -56,7 +57,7 @@ that you don't miss anything about your favourite programs.
 * procmail or something else (otherwise you will have to send every
                               newsletter through the filter by hand)
 
-* perl, sendmail, date
+* perl, sendmail
 
 
 
@@ -242,17 +243,31 @@ separated by whitespaces.
 
 
 
-  [6] Download
+  [6] Manpage
+  ~~~~~~~~~~~
+
+A manpage is included in the whatsnewfm Perl script.  You can extract
+it with the pod2* commands.  For example:
+
+  pod2man whatsnewfm.pl whatsnewfm.pl.1
+  pod2text whatsnewfm.pl whatsnewfm.txt
+  pod2html whatsnewfm.pl whatsnewfm.html
+
+
+
+  [7] Download
   ~~~~~~~~~~~~
 
 * The homepage of whatsnewfm is here:
   http://www.cgarbs.de/whatsnewfm.en.html
    or
   http://www.h.shuttle.de/mitch/whatsnewfm.en.html
+   or
+  http://sourceforge.net/projects/whatsnewfm
 
 
 
-  [7] Thanks
+  [8] Thanks
   ~~~~~~~~~~
 
 * Matthias Kluwe <mkluwe@web.de> discovered and fixed the warnings
@@ -299,7 +314,7 @@ separated by whitespaces.
   
 
 
-  [8] Future Plans
+  [9] Future Plans
   ~~~~~~~~~~~~~~~~
 
 Items marked with ? mean "Does anybody need this?".  If you want to

@@ -26,6 +26,8 @@ my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
 #############################################################################
 #
 # v0.4.4
+# 2001/06/23--> BUGFIX: Warning message about changed newsletter format
+#               was not generated correctly
 # 2001/05/31--> "view" accepts optional regexp to filter the output
 #
 # v0.4.3
@@ -109,7 +111,7 @@ my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.39 2001/06/23 15:11:45 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.40 2001/06/23 15:52:19 mitch Exp $
 #
 #
 #############################################################################
@@ -133,9 +135,9 @@ my $configfile = "~/.whatsnewfmrc";
 my %config;
 
 # information
-my @whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
+my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
 			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html" ,
-			     "http://wombat.eu.org/linux/whatsnewfm/" ];
+			     "http://wombat.eu.org/linux/whatsnewfm/" );
 
 my $whatsnewfm_author = "Christian Garbs <mitch\@uni.de>";
 
@@ -338,7 +340,7 @@ sub parse_newsletter
     my %interesting;
     my %this_time_new;
 
-    my $subject      = "Freshmeat Newsletter (no subject?)";
+    my $subject      = "Subject: Freshmeat Newsletter (no subject?)\n";
     my $position     = 3;
     # 3-> after mail header
     # 2-> within articles
@@ -880,21 +882,20 @@ EOF
  !! Perhaps the processed mail was no newsletter at all?
  !!
  !! If this error repeats within the next days then most likely the
- !! newsletter format has changed (or whatsnewfm is broken).
- !!
- !! Please visit the whatsnewfm homepage and look for an updated
- !! version of whatsnewfm.
+ !! newsletter format has changed (or whatsnewfm is broken). You
+ !! should then visit the whatsnewfm homepage and look for an 
+ !! updated version of whatsnewfm.
  !!
  !! If there is neither a new version available nor a message that
- !! the error is already being fixed, please inform the author of
- !! the error you encountered.
+ !! the error is already being fixed, please inform the author
+ !! about the error you encountered.
  !!
  !! homepage:
 EOF
     ;
 	
 	foreach my $whatsnewfm_homepage (@whatsnewfm_homepages) {
-	    print " !!     $whatsnewfm_homepage\n";
+	    $summary .= " !!     $whatsnewfm_homepage\n";
 	}
 
 	$summary .= << "EOF";

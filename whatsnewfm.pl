@@ -48,50 +48,29 @@ my $id="whatsnewfm.pl  v0.2.0  2000-08-22";
 # 2000/07/07 -> it works
 # 2000/07/06 -> first piece of code
 #
+#
+# $Id: whatsnewfm.pl,v 1.13 2000/09/08 19:27:02 mitch Exp $
+#
+#
 #############################################################################
+
+
+<<<<<<<<<<<<<< variant A
+##########################[ import modules ]#################################
+
+
 use strict;                     # strict syntax checking
 use Fcntl ':flock';             # import LOCK_* constants
-#############################################################################
-#
-# Please edit the following variables to your needs:
-#
-#
-# *==> Who should get the mail with new programs?
-#      Remember: write \@ instead of @   
-#
-my $mailto="joe.user\@some.host";
-#
-#
-# *==> Where are the databases located?
-#
-my $db_old="/home/joeuser/database-old";
-my $db_hot="/home/joeuser/database-hot";
-#
-#
-# *==> After how many months does an entry in the "old" database expire?
-#
-my $expire=12;
-#
-#
-# *==> Location of external programs:
-#
-my $date_cmd="/bin/date";
-my $mail_cmd="/usr/lib/sendmail";
-#
-#
-# *==> Collect "hot" updates in a single mail or send multiple mails?
-#
-my $update_mail="single";
-#my $update_mail="multiple";
-#
-#############################################################################
-#
-# YOU DON'T NEED TO EDIT ANYTHING BEYOND...
-#
-#############################################################################
 
 
-# $Id: whatsnewfm.pl,v 1.12 2000/09/08 19:06:46 mitch Exp $
+#####################[ declare global variables ]############################
+
+
+# where to look for the configuration file:
+my $configfile = "~/.whatsnewfmrc";
+
+# global configuration hash:
+my %config;
 
 
 ###########################[ main routine ]##################################
@@ -100,17 +79,32 @@ my $update_mail="single";
 if ($ARGV[0]) {
 
     if ($ARGV[0] eq "add") {
+
 	shift @ARGV;
+	read_config($configfile);
 	add_entry(@ARGV);
+
     } elsif ($ARGV[0] eq "del") {
+
 	shift @ARGV;
+	read_config($configfile);
 	remove_entry(@ARGV);
+
+    } elsif ($ARGV[0] eq "view") {
+
+	shift @ARGV;
+	read_config($configfile);
+	view_entries(@ARGV);
+
     } else {
+
 	display_help();
+
     }
 
 } else {
 
+    read_config($configfile);
     parse_newsletter();
 
 }
@@ -139,6 +133,22 @@ remove applications from the "hot" list:
 or a list from stdin:
     whatsnewfm.pl del
 EOF
+}
+
+
+##############[	view the entries in the 'hot' database ]#####################
+
+
+sub view_entries
+{
+    my %db = read_hot();
+
+    foreach my $project (keys %db) {
+
+	print "$project\t$db{$project}\n";
+
+    }
+
 }
 
 
@@ -233,13 +243,13 @@ sub parse_newsletter
 ### generate current timestamp
 
 
-    my $year = `$date_cmd +%Y`;
+    my $year = `$config{'DATE_CMD'} +%Y`;
     if ($? >> 8) {
 	die "Could not get current date";
     }
     chomp $year;
 
-    my $month = `$date_cmd +%m`;
+    my $month = `$config{'DATE_CMD'} +%m`;
     if ($? >> 8) {
 	die "Could not get current date";
     }
@@ -265,7 +275,7 @@ sub parse_newsletter
 
     
     foreach my $number (keys %database) {
-	if (($database{$number}+$expire) < $timestamp) {
+	if (($database{$number}+$config{'EXPIRE'}) < $timestamp) {
 	    $db_expired++;
 	    delete $database{$number};
 	}
@@ -413,7 +423,7 @@ sub parse_newsletter
 
 		    print MAIL_HOT "\n*" . "=" x 76 . "*\n";
 		    
-		    if ($update_mail ne "single") {
+		    if ($config{'UPDATE_MAIL'} ne "single") {
 			close_hot();
 			$first_hot=1;
 		    }
@@ -528,7 +538,7 @@ sub parse_newsletter
 
 sub lock_old
 {
-    open LOCK_OLD, ">$db_old.LOCK" or die "can't create lockfile \"$db_old.LOCK\": $!";
+    open LOCK_OLD, ">$config{'DB_OLD'}.LOCK" or die "can't create lockfile \"$config{'DB_OLD'}.LOCK\": $!";
     if (! flock(LOCK_OLD,LOCK_EX | LOCK_NB)) {
 	print STDERR "Some other process has locked the 'old' database. I'll wait for my turn...\n";
 	flock(LOCK_OLD,LOCK_EX) or die "can't lock lockfile: $!";
@@ -545,7 +555,7 @@ sub lock_old
 
 sub lock_hot
 {
-    open LOCK_HOT, ">$db_hot.LOCK" or die "can't create lockfile\"$db_hot.LOCK\": $!";
+    open LOCK_HOT, ">$config{'DB_HOT'}.LOCK" or die "can't create lockfile\"$config{'DB_HOT'}.LOCK\": $!";
     if (! flock(LOCK_HOT,LOCK_EX | LOCK_NB)) {
 	print STDERR "Some other process has locked the 'hot' database. I'll wait for my turn...\n";
 	flock(LOCK_HOT,LOCK_EX) or die "can't lock lockfile: $!";
@@ -562,9 +572,9 @@ sub lock_hot
 
 sub release_hot
 {
-    flock(LOCK_HOT,LOCK_UN) or die "can't unlock lockfile: $!";
-    close LOCK_HOT          or die "can't close lockfile: $!";
-    unlink "$db_hot.LOCK"   or die "can't remove lockfile: $!";
+    flock(LOCK_HOT,LOCK_UN)          or die "can't unlock lockfile: $!";
+    close LOCK_HOT                   or die "can't close lockfile: $!";
+    unlink "$config{'DB_HOT'}.LOCK"  or die "can't remove lockfile: $!";
 }
 
 
@@ -573,9 +583,9 @@ sub release_hot
 
 sub release_old
 {
-    flock(LOCK_OLD,LOCK_UN) or die "can't unlock lockfile: $!";
-    close LOCK_OLD          or die "can't close lockfile: $!";
-    unlink "$db_old.LOCK"   or die "can't remove lockfile: $!";
+    flock(LOCK_OLD,LOCK_UN)          or die "can't unlock lockfile: $!";
+    close LOCK_OLD                   or die "can't close lockfile: $!";
+    unlink "$config{'DB_OLD'}.LOCK"  or die "can't remove lockfile: $!";
 }
 
 
@@ -585,7 +595,7 @@ sub release_old
 sub read_hot
 {
     my %db;
-    open DB, "<$db_hot" or die "couldn't open 'hot' database \"$db_hot\": $!";
+    open DB, "<$config{'DB_HOT'}" or die "couldn't open 'hot' database \"$config{'DB_HOT'}\": $!";
     while (my $line=<DB>) {
 	chomp $line;
 	my ($project, $comment) = split /\s/, $line, 2;
@@ -593,7 +603,7 @@ sub read_hot
 	    $db{lc $project} = $comment;
 	}
     }
-    close DB or die "couldn't close 'hot' database \"$db_hot\": $!";
+    close DB or die "couldn't close 'hot' database \"$config{'DB_HOT'}\": $!";
 
     return %db;
 }
@@ -606,7 +616,7 @@ sub read_old
 {
     my %db;
 
-    open DB, "<$db_old" or die "couldn't open 'old' database \"$db_old\": $!";
+    open DB, "<$config{'DB_OLD'}" or die "couldn't open 'old' database \"$config{'DB_OLD'}\": $!";
     while (my $line=<DB>) {
 	chomp $line;
 	my ($project, $addition) = split /\s/, $line;
@@ -614,7 +624,7 @@ sub read_old
 	    $db{lc $project} = $addition;
 	}
     }
-    close DB or die "couldn't close 'old' database \"$db_old\": $!";
+    close DB or die "couldn't close 'old' database \"$config{'DB_OLD'}\": $!";
 
     return %db;
 }
@@ -627,13 +637,13 @@ sub write_old
 {
     my $written = 0;
     my %db = @_;
-    rename $db_old, "$db_old~" or die "couldn't back up 'old' database \"$db_old\": $!";
-    open DB, ">$db_old" or die "couldn't open 'old' database \"$db_old\": $!";
+    rename $config{'DB_OLD'}, "$config{'DB_OLD'}~" or die "couldn't back up 'old' database \"$config{'DB_OLD'}\": $!";
+    open DB, ">$config{'DB_OLD'}" or die "couldn't open 'old' database \"$config{'DB_OLD'}\": $!";
     foreach my $key (sort keys %db) {
 	print DB (lc $key) . "\t$db{$key}\n";
 	$written++;
     }
-    close DB or die "couldn't close 'old' database \"$db_old\": $!";
+    close DB or die "couldn't close 'old' database \"$config{'DB_OLD'}\": $!";
     return $written;
 }
 
@@ -645,14 +655,14 @@ sub write_hot
 {
     my $written = 0;
     my %db = @_;
-    rename $db_hot, "$db_hot~" or die "couldn't back up 'hot' database \"$db_hot\": $!";
-    open DB, ">$db_hot" or die "couldn't open 'hot' database \"$db_hot\": $!";
+    rename $config{'DB_HOT'}, "$config{'DB_HOT'}~" or die "couldn't back up 'hot' database \"$config{'DB_HOT'}\": $!";
+    open DB, ">$config{'DB_HOT'}" or die "couldn't open 'hot' database \"$config{'DB_HOT'}\": $!";
     foreach my $key (sort { $db{$a} cmp $db{$b} } keys %db) {
 	$key = lc $key;
 	print DB (lc $key) . "\t$db{$key}\n";
 	$written++;
     }
-    close DB or die "couldn't close 'hot' database \"$db_hot\": $!";
+    close DB or die "couldn't close 'hot' database \"$config{'DB_HOT'}\": $!";
     return $written;
 }
 
@@ -669,7 +679,7 @@ sub close_hot
 	    
 EOF
     
-    close MAIL_HOT or die "can't close mailer \"$mail_cmd\": $!";
+    close MAIL_HOT or die "can't close mailer \"$config{'MAIL_CMD'}\": $!";
 }
 
 
@@ -699,7 +709,7 @@ EOF
 	    
     print MAIL_NEW "\n*" . "=" x 76 . "*\n";
     
-    close MAIL_NEW or die "can't close mailer \"$mail_cmd\": $!";
+    close MAIL_NEW or die "can't close mailer \"$config{'MAIL_CMD'}\": $!";
 }
 
 
@@ -710,10 +720,10 @@ sub open_hot
 {
     my %new_app = @_;
 
-    open MAIL_HOT, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
+    open MAIL_HOT, "|$config{'MAIL_CMD'} $config{'MAILTO'}" or die "can't open mailer \"$config{'MAIL_CMD'}\": $!";
     
-    print MAIL_HOT "To: $mailto\n";
-    if ($update_mail eq "single") {
+    print MAIL_HOT "To: $config{'MAILTO'}\n";
+    if ($config{'UPDATE_MAIL'} eq "single") {
 	print MAIL_HOT "Subject: whatsnewfm.pl: Updates of interesting applications\n";
     } else {
 	print MAIL_HOT "Subject: whatsnewfm.pl: Update: $new_app{'subject'}\n";
@@ -730,12 +740,75 @@ sub open_hot
 sub open_new
 {
     my $subject = $_[0];
-    open MAIL_NEW, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
+    open MAIL_NEW, "|$config{'MAIL_CMD'} $config{'MAILTO'}" or die "can't open mailer \"$config{'MAIL_CMD'}\": $!";
     
-    print MAIL_NEW "To: $mailto\n";
+    print MAIL_NEW "To: $config{'MAILTO'}\n";
     print MAIL_NEW $subject;
     print MAIL_NEW "X-Loop: sent by whatsnewfm.pl daemon\n";
     print MAIL_NEW "\n";
     print MAIL_NEW "*" . "=" x 76 . "*\n";
+}
+
+
+###################[ read the configuration file ]###########################
+
+
+sub read_config()
+{
+    my $config_file = $_[0];
+    my @allowed_keys = ("MAILTO", "DB_OLD", "DB_HOT", "EXPIRE", "DATE_CMD",
+			"MAIL_CMD", "UPDATE_MAIL");
+
+### look for config file
+    $config_file =~ s/^~/$ENV{'HOME'}/;
+    if (! -e $config_file) {
+	die "configuration file \"$config_file\" not found!\n";
+    }
+
+### read the config file
+    open CONF, "<$config_file" or
+	die "could not open configuration file \"$config_file\": $!";
+
+    while (my $line = <CONF>) {
+	chomp $line;
+	$line =~ s/\s+$//;
+	$line =~ s/^\s+//;
+	if (($line ne "") && ($line !~ /^\#/)) {
+	    my ($key, $value) = split /=/, $line, 2;
+	    if ($value) {
+		$key = uc $key;
+		if (grep {/$key/} @allowed_keys) {
+		    $config{$key} = $value;
+		} else {
+		    warn "$0 warning:\n";
+		    warn "unknown keyword \"$key\" in configuration file at line $.\n";
+		}
+	    } else {
+		warn "$0 warning:\n";
+		warn "keyword \"$key\" has no value configuration file at line $.\n";
+	    }
+	}
+	    
+    }
+
+    close CONF or die "could not close configuration file \"$config_file\": $!";
+
+### is the config file complete?
+    foreach my $key (@allowed_keys) {
+	if (! exists $config{$key}) {
+	    warn "$0 fatal error:\n";
+	    die  "keyword \"$key\" is missing in configuration file \"$config_file\"\n";
+	}
+    }
+
+### expand ~ to home directory
+    $config{'DB_HOT'}    =~ s/^~/$ENV{'HOME'}/;
+    $config{'DB_OLD'}    =~ s/^~/$ENV{'HOME'}/;
+    $config{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
+    $config{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
+
+### expand ~ to username
+    $config{'MAILTO'}   =~ s/^~/$ENV{'USER'}/;
+
 }
 

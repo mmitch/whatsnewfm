@@ -1,0 +1,37 @@
+# This is a sample configuration file for whatsnewfm (http://www.cgarbs.de)
+# Please edit the following variables to your needs and copy this file
+# to ~/.whatsnewfmrc
+
+#
+# *==> Who should get the mail with new programs?
+#
+MAILTO=
+
+#
+# *==> Where are the databases located?
+#
+DB_OLD=~/.whatsnewfm.db.old
+DB_HOT=~/.whatsnewfm.db.hot
+
+#
+# *==> After how many months does an entry in the "old" database expire?
+#
+EXPIRE=12
+
+#
+# *==> Collect "hot" updates in a single mail or send multiple mails?
+#
+UPDATE_MAIL=single
+# UPDATE_MAIL=multiple
+
+#
+# *==> Scoring: score_value <TAB> regexp
+#
+#SCORE=+50	mp3
+#SCORE=-999	usb
+
+#
+# *==> Location of external programs:
+#
+DATE_CMD=/bin/date
+MAIL_CMD=/usr/lib/sendmail

@@ -29,9 +29,12 @@ miss anything about your favourite programs.
 %build
 
 %install
-mkdir -p /var/tmp/%{name}-%{version}/usr/bin/
-cp whatsnewfm.pl /var/tmp/%{name}-%{version}/usr/bin/
+mkdir -p $RPM_BUILD_ROOT/usr/bin/
+cp whatsnewfm.pl $RPM_BUILD_ROOT/usr/bin/
 
 %files
 %doc README COPYING HISTORY whatsnewfmrc.sample welcome
 /usr/bin/whatsnewfm.pl
+
+%clean
+rm -rf $RPM_BUILD_ROOT

@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 #
 #############################################################################
 #
+# 2001/09/07--> BUGFIX: Test message didn't work.
+#
 # v0.4.8
 # 2001/08/15--> BUGFIX: Categories were missing in 'hot' mails.
 #
@@ -124,7 +126,7 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.47 2001/08/15 20:26:47 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.48 2001/09/07 14:41:38 mitch Exp $
 #
 #
 #############################################################################

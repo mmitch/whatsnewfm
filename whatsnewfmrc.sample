@@ -6,13 +6,14 @@
 #
 # *==> Who should get the mail with new programs?
 #
-MAILTO=
+MAILTO=someuser@example.com
 
 
 #
 # *==> Where are the databases located?
 #
-DB_NAME=~/.whatsnewfm.db
+DB_OLD=~/.whatsnewfm.db.old
+DB_HOT=~/.whatsnewfm.db.hot
 
 
 #

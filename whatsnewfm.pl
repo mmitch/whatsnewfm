@@ -91,7 +91,7 @@ my $update_mail="single";
 #############################################################################
 
 
-# $Id: whatsnewfm.pl,v 1.10 2000/08/22 21:13:59 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.11 2000/08/22 21:19:48 mitch Exp $
 
 
 ###########################[ main routine ]##################################
@@ -153,7 +153,7 @@ sub add_entry
 
     if (@_) {
 
-	my $project = shift @_;
+	my $project = lc shift @_;
 	my $comment = join " ", @_;
 	$comment = "" unless $comment;
 	$hot{$project} = $comment;
@@ -164,7 +164,7 @@ sub add_entry
 	    chomp $line;
 	    my ($project, $comment) = split /\s/, $line, 2;
 	    $comment = "" unless $comment;
-	    $hot{$project} = $comment;
+	    $hot{lc $project} = $comment;
 	}
 	
     }
@@ -187,7 +187,7 @@ sub remove_entry
     if (@_) {
 
 	foreach my $project (@_) {
-	    delete $hot{$project} if exists $hot{$project};
+	    delete $hot{lc $project} if exists $hot{lc $project};
 	}
 
     } else {
@@ -196,7 +196,7 @@ sub remove_entry
 	    chomp $line;
 	    my @projects = split /\s/, $line;
 	    foreach my $project (@projects) {
-		delete $hot{$project} if exists $hot{$project};
+		delete $hot{lc $project} if exists $hot{lc $project};
 	    }
 	}
 
@@ -329,21 +329,21 @@ sub parse_newsletter
 
 	    } elsif  ($line =~ /homepage:\s/) {
 		$line =~ s/^.*homepage:\s//;
-		$new_app{'homepage'} = $line;
+		$new_app{'homepage'} = lc $line;
 		$line =~ s/^.*freshmeat\.net\/projects\///;
 		$line =~ s/\/homepage\/$//;
 		$new_app{'project_id'} = $line;
 
 	    } elsif  ($line =~ /download:\s/) {
 		$line =~ s/^.*download:\s//;
-		$new_app{'download'} = $line;
+		$new_app{'download'} = lc $line;
 		$line =~ s/^.*freshmeat\.net\/projects\///;
 		$line =~ s/\/download\/$//;
 		$new_app{'project_id'} = $line;
 
 	    } elsif  ($line =~ /changelog:\s/) {
 		$line =~ s/^.*changelog:\s//;
-		$new_app{'changelog'} = $line;
+		$new_app{'changelog'} = lc $line;
 		$line =~ s/^.*freshmeat\.net\/projects\///;
 		$line =~ s/\/changelog\/$//;
 		$new_app{'project_id'} = $line;
@@ -603,7 +603,7 @@ sub read_hot
 	chomp $line;
 	my ($project, $comment) = split /\s/, $line, 2;
 	if (defined $project) {
-	    $db{$project} = $comment;
+	    $db{lc $project} = $comment;
 	}
     }
     close DB or die "couldn't close 'hot' database \"$db_hot\": $!";
@@ -624,7 +624,7 @@ sub read_old
 	chomp $line;
 	my ($project, $addition) = split /\s/, $line;
 	if (defined $project) {
-	    $db{$project} = $addition;
+	    $db{lc $project} = $addition;
 	}
     }
     close DB or die "couldn't close 'old' database \"$db_old\": $!";

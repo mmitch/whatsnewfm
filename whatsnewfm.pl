@@ -2,7 +2,7 @@
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
-#   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
+#   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
 #                            Joerg Plate <Joerg@Plate.cx>
@@ -146,7 +146,7 @@ my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.62.2.1 2002/11/25 22:28:09 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.62.2.2 2002/12/02 21:57:27 mastermitch Exp $
 #
 #
 #############################################################################

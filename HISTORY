@@ -1,7 +1,14 @@
-<<$Id: HISTORY,v 1.24.2.3 2003/04/27 09:24:52 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.24.2.4 2003/08/18 19:45:18 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2003/08/18  -  0.4.15
+~~~~~~~~~~~~~~~~~~~~~
+- Parameters of sendmail(1) call can be configured.  You propably
+  need to add "MAIL_OPT=-oi -t" to your configuration file.
+
 
 
 2003/04/27  -  0.4.14

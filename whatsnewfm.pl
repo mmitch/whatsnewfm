@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.77 2003/03/09 16:38:50 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.78 2003/04/23 21:21:57 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.2-pre  2003-03-09";
@@ -26,6 +26,8 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-03-09";
 #
 #############################################################################
 #
+# 2003/04/23--> BUGFIX: Multiline release subjects were not handled
+#                       correctly (Sourceforge bug #726261).
 # 2003/03/09--> Call sendmail(1) as advised in `perldoc -q "send mail"`.
 #               No need for the "sendmail fixes" regarding dot-lines any more.
 # 2003/02/26--> Removed old filenames from documentation.
@@ -177,7 +179,7 @@ my $id="whatsnewfm.pl  v0.6.2-pre  2003-03-09";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.77 2003/03/09 16:38:50 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.78 2003/04/23 21:21:57 mastermitch Exp $
 #
 #
 #############################################################################
@@ -710,6 +712,12 @@ sub parse_newsletter()
 	    chomp $line;
 	    $new_app->{'subject'} = $line;
 	    $line=<STDIN>;
+	    while ((defined $line) and ($line !~ /^\s/)) {
+		# multiline subject field!
+		chomp $line;
+		$new_app->{'subject'} .= ' ' . $line;
+		$line=<STDIN>;
+	    }
 	    next unless defined $line;
 	    
 	    # from

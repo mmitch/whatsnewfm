@@ -1,9 +1,13 @@
-<<$Id: README,v 1.59 2003/01/04 20:46:37 mastermitch Exp $>>
+<<$Id: README,v 1.60 2003/01/04 21:16:43 mastermitch Exp $>>
 
 
-   NN   When upgrading from a 0.4.x version, be sure to remove
-   NN   the DATE_CMD option from your configuration file.  See
-   oo   section [6] for how to import your data.
+
+   NN   When upgrading from a 0.4.x version, be sure to remove the
+   NN   DATE_CMD option from your configuration file.  You also need
+   NN   to remove the DB_OLD and DB_HOT options and add DB_NAME instead.
+   NN   See section [4] for details.
+
+   NN   See section [6] for how to import your old databases.
 
 
 

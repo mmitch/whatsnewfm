@@ -1,10 +1,10 @@
-<<$Id: README,v 1.25 2001/02/06 22:52:19 mitch Exp $>>
+<<$Id: README,v 1.26 2001/02/11 11:47:28 mitch Exp $>>
 
 
-  whatsnewfm 0.4.2
+  whatsnewfm 0.4.3
   ~~~~~~~~~~~~~~~~
 
- 2001/02/05
+ 2001/02/11
 
  (c) 2000-2001 by Christian Garbs <mitch@uni.de>
 
@@ -112,21 +112,25 @@ You need to specify the following keywords:
 
 * MAILTO=email@address
   This is the eMail address to which the filtered newsletter and the
-  updates of 'hot' programs are sent.
+  updates of "hot" programs are sent.
 
 * DB_OLD=~/.whatsnewfm.db.old
-  This is the filename of the 'old' database.
+  This is the filename of the "old" database.
 
 * DB_HOT=~/.whatsnewfm.db.hot
-  This is the filename of the 'hot' database.
+  This is the filename of the "hot" database.
 
 * EXPIRE=12
-  After this time (in months) an entry from the 'old' database expires.
+  After this time (in months) an entry from the "old" database expires.
 
 * UPDATE_MAIL=single
-  All updates of 'hot' applications from one newsletter are sent
+  All updates of "hot" applications from one newsletter are sent
   in one single eMail. If you would like to have a unique eMail for
   every application, set this key to "multiple" instead of "single".
+
+* SUMMARY_AT=bottom
+  Prints the summary at the bottom of a processed newsletter. If you
+  want the summary to be printed at the top, set this to "top".
 
 * MAIL_CMD=/usr/lib/sendmail
   This is the location of your sendmail command (or any command
@@ -232,6 +236,13 @@ separated by whitespaces.
   [7] Thanks
   ~~~~~~~~~~
 
+* Pedro Melo Cunha <melo@isp.novis.pt> send a patch to move the
+  newsletter summary to the top of the mail (included in v.0.4.3).
+
+* Eugen Dedu <dedu@ese-metz.fr> reported the missing Project ID in
+  "hot" mails (fixed in v0.4.3). He also suggested to include the
+  comments from the "hot" database in an update notification.
+
 * Dominik Brettnacher <dominik@brettnacher.org> sent a patch to
   include the freshmeat editorials into the list of new applications
   (included in v0.2.5).
@@ -265,12 +276,11 @@ of the next versions.
 ? Save the application names in the "old" database (like comments in
   the "hot" database).
 
-? Provide an option that always shows messages with high urgency.
+? Provide an option that always shows messages with high urgency (or a
+  corresponding release focus).
 
 * Create backup files only when there have been changes (like watchfm).
 
 * Use a database like gdbm, ndbm or dbm instead of plain ascii files
-  (this will only happen on a boring, cold and rainy sunday afternoon).
-
-- Looks like it's impossible to migrate version 0.0.x databases to the
-  new 0.2.x format. As far of now, no converter will be written.
+  (this will only happen on a boring, cold and rainy sunday afternoon
+   when I don't have anything better to do).

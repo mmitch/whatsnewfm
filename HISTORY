@@ -1,5 +1,16 @@
 whatsnewfm HISTORY
 
+2001/02/11  -  0.4.3
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Existing comments in 'hot' database could not be updated.
+- BUGFIX: URL was missing in articles.
+- BUGFIX: Project ID was missing in 'hot' mails.
+- The newsletter summary can be printed at top or bottom of a parsed
+  newsletter (add SUMMARY_AT=top to your ~/.whatsnewfmrc).
+- Comments from 'hot' database are included in 'hot' mails.
+
+
+
 2001/02/05  -  0.4.2
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: freshmeat has changed the syntax of the newsletter.

@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.90 2004/02/13 21:42:28 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.91 2004/02/15 14:28:01 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.4pre  2004-02-13";
@@ -9,7 +9,7 @@ my $id="whatsnewfm.pl  v0.6.4pre  2004-02-13";
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
-#                            Matthew Gabeler-Lee <cheetah@users.sourceforge.net>
+#                            Matthew Gabeler-Lee <msg2@po.cwru.edu>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ my $id="whatsnewfm.pl  v0.6.4pre  2004-02-13";
 #
 #############################################################################
 #
+# v0.6.4
 # 2004/02/13--> Copy Content-type etc. to output mails as proposed in
 #               Sourceforge bug #891520.
 # 2003/08/24--> Fix typo in manpage.
@@ -191,7 +192,7 @@ my $id="whatsnewfm.pl  v0.6.4pre  2004-02-13";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.90 2004/02/13 21:42:28 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.91 2004/02/15 14:28:01 mastermitch Exp $
 #
 #
 #############################################################################

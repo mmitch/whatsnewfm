@@ -27,8 +27,8 @@ my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
 #
 # v0.4.4
 # 2001/06/23--> BUGFIX: Warning message about changed newsletter format
-#               was not generated correctly
-# 2001/05/31--> "view" accepts optional regexp to filter the output
+#               was not generated correctly.
+# 2001/05/31--> "view" accepts optional regexp to filter the output.
 #
 # v0.4.3
 # 2001/02/11--> Summary can be printed at top or bottom of a parsed
@@ -111,7 +111,7 @@ my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.40 2001/06/23 15:52:19 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.41 2001/06/23 15:53:32 mitch Exp $
 #
 #
 #############################################################################

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.2.2  2000-09-22";
+my $id="whatsnewfm.pl  v0.2.3  2000-10-30";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -22,6 +22,8 @@ my $id="whatsnewfm.pl  v0.2.2  2000-09-22";
 #
 #############################################################################
 #
+# v0.2.3
+# 2000/10/30--> Reacted to a change in the newsletter format (item name).
 # 2000/10/08--> "add" and "del" give more verbose messages.
 #
 # v0.2.2
@@ -65,7 +67,7 @@ my $id="whatsnewfm.pl  v0.2.2  2000-09-22";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.20 2000/10/08 13:27:33 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.21 2000/10/30 20:49:05 mitch Exp $
 #
 #
 #############################################################################
@@ -354,6 +356,10 @@ sub parse_newsletter
 
 	    if ($line =~ /subject:\s/) {
 		$line =~ s/^.*subject:\s//;
+		$new_app{'subject'} = $line;
+
+	    } elsif ($line =~ /name:\s/) {
+		$line =~ s/^.*name:\s//;
 		$new_app{'subject'} = $line;
 
 	    } elsif  ($line =~ /added\sby:\s/) {

@@ -1,5 +1,13 @@
 whatsnewfm HISTORY
 
+2000/09/22  -  0.2.2
+~~~~~~~~~~~~~~~~~~~~
+- Added scoring of newsletter items.
+- Adding and removing items from the "hot" database now gives
+  affirmative messages.
+
+
+
 2000/09/10  -  0.2.1
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: Statistic calculations at the end of a parsed newsletter

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.0.4pre  2000-08-05";
+my $id="whatsnewfm.pl  v0.2.0  2000-08-22";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -22,6 +22,8 @@ my $id="whatsnewfm.pl  v0.0.4pre  2000-08-05";
 #
 #############################################################################
 #
+# v0.2.0
+# 2000/08/22 -> BUGFIX: freshmeat has changed the newsletter format
 # 2000/08/05 -> Updates can be sent as one big or several small mails.
 # v0.0.3
 # 2000/08/04 -> BUGFIX: No empty mails are sent any more.
@@ -86,6 +88,10 @@ my $update_mail="single";
 #
 # YOU DON'T NEED TO EDIT ANYTHING BEYOND...
 #
+#############################################################################
+
+
+# $Id: whatsnewfm.pl,v 1.9 2000/08/22 20:57:13 mitch Exp $
 
 
 ###########################[ main routine ]##################################
@@ -326,23 +332,23 @@ sub parse_newsletter
 	    } elsif  ($line =~ /homepage:\s/) {
 		$line =~ s/^.*homepage:\s//;
 		$new_app{'homepage'} = $line;
-		$line =~ s/^.*freshmeat\.net\/redir\/homepage\///;
-		$line =~ s/\/$//;
-		$new_app{'app_id'} = $line;
+		$line =~ s/^.*freshmeat\.net\/projects\///;
+		$line =~ s/\/homepage\/$//;
+		$new_app{'project_id'} = $line;
 
 	    } elsif  ($line =~ /download:\s/) {
 		$line =~ s/^.*download:\s//;
 		$new_app{'download'} = $line;
-		$line =~ s/^.*freshmeat\.net\/redir\/download\///;
-		$line =~ s/\/$//;
-		$new_app{'app_id'} = $line;
+		$line =~ s/^.*freshmeat\.net\/projects\///;
+		$line =~ s/\/download\/$//;
+		$new_app{'project_id'} = $line;
 
 	    } elsif  ($line =~ /changelog:\s/) {
 		$line =~ s/^.*changelog:\s//;
 		$new_app{'changelog'} = $line;
-		$line =~ s/^.*freshmeat\.net\/redir\/changelog\///;
-		$line =~ s/\/$//;
-		$new_app{'app_id'} = $line;
+		$line =~ s/^.*freshmeat\.net\/projects\///;
+		$line =~ s/\/changelog\/$//;
+		$new_app{'project_id'} = $line;
 
 	    } elsif  ($line =~ /^description:$/) {
 		while (my $line=<STDIN>) {
@@ -362,14 +368,14 @@ sub parse_newsletter
 		    $new_app{'urgency'} .= $line;
 		}
 
-	    } elsif  ($line =~ /^\|\>\shttp:\/\/freshmeat.net\/news\//) {
+	    } elsif  ($line =~ /^\|\>\shttp:\/\/freshmeat.net\/projects\//) {
 		$line =~ s/^\|\>\s//;
 		$new_app{'newslink'} = $line;
 		$letter++;
 
 ### print a 'hot' entry
 
-		if (exists $interesting{$new_app{'app_id'}}) {
+		if (($new_app{'project_id'}) && (exists $interesting{$new_app{'project_id'}})) {
 
 		    if ($first_hot == 1) {
 			$first_hot=0;
@@ -431,11 +437,13 @@ sub parse_newsletter
 
 ### print a 'new' entry
 
-		elsif (! defined $database{$new_app{'app_id'}}) {
+		elsif ((! $new_app{'project_id'}) || (! defined $database{$new_app{'project_id'}})) {
 
 		    $db_new++;
 		    $letter_new++;
-		    $database{$new_app{'app_id'}} = $timestamp;
+		    if (defined $new_app{'project_id'}) {
+			$database{$new_app{'project_id'}} = $timestamp;
+		    }
 		    
 		    if ($first_new == 1) {
 			$first_new=0;
@@ -486,8 +494,10 @@ sub parse_newsletter
 			print MAIL_NEW "   news item: $new_app{'newslink'}\n";
 		    }
 
-		    print MAIL_NEW "    magic id: $new_app{'app_id'}\n";
-
+		    if (defined $new_app{'project_id'}) {
+			print MAIL_NEW "  project id: $new_app{'project_id'}\n";
+		    }
+			
 		    print MAIL_NEW "\n*" . "=" x 76 . "*\n";
 		    
 		}
@@ -635,10 +645,8 @@ sub write_old
     rename $db_old, "$db_old~" or die "couldn't back up 'old' database \"$db_old\": $!";
     open DB, ">$db_old" or die "couldn't open 'old' database \"$db_old\": $!";
     foreach my $key (sort keys %db) {
-	if ($key =~ /^[0-9]+$/) {
-	    print DB "$key\t$db{$key}\n";
-	    $written++;
-	}
+	print DB "$key\t$db{$key}\n";
+	$written++;
     }
     close DB or die "couldn't close 'old' database \"$db_old\": $!";
     return $written;
@@ -655,10 +663,8 @@ sub write_hot
     rename $db_hot, "$db_hot~" or die "couldn't back up 'hot' database \"$db_hot\": $!";
     open DB, ">$db_hot" or die "couldn't open 'hot' database \"$db_hot\": $!";
     foreach my $key (sort { $db{$a} cmp $db{$b} } keys %db) {
-	if ($key =~ /^[0-9]+$/) {
-	    print DB "$key\t$db{$key}\n";
-	    $written++;
-	}
+	print DB "$key\t$db{$key}\n";
+	$written++;
     }
     close DB or die "couldn't close 'hot' database \"$db_hot\": $!";
     return $written;

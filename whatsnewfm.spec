@@ -29,7 +29,8 @@ miss anything about your favourite programs.
 %build
 
 %install
-cp whatsnewfm.pl /usr/bin/
+mkdir -p /var/tmp/%{name}-%{version}/usr/bin/
+cp whatsnewfm.pl /var/tmp/%{name}-%{version}/usr/bin/
 
 %files
 %doc README COPYING HISTORY whatsnewfmrc.sample welcome

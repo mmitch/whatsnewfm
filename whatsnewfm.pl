@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.2.5  2000-11-25";
+my $id="whatsnewfm.pl  v0.2.6  2001-01-30";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -23,6 +23,9 @@ my $id="whatsnewfm.pl  v0.2.5  2000-11-25";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.2.6
+# 2000/01/30--> New items with less than a specified score will not be shown.
 #
 # v0.2.5
 # 2000/11/25--> Freshmeat editorials are included in the list of new
@@ -76,7 +79,7 @@ my $id="whatsnewfm.pl  v0.2.5  2000-11-25";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.24 2000/11/25 12:10:20 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.25 2001/01/30 22:10:16 mitch Exp $
 #
 #
 #############################################################################
@@ -721,7 +724,7 @@ sub read_config($)
 {
     my $config_file = $_[0];
     my @allowed_keys = ("MAILTO", "DB_OLD", "DB_HOT", "EXPIRE", "DATE_CMD",
-			"MAIL_CMD", "UPDATE_MAIL");
+			"MAIL_CMD", "UPDATE_MAIL", "SCORE_MIN");
     my @scores = ();
 
 ### look for config file
@@ -744,11 +747,10 @@ sub read_config($)
 		warn "$0 warning:\n";
 		warn "duplicate keyword \"$key\" in configuration file at line $.\n";
 	    }
-	    if ($value) {
+	    if (defined $value) {
 		$key = uc $key;
-		if (grep {/$key/} @allowed_keys) {
-		    $config{$key} = $value;
-		} elsif ($key eq "SCORE") {
+
+		if ($key eq "SCORE") {
 		    
 		    my ($score, $regexp) = split /\t/, $value, 2;
 		    if ((! defined $regexp) or ($regexp eq "")) {
@@ -762,6 +764,8 @@ sub read_config($)
 			warn "SCORE value not numeric in configuration file at line $.\n";
 		    }
 		    
+		} elsif (grep {/$key/} @allowed_keys) {
+		    $config{$key} = $value;
 		} else {
 		    warn "$0 warning:\n";
 		    warn "unknown keyword \"$key\" in configuration file at line $.\n";
@@ -898,6 +902,11 @@ sub mail_new_apps()
 	    }
 	}
     }
+
+
+### only keep applications with at least minimum score
+    @new_applications = grep {$_->{'score'} >= $config{'SCORE_MIN'}} @new_applications;
+
 
 ### sort by score
     @new_applications = sort { %{$a}->{'score'} <=> %{$b}->{'score'} } @new_applications;

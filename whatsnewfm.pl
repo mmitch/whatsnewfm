@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
+my $id="whatsnewfm.pl  v0.4.9  2001-10-19";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2001  Christian Garbs <mitch@cgarbs.de>
@@ -25,8 +25,11 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 #
 #############################################################################
 #
+# v0.4.9
 # 2001/10/19--> BUGFIX: Corrected calculation of value $db_new in summary.
-#                       (Bug is result of changes on 2001/10/01)
+#           |   (bug is result of changes on 2001/10/01)
+#           |-> Scoring of editorial articles is possible now.
+#           `-> List of skipped articles can be shown.
 # 2001/10/13--> Configuration file warnings are included in 'new' mails.
 # 2001/10/01--> A news item that got filtered out because of a low score
 #               is not added to the 'old' database so it will "reappear"
@@ -132,7 +135,7 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.51 2001/10/19 10:28:01 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.52 2001/10/19 16:04:00 mitch Exp $
 #
 #
 #############################################################################
@@ -174,7 +177,8 @@ my @cfg_optional_keys = (
 			 );
 my @cfg_warnings;
 
-my @skipped_items;
+my @skipped_already_seen;
+my @skipped_low_score;
 
 my $separator = "*" . "="x76 . "*\n";
 
@@ -521,6 +525,8 @@ sub parse_newsletter
 	    undef $new_app{'project_id'};
 	    $articles++;
 	    
+	    do_scoring(\%new_app);
+
 	    push @new_applications, { %new_app };
 	    %new_app=();
 
@@ -710,7 +716,11 @@ sub parse_newsletter
 		}
 		push @new_applications, { %new_app };
 	    
+	    } else {
+		# already seen
+		push @skipped_already_seen, $new_app{'subject'};
 	    }
+
 	    
 	    # wait for separator  (UGLY, change this routine somehow)
 	    my $end = 0;
@@ -1237,16 +1247,27 @@ sub get_skipped()
 {
     my $skipped = "";
 
-    if (@skipped_items > 0) {
+    if (@skipped_already_seen > 0) {
 
-	$skipped .= "\n These news items are not shown in this mail:\n\n";
+	$skipped .= "\n These news items were skipped as 'already seen':\n\n";
 
-	foreach my $item (@skipped_items) {
+	foreach my $item (@skipped_already_seen) {
 	    $skipped .= " *  $item\n";
 	}
 
-	$skipped .= "\n$separator";
     }
+
+    if (@skipped_low_score > 0) {
+
+	$skipped .= "\n These news items were skipped as 'low score':\n\n";
+
+	foreach my $item (@skipped_low_score) {
+	    $skipped .= " *  $item\n";
+	}
+
+    }
+
+    $skipped .= "\n$separator" unless $skipped eq "";
 
     return $skipped;
 }
@@ -1286,6 +1307,7 @@ sub mail_new_apps()
 
 ### only keep applications with at least minimum score
     my $score_killed = @new_applications;
+    @skipped_low_score = map { $_->{'subject'} } grep {$_->{'score'} < $config{'SCORE_MIN'}} @new_applications;
     @new_applications = grep {$_->{'score'} >= $config{'SCORE_MIN'}} @new_applications;
     $score_killed -= @new_applications;
 

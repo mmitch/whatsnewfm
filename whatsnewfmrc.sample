@@ -68,6 +68,7 @@ SCORE_MIN=-999
 
 
 #
-# *==> Location of external programs:
+# *==> How to send mail (mail program and parameters):
 #
 MAIL_CMD=/usr/lib/sendmail
+MAIL_OPT=-oi -t

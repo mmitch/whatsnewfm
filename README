@@ -1,4 +1,4 @@
-<<$Id: README,v 1.36 2001/10/13 16:10:13 mitch Exp $>>
+<<$Id: README,v 1.37 2001/10/19 15:35:55 mitch Exp $>>
 
 
   whatsnewfm 0.4.8
@@ -146,11 +146,11 @@ You need to specify the following keywords:
   This is the location of your date command.
 
 * SCORE=<score> <TAB> <regexp>
-  This enables scoring of newsletter items (release text). This
-  keyword can appear multiple times (it may also be omitted).
-  Each value consists of a score (either a negative or positive
-  integer value) and a regular expression, both separated by a
-  tabulator (\t). If the regular expression is found within the
+  This enables scoring of newsletter items (release text and
+  articles). This keyword can appear multiple times (it may also be
+  omitted). Each value consists of a score (either a negative or
+  positive integer value) and a regular expression, both separated by
+  a tabulator (\t). If the regular expression is found within the
   descriptive text of a news item, the score value is added to the
   score of that news item. Regular expressions are matched
   case-insensitive. The news items then are listed according to their
@@ -160,6 +160,7 @@ You need to specify the following keywords:
 * CATSCORE=<score> <TAB> <regexp>
   This works exactly like the SCORE keyword, except that not the
   release text but the Freshmeat Category fields are scored.
+  Try "CATSCORE=+100<TAB>Editorial" so mark all editorial articles.
 
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.62 2003/04/27 07:52:16 mastermitch Exp $>>
+<<$Id: README,v 1.63 2003/04/27 09:16:48 mastermitch Exp $>>
 
 
 
@@ -322,6 +322,10 @@ it with the pod2* commands.  For example:
 
 * Scott reported a bug with multiline subjects within the newsletter
   (sourceforge bug #726261, fixed in v0.6.2, backported to v0.4.14).
+
+* Josef 'Jupp' Schugt <jupp@gmx.de> made some annotations to the
+  expire algorithm for the 'old' database (changes included on v0.6.2
+  and backported to v0.4.14).
 
 * Roger H. Goun <rgoun at sourceforge> reported a bug in the RPMs of
   v0.4.12.

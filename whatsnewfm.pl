@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.86 2003/08/18 19:49:38 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.87 2003/08/19 08:19:20 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
@@ -186,7 +186,7 @@ my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.86 2003/08/18 19:49:38 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.87 2003/08/19 08:19:20 mastermitch Exp $
 #
 #
 #############################################################################
@@ -342,7 +342,6 @@ my $cfg_allowed_keys  = {
 };
 my $cfg_optional_keys = {
     "LIST_SKIPPED" => 0,
-    "MAIL_OPT"     => 0,
     "SUMMARY_AT"   => 0,
 };
 my $cfg_warnings = [];

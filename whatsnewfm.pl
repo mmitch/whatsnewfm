@@ -152,7 +152,7 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-24";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.59.2.7 2002/11/24 23:04:46 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59.2.8 2002/11/24 23:32:13 mitch Exp $
 #
 #
 #############################################################################
@@ -237,7 +237,7 @@ EOF
 }
 
 
-##############[	view the entries in the 'hot' database ]#####################
+##############[ view the entries in the 'hot' database ]#####################
 
 
 sub view_entries(@)
@@ -845,7 +845,7 @@ sub close_hot_db()
 }
 
 
-######################[	close an "update" mail ]#############################
+######################[ close an "update" mail ]#############################
 
     
 sub close_hot()
@@ -937,7 +937,7 @@ EOF
 }
 
 
-######################[	open an "update" mail ]##############################
+######################[ open an "update" mail ]##############################
 
 
 sub open_hot_mail($)

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.2.1  2000-09-10";
+my $id="whatsnewfm.pl  v0.2.2  2000-09-22";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -22,42 +22,48 @@ my $id="whatsnewfm.pl  v0.2.1  2000-09-10";
 #
 #############################################################################
 #
-# 2000/09/20 -> Added a scoring for new applications.
-# 2000/09/19 -> "add" and "del" produce affirmative messages.
+# v0.2.2
+# 2000/09/20--> Added scoring of newsletters.
+# 2000/09/19--> "add" and "del" produce affirmative messages.
+#
 # v0.2.1
-# 2000/09/08 -> BUGFIX: Statistic calculations at the end of a
-#               newsletter were broken.
-#            -> You can "view" all entries in the 'hot' database.
-#            -> Configuration is read from a configuration file. The
+# 2000/09/08--> BUGFIX: Statistic calculations at the end of a
+#           !   newsletter were broken.
+#           !-> You can "view" all entries in the 'hot' database.
+#           '-> Configuration is read from a configuration file. The
 #               script doesn't need to be edited any more.
+#
 # v0.2.0
-# 2000/08/22 -> BUGFIX: freshmeat has changed the newsletter format
-# 2000/08/05 -> Updates can be sent as one big or several small mails.
+# 2000/08/22--> BUGFIX: freshmeat has changed the newsletter format
+# 2000/08/05--> Updates can be sent as one big or several small mails.
+#
 # v0.0.3
-# 2000/08/04 -> BUGFIX: No empty mails are sent any more.
-#            -> Display of help text
-# 2000/08/03 -> BUGFIX: Comments in the 'hot' database were deleted
-#               after every run.
-#            -> Major code cleanup.
-#            -> You can "add" and "del" entries from the 'hot' database.
+# 2000/08/04--> BUGFIX: No empty mails are sent any more.
+#           '-> Display of help text
+# 2000/08/03--> BUGFIX: Comments in the 'hot' database were deleted
+#           !   after every run.
+#           !-> Major code cleanup.
+#           '-> You can "add" and "del" entries from the 'hot' database.
+#
 # v0.0.2
-# 2000/08/03 -> A list of interesting applications is kept and you are
-#               informed of updates of these applications.
-#            -> Databases are locked properly.
+# 2000/08/03--> A list of interesting applications is kept and you are
+#           !   informed of updates of these applications.
+#           '-> Databases are locked properly.
+#
 # v0.0.1
-# 2000/07/17 -> generated Appindex link is wrong, thus it is removed.
+# 2000/07/17--> generated Appindex link is wrong, thus it is removed.
 #               The link can't be generated offline, because there is not
 #               enough information contained in the newsletter.
-# 2000/07/14 -> removed the dot because "sendmail" will treat it as end 
+# 2000/07/14--> removed the dot because "sendmail" will treat it as end 
 #               of mail in the middle of the newsletter...
-# 2000/07/12 -> a dot before the separator line to allow copy'n'paste to
+# 2000/07/12--> a dot before the separator line to allow copy'n'paste to
 #               the "mail" program - bad idea[TM] (see 2000/07/14)
-# 2000/07/11 -> statistics are generated
-# 2000/07/07 -> it works
-# 2000/07/06 -> first piece of code
+# 2000/07/11--> statistics are generated
+# 2000/07/07--> it works
+# 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.18 2000/09/20 15:48:15 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.19 2000/09/22 17:44:40 mitch Exp $
 #
 #
 #############################################################################

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.12 2000/09/27 20:42:24 mitch Exp $>>
+<<$Id: README,v 1.13 2000/10/01 10:01:20 mitch Exp $>>
 
 
   whatsnewfm 0.2.2
@@ -233,8 +233,8 @@ separated by whitespaces.
   [7] Thanks
   ~~~~~~~~~~
 
-* Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> offered to build
-  whatsnewfm RPM packages.
+* Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> maintains the
+  whatsnewfm RPM and .deb packages.
 
 * All those people who told me that whatsnewfm didn't work any more
   when freshmeat changed the newsletter format. Apparently someone

@@ -145,7 +145,7 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.59.2.2 2002/11/24 19:31:26 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59.2.3 2002/11/24 19:56:46 mitch Exp $
 #
 #
 #############################################################################
@@ -165,28 +165,28 @@ use strict;                     # strict syntax checking
 my $configfile = "~/.whatsnewfmrc-dev";
 
 # global configuration hash:
-my %config;
+my $config;
 
 # information
-my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
-			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html");
+my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
+			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html" ];
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file
-my @cfg_allowed_keys  = (
+my $cfg_allowed_keys  = [
 			 "MAILTO",      "DB_OLD",
 			 "DB_HOT",      "EXPIRE",
 			 "DATE_CMD",    "MAIL_CMD",
 			 "UPDATE_MAIL", "SCORE_MIN",
 			 "SUMMARY_AT",  "LIST_SKIPPED"
-			 );
-my @cfg_optional_keys = (
+			 ];
+my $cfg_optional_keys = [
 			 "LIST_SKIPPED", "SUMMARY_AT"
-			 );
-my @cfg_warnings;
+			 ];
+my $cfg_warnings = [];
 
-my @skipped_already_seen;
-my @skipped_low_score;
+my $skipped_already_seen = [];
+my $skipped_low_score = [];
 
 my $separator = "*" . "="x76 . "*\n";
 
@@ -257,7 +257,7 @@ sub do_scoring($)
     $app->{'score'} = 0;
 
     if (defined $app->{'description'}) {
-	foreach my $score ( @{$config{'SCORE'}}) {
+	foreach my $score ( @{$config->{'SCORE'}}) {
 	    if ($app->{'description'} =~ /$score->{'regexp'}/i) {
 		$app->{'score'} += $score->{'score'};
 	    }
@@ -265,7 +265,7 @@ sub do_scoring($)
     }
     
     if (defined $app->{'category'}) {
-	foreach my $score ( @{$config{'CATSCORE'}}) {
+	foreach my $score ( @{$config->{'CATSCORE'}}) {
 	    if ($app->{'category'} =~ /$score->{'regexp'}/i) {
 		$app->{'score'} += $score->{'score'};
 	    }
@@ -367,10 +367,10 @@ sub remove_entry
 sub parse_newsletter
 {
 
-    my %database;
-    my %new_app;
-    my %interesting;
-    my %this_time_new;
+    my $database;
+    my $new_app;
+    my $interesting;
+    my $this_time_new;
 
     my $subject      = "Subject: Freshmeat Newsletter (no subject?)\n";
     my $position     = 3;
@@ -388,20 +388,20 @@ sub parse_newsletter
     my $releases     = 0;
     my $releases_new = 0;
 
-    my @hot_applications = ();
-    my @new_applications = ();
+    my $hot_applications = [];
+    my $new_applications = [];
 
 
 ### generate current timestamp
 
 
-    my $year = `$config{'DATE_CMD'} +%Y`;
+    my $year = `$config->{'DATE_CMD'} +%Y`;
     if ($? >> 8) {
 	die "Could not get current date";
     }
     chomp $year;
 
-    my $month = `$config{'DATE_CMD'} +%m`;
+    my $month = `$config->{'DATE_CMD'} +%m`;
     if ($? >> 8) {
 	die "Could not get current date";
     }
@@ -412,17 +412,17 @@ sub parse_newsletter
 
 ### read databases
 
-    %database    = read_old();
-    %interesting = read_hot();
+    $database    = read_old();
+    $interesting = read_hot();
 
 
 ### expire 'old' entries
 
     
-    foreach my $number (keys %database) {
-	if (($database{$number}+$config{'EXPIRE'}) < $timestamp) {
+    foreach my $number (keys %{$database}) {
+	if (($database->{$number}+$config->{'EXPIRE'}) < $timestamp) {
 	    $db_expired++;
-	    delete $database{$number};
+	    delete $database->{$number};
 	}
     }
 
@@ -459,7 +459,7 @@ sub parse_newsletter
 
 	    # title
 	    chomp $line;
-	    $new_app{'subject'} = $line;
+	    $new_app->{'subject'} = $line;
 	    $line=<STDIN>;
 	    next unless defined $line;
 	    
@@ -467,7 +467,7 @@ sub parse_newsletter
 	    if ($line =~ /^by /) {
 		$line =~ s/^by //;
 		chomp $line;
-		$new_app{'author'} = $line;
+		$new_app->{'author'} = $line;
 		$line=<STDIN>;
 		next unless defined $line;
 	    }
@@ -476,14 +476,14 @@ sub parse_newsletter
 	    if ($line =~ /^Section: /) {
 		$line =~ s/^Section: //;
 		chomp $line;
-		$new_app{'category'} = $line;
+		$new_app->{'category'} = $line;
 		$line=<STDIN>;
 		next unless defined $line;
 	    }
 
 	    # date
 	    chomp $line;
-	    $new_app{'date'} = $line;
+	    $new_app->{'date'} = $line;
 	    $line=<STDIN>;
 	    next unless defined $line;
 	    
@@ -495,11 +495,11 @@ sub parse_newsletter
 
 	    # text
 	    $line =~ s/^\.$/. /; # sendmail fix
-	    $new_app{'description'} = $line;
+	    $new_app->{'description'} = $line;
 	    while ($line=<STDIN>) {
 		last if $line =~ /^\s$/;
 		$line =~ s/^\.$/. /; # sendmail fix
-		$new_app{'description'} .= $line;
+		$new_app->{'description'} .= $line;
 	    }
 
 	    # empty line
@@ -512,19 +512,19 @@ sub parse_newsletter
 	    if ($line =~ /^\s*URL: /) {
 		$line =~ s/^\s*URL: //;
 		chomp $line;
-		$new_app{'newslink'} = $line;
+		$new_app->{'newslink'} = $line;
 		$line=<STDIN>;
 		next unless defined $line;
 	    }
 
 	    # save it
-	    undef $new_app{'project_id'};
+	    undef $new_app->{'project_id'};
 	    $articles++;
 	    
-	    do_scoring(\%new_app);
+	    do_scoring($new_app);
 
-	    push @new_applications, { %new_app };
-	    %new_app=();
+	    push @{$new_applications}, $new_app;
+	    $new_app = {};
 
 	    # wait for separator  (UGLY, change this routine somehow)
 	    my $end = 0;
@@ -564,7 +564,7 @@ sub parse_newsletter
 	    $line =~ s/^(\[\d+\]) - //;
 	    $release_nr = $1;
 	    chomp $line;
-	    $new_app{'subject'} = $line;
+	    $new_app->{'subject'} = $line;
 	    $line=<STDIN>;
 	    next unless defined $line;
 	    
@@ -572,7 +572,7 @@ sub parse_newsletter
 	    if ($line =~ /^\s+by /) {
 		$line =~ s/^\s+by //;
 		chomp $line;
-		$new_app{'author'} = $line;
+		$new_app->{'author'} = $line;
 		$line=<STDIN>;
 		next unless defined $line;
 	    }
@@ -581,13 +581,13 @@ sub parse_newsletter
 	    chomp $line;
 	    while ((defined $line) && ($line =~ /\(http:\/\/.*\)/ )) {
 		# This is no date, but a multi-line "by" field!
-		$new_app{'author'} .= "\n              $line";
+		$new_app->{'author'} .= "\n              $line";
 		$line=<STDIN>;
 		chomp $line;
 	    }
 	    next unless defined $line;
 	    $line =~ s/^\s+//;
-	    $new_app{'date'} = $line;
+	    $new_app->{'date'} = $line;
 	    $line=<STDIN>;
 	    next unless defined $line;
 	    
@@ -600,13 +600,13 @@ sub parse_newsletter
 	    # Category
 	    if ($line !~ /^About: /) {
 		chomp $line;
-		$new_app{'category'} = $line;
+		$new_app->{'category'} = $line;
 		while ($line=<STDIN>) {
 		    last if $line =~ /^\s*$/;
 		    chomp $line;
-		    $new_app{'category'} .= "," . $line;
+		    $new_app->{'category'} .= "," . $line;
 		}
-		$new_app{'category'} = $line unless $line =~ /^\s*$/;
+		$new_app->{'category'} = $line unless $line =~ /^\s*$/;
 		$line=<STDIN>;
 		next unless defined $line;
 
@@ -621,11 +621,11 @@ sub parse_newsletter
 	    if ($line =~ /^About: /) {
 		$line =~ s/^About: //;
 		$line =~ s/^\.$/. /; # sendmail fix
-		$new_app{'description'} = $line;
+		$new_app->{'description'} = $line;
 		while ($line=<STDIN>) {
 		    last if $line =~ /^\s*$/;
 		    $line =~ s/^\.$/. /; # sendmail fix
-		    $new_app{'description'} .= $line;
+		    $new_app->{'description'} .= $line;
 		}
 	    }
 
@@ -639,11 +639,11 @@ sub parse_newsletter
 	    if ($line =~ /^Changes: /) {
 		$line =~ s/^Changes: //;
 		$line =~ s/^\.$/. /; # sendmail fix
-		$new_app{'changes'} = $line;
+		$new_app->{'changes'} = $line;
 		while ($line=<STDIN>) {
 		    last if $line =~ /^\s*$/;
 		    $line =~ s/^\.$/. /; # sendmail fix
-		    $new_app{'changes'} .= $line;
+		    $new_app->{'changes'} .= $line;
 		}
 	    }
 
@@ -657,7 +657,7 @@ sub parse_newsletter
 	    if ($line =~ /^\s*License: /) {
 		$line =~ s/^\s*License: //;
 		chomp $line;
-		$new_app{'license'} = $line unless $line =~ /^\s*$/;
+		$new_app->{'license'} = $line unless $line =~ /^\s*$/;
 		$line=<STDIN>;
 		next unless defined $line;
 	    }
@@ -672,27 +672,27 @@ sub parse_newsletter
 	    if ($line =~ /^\s*URL: /) {
 		$line =~ s/^\s*URL: //;
 		chomp $line;
-		$new_app{'project_link'} = $line;
+		$new_app->{'project_link'} = $line;
 		$line =~ s!/$!!;
 		$line =~ s!^http://freshmeat.net/projects/!!;
-		$new_app{'project_id'} = $line;
+		$new_app->{'project_id'} = $line;
 		$line=<STDIN>;
 		next unless defined $line;
 	    }
 
 	    $releases++;
-	    do_scoring(\%new_app);
+	    do_scoring($new_app);
 	    
 	    ### save a 'hot' entry
 	    
-	    if (($new_app{'project_id'}) and (exists $interesting{$new_app{'project_id'}})) {
+	    if (($new_app->{'project_id'}) and (exists $interesting->{$new_app->{'project_id'}})) {
 
 		# also remember the comments from the hot database (if any)
-		if ($interesting{$new_app{'project_id'}} !~ /^\s*$/) {
-		    $new_app{'comments'} = $interesting{$new_app{'project_id'}};
+		if ($interesting->{$new_app->{'project_id'}} !~ /^\s*$/) {
+		    $new_app->{'comments'} = $interesting->{$new_app->{'project_id'}};
 		}
 
-		push @hot_applications, { %new_app };
+		push @{$hot_applications}, $new_app;
 		
 	    } # LOOKOUT, there's an elsif coming!
 
@@ -700,20 +700,20 @@ sub parse_newsletter
 	    ### if the same project appears twice in a newsletter, it is found
 	    ### with %this_time_new (although %database is already set)
 	    
-	    elsif (((! exists $database{$new_app{'project_id'}}) or (exists $this_time_new{$new_app{'project_id'}})) and (! exists $interesting{$new_app{'project_id'}})) {
+	    elsif (((! exists $database->{$new_app->{'project_id'}}) or (exists $this_time_new->{$new_app->{'project_id'}})) and (! exists $interesting->{$new_app->{'project_id'}})) {
 		
 		$releases_new++;
-		if ($new_app{'score'} >= $config{'SCORE_MIN'}) {
+		if ($new_app->{'score'} >= $config->{'SCORE_MIN'}) {
 		    # only add when not scored out
-		    $database{$new_app{'project_id'}} = $timestamp;
-		    $this_time_new{$new_app{'project_id'}} = $timestamp;
+		    $database->{$new_app->{'project_id'}} = $timestamp;
+		    $this_time_new->{$new_app->{'project_id'}} = $timestamp;
 		    $db_new++;
 		}
-		push @new_applications, { %new_app };
+		push @{$new_applications}, $new_app;
 	    
 	    } else {
 		# already seen
-		push @skipped_already_seen, $new_app{'subject'};
+		push @{$skipped_already_seen}, $new_app->{'subject'};
 	    }
 
 	    
@@ -730,7 +730,7 @@ sub parse_newsletter
 		$end = 1 unless defined $line;
 	    }
 
-	    %new_app=();
+	    $new_app = {};
 
 	}
     }
@@ -739,16 +739,16 @@ sub parse_newsletter
 ### write databases
 
 
-    $db_written = write_old(%database);
-    $db_new -= keys (%database) - $db_written;
+    $db_written = write_old($database);
+    $db_new -= keys (%{$database}) - $db_written;
 
-    $hot_written = write_hot(%interesting);
+    $hot_written = write_hot($interesting);
     
 
 ### send mails
 
-    mail_hot_apps(@hot_applications);
-    mail_new_apps($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications);
+    mail_hot_apps($hot_applications);
+    mail_new_apps($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications);
 
 }
 
@@ -759,7 +759,7 @@ sub parse_newsletter
 sub read_hot
 {
     my $db;
-    open DB, "<$config{'DB_HOT'}" or die "couldn't open 'hot' database \"$config{'DB_HOT'}\": $!";
+    open DB, "<$config->{'DB_HOT'}" or die "couldn't open 'hot' database \"$config->{'DB_HOT'}\": $!";
     while (my $line=<DB>) {
 	chomp $line;
 	my ($project, $comment) = split /\s/, $line, 2;
@@ -767,7 +767,7 @@ sub read_hot
 	    $db->{lc $project} = $comment;
 	}
     }
-    close DB or die "couldn't close 'hot' database \"$config{'DB_HOT'}\": $!";
+    close DB or die "couldn't close 'hot' database \"$config->{'DB_HOT'}\": $!";
 
     return $db;
 }
@@ -780,7 +780,7 @@ sub read_old
 {
     my $db = {};
 
-    open DB, "<$config{'DB_OLD'}" or die "couldn't open 'old' database \"$config{'DB_OLD'}\": $!";
+    open DB, "<$config->{'DB_OLD'}" or die "couldn't open 'old' database \"$config->{'DB_OLD'}\": $!";
     while (my $line=<DB>) {
 	chomp $line;
 	my ($project, $addition) = split /\s/, $line;
@@ -788,7 +788,7 @@ sub read_old
 	    $db->{lc $project} = $addition;
 	}
     }
-    close DB or die "couldn't close 'old' database \"$config{'DB_OLD'}\": $!";
+    close DB or die "couldn't close 'old' database \"$config->{'DB_OLD'}\": $!";
 
     return $db;
 }
@@ -801,13 +801,13 @@ sub write_old
 {
     my $written = 0;
     my $db = shift;
-    rename $config{'DB_OLD'}, "$config{'DB_OLD'}~" or die "couldn't back up 'old' database \"$config{'DB_OLD'}\": $!";
-    open DB, ">$config{'DB_OLD'}" or die "couldn't open 'old' database \"$config{'DB_OLD'}\": $!";
+    rename $config->{'DB_OLD'}, "$config->{'DB_OLD'}~" or die "couldn't back up 'old' database \"$config->{'DB_OLD'}\": $!";
+    open DB, ">$config->{'DB_OLD'}" or die "couldn't open 'old' database \"$config->{'DB_OLD'}\": $!";
     foreach my $key (sort keys %{$db}) {
 	print DB (lc $key) . "\t$db->{$key}\n";
 	$written++;
     }
-    close DB or die "couldn't close 'old' database \"$config{'DB_OLD'}\": $!";
+    close DB or die "couldn't close 'old' database \"$config->{'DB_OLD'}\": $!";
     return $written;
 }
 
@@ -819,14 +819,14 @@ sub write_hot
 {
     my $written = 0;
     my $db = shift;
-    rename $config{'DB_HOT'}, "$config{'DB_HOT'}~" or die "couldn't back up 'hot' database \"$config{'DB_HOT'}\": $!";
-    open DB, ">$config{'DB_HOT'}" or die "couldn't open 'hot' database \"$config{'DB_HOT'}\": $!";
+    rename $config->{'DB_HOT'}, "$config->{'DB_HOT'}~" or die "couldn't back up 'hot' database \"$config->{'DB_HOT'}\": $!";
+    open DB, ">$config->{'DB_HOT'}" or die "couldn't open 'hot' database \"$config->{'DB_HOT'}\": $!";
     foreach my $key (sort { $db->{$a} cmp $db->{$b} } keys %{$db}) {
 	$key = lc $key;
 	print DB (lc $key) . "\t$db->{$key}\n";
 	$written++;
     }
-    close DB or die "couldn't close 'hot' database \"$config{'DB_HOT'}\": $!";
+    close DB or die "couldn't close 'hot' database \"$config->{'DB_HOT'}\": $!";
     return $written;
 }
 
@@ -843,7 +843,7 @@ sub close_hot
 	    
 EOF
     
-    close MAIL_HOT or die "can't close mailer \"$config{'MAIL_CMD'}\": $!";
+    close MAIL_HOT or die "can't close mailer \"$config->{'MAIL_CMD'}\": $!";
 }
 
 
@@ -854,7 +854,7 @@ sub get_summary
 {
     my ($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
-    my $already_seen=@skipped_already_seen;
+    my $already_seen=@{$skipped_already_seen};
     my $difference=$releases-$releases_new-$already_seen;
     my $remaining=$releases_new+$articles-$score_killed;
     my $summary = << "EOF";
@@ -896,7 +896,7 @@ EOF
 EOF
     ;
 	
-	foreach my $whatsnewfm_homepage (@whatsnewfm_homepages) {
+	foreach my $whatsnewfm_homepage (@{$whatsnewfm_homepages}) {
 	    $summary .= " !!     $whatsnewfm_homepage\n";
 	}
 
@@ -928,15 +928,15 @@ EOF
 
 sub open_hot
 {
-    my %new_app = @_;
+    my $new_app = shift;
 
-    open MAIL_HOT, "|$config{'MAIL_CMD'} $config{'MAILTO'}" or die "can't open mailer \"$config{'MAIL_CMD'}\": $!";
+    open MAIL_HOT, "|$config->{'MAIL_CMD'} $config->{'MAILTO'}" or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
     
-    print MAIL_HOT "To: $config{'MAILTO'}\n";
-    if ($config{'UPDATE_MAIL'} eq "single") {
+    print MAIL_HOT "To: $config->{'MAILTO'}\n";
+    if ($config->{'UPDATE_MAIL'} eq "single") {
 	print MAIL_HOT "Subject: whatsnewfm.pl: Updates of interesting applications\n";
     } else {
-	print MAIL_HOT "Subject: whatsnewfm.pl: Update: $new_app{'subject'}\n";
+	print MAIL_HOT "Subject: whatsnewfm.pl: Update: $new_app->{'subject'}\n";
     }
     print MAIL_HOT "X-Loop: sent by whatsnewfm.pl script\n";
     print MAIL_HOT "\n";
@@ -950,9 +950,9 @@ sub open_hot
 sub open_new
 {
     my $subject = $_[0];
-    open MAIL_NEW, "|$config{'MAIL_CMD'} $config{'MAILTO'}" or die "can't open mailer \"$config{'MAIL_CMD'}\": $!";
+    open MAIL_NEW, "|$config->{'MAIL_CMD'} $config->{'MAILTO'}" or die "can't open mailer \"$config->{'MAIL_CMD'}\": $!";
     
-    print MAIL_NEW "To: $config{'MAILTO'}\n";
+    print MAIL_NEW "To: $config->{'MAILTO'}\n";
     print MAIL_NEW $subject;
     print MAIL_NEW "X-Loop: sent by whatsnewfm.pl daemon\n";
     print MAIL_NEW "\n";
@@ -985,10 +985,10 @@ sub read_config($)
 	$line =~ s/^\s+//;
 	if (($line ne "") and ($line !~ /^\#/)) {
 	    my ($key, $value) = split /=/, $line, 2;
-	    if (exists $config{$key}) {
+	    if (exists $config->{$key}) {
 		warn "$0 warning:\n";
 		warn "duplicate keyword \"$key\" in configuration file at line $.\n";
-		push @cfg_warnings, "duplicate keyword \"$key\" at line $.";
+		push @{$cfg_warnings}, "duplicate keyword \"$key\" at line $.";
 	    }
 	    if (defined $value) {
 		$key = uc $key;
@@ -999,14 +999,14 @@ sub read_config($)
 		    if ((! defined $regexp) or ($regexp eq "")) {
 			warn "$0 warning:\n";
 			warn "no REGEXP given in configuration file at line $.\n";
-			push @cfg_warnings, "no REGEXP given at line $.";
+			push @{$cfg_warnings}, "no REGEXP given at line $.";
 		    }
 		    elsif ($score =~ /[+-]\d+/) {
 			push @scores, { 'score' => $score, 'regexp' => $regexp };
 		    } else {
 			warn "$0 warning:\n";
 			warn "SCORE value not numeric in configuration file at line $.\n";
-			push @cfg_warnings, "SCORE value not numeric at line $.";
+			push @{$cfg_warnings}, "SCORE value not numeric at line $.";
 		    }
 		    
 		} elsif ($key eq "CATSCORE") {
@@ -1015,22 +1015,22 @@ sub read_config($)
 		    if ((! defined $regexp) or ($regexp eq "")) {
 			warn "$0 warning:\n";
 			warn "no REGEXP given in configuration file at line $.\n";
-			push @cfg_warnings, "no REGEXP given at line $.";
+			push @{$cfg_warnings}, "no REGEXP given at line $.";
 		    }
 		    elsif ($score =~ /[+-]\d+/) {
 			push @catscores, { 'score' => $score, 'regexp' => $regexp };
 		    } else {
 			warn "$0 warning:\n";
 			warn "SCORE value not numeric in configuration file at line $.\n";
-			push @cfg_warnings, "SCORE value not numeric at line $.";
+			push @{$cfg_warnings}, "SCORE value not numeric at line $.";
 		    }
 		    
-		} elsif (grep {$_ eq $key} @cfg_allowed_keys) {
-		    $config{$key} = $value;
+		} elsif (grep {$_ eq $key} @{$cfg_allowed_keys}) {
+		    $config->{$key} = $value;
 		} else {
 		    warn "$0 warning:\n";
 		    warn "unknown keyword \"$key\" in configuration file at line $.\n";
-		    push @cfg_warnings, "unknown keyword \"$key\" at line $.";
+		    push @{$cfg_warnings}, "unknown keyword \"$key\" at line $.";
 		}
 	    } else {
 		warn "$0 fatal error:\n";
@@ -1043,43 +1043,43 @@ sub read_config($)
     close CONF or die "could not close configuration file \"$config_file\": $!";
 
 ### is the config file complete?
-    foreach my $key (@cfg_allowed_keys) {
-	if (! exists $config{$key}) {
-	    if ( (grep { $_ eq $key } @cfg_optional_keys) == 0) {
+    foreach my $key (@{$cfg_allowed_keys}) {
+	if (! exists $config->{$key}) {
+	    if ( (grep { $_ eq $key } @{$cfg_optional_keys}) == 0) {
 		warn "$0 fatal error:\n";
 		die  "keyword \"$key\" is missing in configuration file \"$config_file\"\n";
 	    } else {
 		warn "$0 warning:\n";
 		warn "using default value for \"$key\"\n";
-		push @cfg_warnings, "using default value for \"$key\"";
+		push @{$cfg_warnings}, "using default value for \"$key\"";
 	    }
 	}
     }
 
 ### default values
-    $config{'SUMMARY_AT'} = 'bottom' unless exists $config{'SUMMARY_AT'}
-                                                && $config{'SUMMARY_AT'} 
-                                                && lc($config{'SUMMARY_AT'}) eq 'top';
-    $config{'LIST_SKIPPED'} = 'no'   unless exists $config{'LIST_SKIPPED'}
-                                                && $config{'LIST_SKIPPED'} 
+    $config->{'SUMMARY_AT'} = 'bottom' unless exists $config->{'SUMMARY_AT'}
+                                                && $config->{'SUMMARY_AT'} 
+                                                && lc($config->{'SUMMARY_AT'}) eq 'top';
+    $config->{'LIST_SKIPPED'} = 'no'   unless exists $config->{'LIST_SKIPPED'}
+                                                && $config->{'LIST_SKIPPED'} 
                                                 && (
-						    lc($config{'LIST_SKIPPED'}) eq 'top' ||
-						    lc($config{'LIST_SKIPPED'}) eq 'bottom'
+						    lc($config->{'LIST_SKIPPED'}) eq 'top' ||
+						    lc($config->{'LIST_SKIPPED'}) eq 'bottom'
 						    );
 
 ### lowercase some values
-    $config{'SUMMARY_AT'} = lc $config{'SUMMARY_AT'};
-    $config{'LIST_SKIPPED'} = lc $config{'LIST_SKIPPED'};
+    $config->{'SUMMARY_AT'} = lc $config->{'SUMMARY_AT'};
+    $config->{'LIST_SKIPPED'} = lc $config->{'LIST_SKIPPED'};
 
 
 ### expand ~ to home directory
-    $config{'DB_HOT'}   =~ s/^~/$ENV{'HOME'}/;
-    $config{'DB_OLD'}   =~ s/^~/$ENV{'HOME'}/;
-    $config{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
-    $config{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
+    $config->{'DB_HOT'}   =~ s/^~/$ENV{'HOME'}/;
+    $config->{'DB_OLD'}   =~ s/^~/$ENV{'HOME'}/;
+    $config->{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
+    $config->{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
 
-    $config{'SCORE'}    = \@scores;
-    $config{'CATSCORE'} = \@catscores;
+    $config->{'SCORE'}    = \@scores;
+    $config->{'CATSCORE'} = \@catscores;
 
 }
 
@@ -1090,42 +1090,42 @@ sub read_config($)
 sub mail_hot_apps()
 {
     
-    my @hot_applications = @_;
-    my %new_app;
+    my $hot_applications = shift;
+    my $new_app;
     my $first_hot = 1;
 
-    while (@hot_applications) {
+    while (@{$hot_applications}) {
 	
-	%new_app = %{pop @hot_applications};
+	$new_app = pop @{$hot_applications};
     
 	
 	if ($first_hot == 1) {
 	    $first_hot=0;
-	    open_hot(%new_app);
+	    open_hot($new_app);
 	}
 	
-	if (defined $new_app{'subject'}) {
-	    print MAIL_HOT "\n   $new_app{'subject'}\n\n";
+	if (defined $new_app->{'subject'}) {
+	    print MAIL_HOT "\n   $new_app->{'subject'}\n\n";
 	}
 	
-	if (defined $new_app{'description'}) {
-	    print MAIL_HOT "$new_app{'description'}\n";
+	if (defined $new_app->{'description'}) {
+	    print MAIL_HOT "$new_app->{'description'}\n";
 	}
 	
-	if (defined $new_app{'changes'}) {
+	if (defined $new_app->{'changes'}) {
 	    print MAIL_HOT "     changes:";
-	    if (defined $new_app{'urgency'}) {
-		print MAIL_HOT " ($new_app{'urgency'} urgency)";
+	    if (defined $new_app->{'urgency'}) {
+		print MAIL_HOT " ($new_app->{'urgency'} urgency)";
 	    }
-	    print MAIL_HOT "\n$new_app{'changes'}\n";
+	    print MAIL_HOT "\n$new_app->{'changes'}\n";
 	}
 	
-	if (defined $new_app{'author'}) {
-	    print MAIL_HOT "    added by: $new_app{'author'}\n";
+	if (defined $new_app->{'author'}) {
+	    print MAIL_HOT "    added by: $new_app->{'author'}\n";
 	}
 	
-	if (defined $new_app{'category'}) {
-	    my @categories = split /,/, $new_app{'category'};
+	if (defined $new_app->{'category'}) {
+	    my @categories = split /,/, $new_app->{'category'};
 	    my $category = shift @categories;
 	    print MAIL_HOT "    category: $category\n";
 	    foreach my $category ( @categories ) {
@@ -1134,33 +1134,33 @@ sub mail_hot_apps()
 	    }
 	}
 	
-	if (defined $new_app{'project_link'}) {
-	    print MAIL_HOT "project page: $new_app{'project_link'}\n";
+	if (defined $new_app->{'project_link'}) {
+	    print MAIL_HOT "project page: $new_app->{'project_link'}\n";
 	}
 
-	if (defined $new_app{'newslink'}) {
-	    print MAIL_HOT "     details: $new_app{'newslink'}\n";
+	if (defined $new_app->{'newslink'}) {
+	    print MAIL_HOT "     details: $new_app->{'newslink'}\n";
 	}
 	
-	if (defined $new_app{'date'}) {
-	    print MAIL_HOT "        date: $new_app{'date'}\n";
+	if (defined $new_app->{'date'}) {
+	    print MAIL_HOT "        date: $new_app->{'date'}\n";
 	}
 	
-	if (defined $new_app{'license'}) {
-	    print MAIL_HOT "     license: $new_app{'license'}\n";
+	if (defined $new_app->{'license'}) {
+	    print MAIL_HOT "     license: $new_app->{'license'}\n";
 	}
 	
-	if (defined $new_app{'project_id'}) {
-	    print MAIL_HOT "  project id: $new_app{'project_id'}\n";
+	if (defined $new_app->{'project_id'}) {
+	    print MAIL_HOT "  project id: $new_app->{'project_id'}\n";
 	}
 
-	if (defined $new_app{'comments'}) {
-	    print MAIL_HOT "your comment: $new_app{'comments'}\n";
+	if (defined $new_app->{'comments'}) {
+	    print MAIL_HOT "your comment: $new_app->{'comments'}\n";
 	}
 
 	print MAIL_HOT "\n$separator";
 
-	if ($config{'UPDATE_MAIL'} ne "single") {
+	if ($config->{'UPDATE_MAIL'} ne "single") {
 	    close_hot();
 	    $first_hot=1;
 	}
@@ -1181,21 +1181,21 @@ sub get_skipped()
 {
     my $skipped = "";
 
-    if (@skipped_already_seen > 0) {
+    if (@{$skipped_already_seen} > 0) {
 
 	$skipped .= "\n These news items were skipped as 'already seen':\n\n";
 
-	foreach my $item (@skipped_already_seen) {
+	foreach my $item (@{$skipped_already_seen}) {
 	    $skipped .= " *  $item\n";
 	}
 
     }
 
-    if (@skipped_low_score > 0) {
+    if (@{$skipped_low_score} > 0) {
 
 	$skipped .= "\n These news items were skipped as 'low score':\n\n";
 
-	foreach my $item (@skipped_low_score) {
+	foreach my $item (@{$skipped_low_score}) {
 	    $skipped .= " *  $item\n";
 	}
 
@@ -1213,12 +1213,12 @@ sub get_warnings()
 {
     my $warnings = "";
 
-    if (@cfg_warnings > 0) {
+    if (@{$cfg_warnings} > 0) {
 
 	$warnings .= "\n Your configuration file ~/.whatsnewfmrc "
 	    . "produced the following warnings:\n\n";
 
-	foreach my $warn (@cfg_warnings) {
+	foreach my $warn (@{$cfg_warnings}) {
 	    $warnings .= " *  $warn\n";
 	}
 
@@ -1236,18 +1236,18 @@ sub get_warnings()
 sub mail_new_apps()
 {
 
-    my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
-    my %new_app;
+    my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications) = @_;
+    my $new_app;
 
 ### only keep applications with at least minimum score
-    my $score_killed = @new_applications;
-    @skipped_low_score = map { $_->{'subject'} } grep {$_->{'score'} < $config{'SCORE_MIN'}} @new_applications;
-    @new_applications = grep {$_->{'score'} >= $config{'SCORE_MIN'}} @new_applications;
-    $score_killed -= @new_applications;
+    my $score_killed = @{$new_applications};
+    $skipped_low_score = [ map { $_->{'subject'} } grep {$_->{'score'} < $config->{'SCORE_MIN'}} @{$new_applications} ];
+    $new_applications = [ grep {$_->{'score'} >= $config->{'SCORE_MIN'}} @{$new_applications} ];
+    $score_killed -= @{$new_applications};
 
 
 ### sort by score
-    @new_applications = sort { $a->{'score'} <=> $b->{'score'} } @new_applications;
+    $new_applications = [ sort { $a->{'score'} <=> $b->{'score'} } @{$new_applications} ];
 
 
 ### get summary
@@ -1270,38 +1270,38 @@ sub mail_new_apps()
     print MAIL_NEW $warnings;
 
 ### print summary if you want it at the beggining
-    print MAIL_NEW $summary if $config{'SUMMARY_AT'} eq 'top';
+    print MAIL_NEW $summary if $config->{'SUMMARY_AT'} eq 'top';
 
 ### list skipped items if you want them at the beggining
-    print MAIL_NEW $skipped if $config{'LIST_SKIPPED'} eq 'top';
+    print MAIL_NEW $skipped if $config->{'LIST_SKIPPED'} eq 'top';
 
 
-    while (@new_applications) {
+    while (@{$new_applications}) {
 	
-	%new_app = %{pop @new_applications};
+	$new_app = pop @{$new_applications};
 	
-	if (defined $new_app{'subject'}) {
-	    print MAIL_NEW "\n   $new_app{'subject'}\n\n";
+	if (defined $new_app->{'subject'}) {
+	    print MAIL_NEW "\n   $new_app->{'subject'}\n\n";
 	}
 
-	if (defined $new_app{'description'}) {
-	    print MAIL_NEW "$new_app{'description'}\n";
+	if (defined $new_app->{'description'}) {
+	    print MAIL_NEW "$new_app->{'description'}\n";
 	}
 
-	if (defined $new_app{'changes'}) {
+	if (defined $new_app->{'changes'}) {
 	    print MAIL_NEW "     changes:";
-	    if (defined $new_app{'urgency'}) {
-		print MAIL_NEW " ($new_app{'urgency'} urgency)";
+	    if (defined $new_app->{'urgency'}) {
+		print MAIL_NEW " ($new_app->{'urgency'} urgency)";
 	    }
-	    print MAIL_NEW "\n$new_app{'changes'}\n";
+	    print MAIL_NEW "\n$new_app->{'changes'}\n";
 	}
 
-	if (defined $new_app{'author'}) {
-	    print MAIL_NEW "    added by: $new_app{'author'}\n";
+	if (defined $new_app->{'author'}) {
+	    print MAIL_NEW "    added by: $new_app->{'author'}\n";
 	}
 
-	if (defined $new_app{'category'}) {
-	    my @categories = split /,/, $new_app{'category'};
+	if (defined $new_app->{'category'}) {
+	    my @categories = split /,/, $new_app->{'category'};
 	    my $category = shift @categories;
 	    print MAIL_NEW "    category: $category\n";
 	    foreach my $category ( @categories ) {
@@ -1310,28 +1310,28 @@ sub mail_new_apps()
 	    }
 	}
 	
-	if (defined $new_app{'project_link'}) {
-	    print MAIL_NEW "project page: $new_app{'project_link'}\n";
+	if (defined $new_app->{'project_link'}) {
+	    print MAIL_NEW "project page: $new_app->{'project_link'}\n";
 	}
 
-	if (defined $new_app{'newslink'}) {
-	    print MAIL_NEW "   news item: $new_app{'newslink'}\n";
+	if (defined $new_app->{'newslink'}) {
+	    print MAIL_NEW "   news item: $new_app->{'newslink'}\n";
 	}
 
-	if (defined $new_app{'date'}) {
-	    print MAIL_NEW "        date: $new_app{'date'}\n";
+	if (defined $new_app->{'date'}) {
+	    print MAIL_NEW "        date: $new_app->{'date'}\n";
 	}
 	
-	if (defined $new_app{'license'}) {
-	    print MAIL_NEW "     license: $new_app{'license'}\n";
+	if (defined $new_app->{'license'}) {
+	    print MAIL_NEW "     license: $new_app->{'license'}\n";
 	}
 	
-	if (defined $new_app{'project_id'}) {
-	    print MAIL_NEW "  project id: $new_app{'project_id'}\n";
+	if (defined $new_app->{'project_id'}) {
+	    print MAIL_NEW "  project id: $new_app->{'project_id'}\n";
 	}
 
-	if (defined $new_app{'score'}) {
-	    print MAIL_NEW "       score: $new_app{'score'}\n";
+	if (defined $new_app->{'score'}) {
+	    print MAIL_NEW "       score: $new_app->{'score'}\n";
 	}
 
 	print MAIL_NEW "\n$separator";
@@ -1339,14 +1339,14 @@ sub mail_new_apps()
     }
     
 ### list skipped items if you want them at the bottom
-    print MAIL_NEW $skipped if $config{'LIST_SKIPPED'} eq 'bottom';
+    print MAIL_NEW $skipped if $config->{'LIST_SKIPPED'} eq 'bottom';
 
 ### print summary if you want it at the end
-    print MAIL_NEW $summary if $config{'SUMMARY_AT'} eq 'bottom';
+    print MAIL_NEW $summary if $config->{'SUMMARY_AT'} eq 'bottom';
 
 
 ### close mailer
-    close MAIL_NEW or die "can't close mailer \"$config{'MAIL_CMD'}\": $!";
+    close MAIL_NEW or die "can't close mailer \"$config->{'MAIL_CMD'}\": $!";
 }
 
 

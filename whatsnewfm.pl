@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.0.3  2000-08-04";
+my $id="whatsnewfm.pl  v0.0.4pre  2000-08-05";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -22,6 +22,7 @@ my $id="whatsnewfm.pl  v0.0.3  2000-08-04";
 #
 #############################################################################
 #
+# 2000/08/05 -> Updates can be sent as one big or several small mails.
 # v0.0.3
 # 2000/08/04 -> BUGFIX: No empty mails are sent any more.
 #            -> Display of help text
@@ -75,6 +76,11 @@ my $expire=12;
 my $date_cmd="/bin/date";
 my $mail_cmd="/usr/lib/sendmail";
 #
+#
+# *==> Collect updates in a single mail or send multiple mails?
+#
+my $update_mail="single";
+#my $update_mail="multiple";
 #
 #############################################################################
 #
@@ -367,12 +373,7 @@ sub parse_newsletter
 
 		    if ($first_hot == 1) {
 			$first_hot=0;
-			open MAIL_HOT, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
-			print MAIL_HOT "To: $mailto\n";
-			print MAIL_HOT "Subject: whatsnewfm.pl: Updates of interesting applications\n";
-			print MAIL_HOT "X-Loop: sent by whatsnewfm.pl daemon\n";
-			print MAIL_HOT "\n";
-			print MAIL_HOT "*" . "=" x 76 . "*\n";
+			open_hot(%new_app);
 		    }
 		    
 		    if (defined $new_app{'subject'}) {
@@ -421,6 +422,11 @@ sub parse_newsletter
 
 		    print MAIL_HOT "\n*" . "=" x 76 . "*\n";
 		    
+		    if ($update_mail ne "single") {
+			close_hot();
+			$first_hot=1;
+		    }
+
 		}
 
 ### print a 'new' entry
@@ -433,12 +439,7 @@ sub parse_newsletter
 		    
 		    if ($first_new == 1) {
 			$first_new=0;
-			open MAIL_NEW, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
-			print MAIL_NEW "To: $mailto\n";
-			print MAIL_NEW $subject;
-			print MAIL_NEW "X-Loop: sent by whatsnewfm.pl daemon\n";
-			print MAIL_NEW "\n";
-			print MAIL_NEW "*" . "=" x 76 . "*\n";
+			open_new($subject);
 		    }
 		    
 		    if (defined $new_app{'subject'}) {
@@ -513,39 +514,15 @@ sub parse_newsletter
     release_old();
 
 
-### print statistics
+### close mailers
 
 
     if ($first_new == 0) {
-	my $difference=$letter-$letter_new;
-	print MAIL_NEW << "EOF";
-	
-    This newsletter has been filtered by:
-    $id
-	
-    The newsletter originally contained $letter news items,
-    $difference items have been filtered out,
-    so there are $letter_new items left in this mail.
-
-    Your databases had $db_read entries.
-    $db_expired entries have expired,
-    while $db_new items were added.
-    Your databases now have $db_written entries.
-EOF
-	    
-        print MAIL_NEW "\n*" . "=" x 76 . "*\n";
-	close MAIL_NEW or die "can't close mailer \"$mail_cmd\": $!";
+	close_new($letter, $letter_new, $db_read, $db_new, $db_written, $db_expired);
     }
     
     if ($first_hot == 0) {
-	print MAIL_HOT << "EOF";
-    
-    This information has been brought to you by:
-    $id
-	
-EOF
-
-        close MAIL_HOT or die "can't close mailer \"$mail_cmd\": $!";
+	close_hot();
     }
 
 }
@@ -670,6 +647,7 @@ sub write_old
 
 #####################[ write the 'hot' database ]############################
 
+
 sub write_hot
 {
     my $written = 0;
@@ -685,3 +663,86 @@ sub write_hot
     close DB or die "couldn't close 'hot' database \"$db_hot\": $!";
     return $written;
 }
+
+
+######################[	close an "update" mail ]#############################
+
+    
+sub close_hot
+{
+    print MAIL_HOT << "EOF";
+	
+    This information has been brought to you by:
+    $id
+	    
+EOF
+    
+    close MAIL_HOT or die "can't close mailer \"$mail_cmd\": $!";
+}
+
+
+########################[ close a "new" mail ]###############################
+
+
+sub close_new
+{
+    my ($letter, $letter_new, $db_read, $db_new, $db_written, $db_expired) = @_;
+
+    my $difference=$letter-$letter_new;
+    print MAIL_NEW << "EOF";
+	
+    This newsletter has been filtered by:
+    $id
+	
+    The newsletter originally contained $letter news items,
+    $difference items have been filtered out,
+    so there are $letter_new items left in this mail.
+
+    Your databases had $db_read entries.
+    $db_expired entries have expired,
+    while $db_new items were added.
+    Your databases now have $db_written entries.
+EOF
+	    
+    print MAIL_NEW "\n*" . "=" x 76 . "*\n";
+    
+    close MAIL_NEW or die "can't close mailer \"$mail_cmd\": $!";
+}
+
+
+######################[	open an "update" mail ]##############################
+
+
+sub open_hot
+{
+    my %new_app = @_;
+
+    open MAIL_HOT, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
+    
+    print MAIL_HOT "To: $mailto\n";
+    if ($update_mail eq "single") {
+	print MAIL_HOT "Subject: whatsnewfm.pl: Updates of interesting applications\n";
+    } else {
+	print MAIL_HOT "Subject: whatsnewfm.pl: Update: $new_app{'subject'}\n";
+    }
+    print MAIL_HOT "X-Loop: sent by whatsnewfm.pl daemon\n";
+    print MAIL_HOT "\n";
+    print MAIL_HOT "*" . "=" x 76 . "*\n";
+}
+
+
+########################[ open a "new" mail ]################################
+
+
+sub open_new
+{
+    my $subject = $_[0];
+    open MAIL_NEW, "|$mail_cmd $mailto" or die "can't open mailer \"$mail_cmd\": $!";
+    
+    print MAIL_NEW "To: $mailto\n";
+    print MAIL_NEW $subject;
+    print MAIL_NEW "X-Loop: sent by whatsnewfm.pl daemon\n";
+    print MAIL_NEW "\n";
+    print MAIL_NEW "*" . "=" x 76 . "*\n";
+}
+

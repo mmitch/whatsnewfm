@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.62.2.9 2003/04/21 11:56:44 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.62.2.10 2003/04/23 21:38:22 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.4.14-pre  2003-04-22";
@@ -26,6 +26,8 @@ my $id="whatsnewfm.pl  v0.4.14-pre  2003-04-22";
 #
 #############################################################################
 #
+# 2003/04/23--> BUGFIX: Multiline release subjects were not handled
+#                       correctly (Sourceforge bug #726261).
 # 2003/04/22--> Call sendmail(1) as advised in `perldoc -q "send mail"`.
 #               No need for the "sendmail fixes" regarding dot-lines any more.
 #
@@ -156,7 +158,7 @@ my $id="whatsnewfm.pl  v0.4.14-pre  2003-04-22";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.62.2.9 2003/04/21 11:56:44 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.62.2.10 2003/04/23 21:38:22 mastermitch Exp $
 #
 #
 #############################################################################
@@ -707,6 +709,12 @@ sub parse_newsletter
 	    chomp $line;
 	    $new_app{'subject'} = $line;
 	    $line=<STDIN>;
+	    while ((defined $line) and ($line !~ /^\s/)) {
+		# multiline subject field!
+		chomp $line;
+		$new_app{'subject'} .= ' ' . $line;
+		$line=<STDIN>;
+	    }
 	    next unless defined $line;
 	    
 	    # from
@@ -1128,8 +1136,8 @@ sub open_hot
 {
     my %new_app = @_;
 
-    open MAIL_HOT, "| $config->{'MAIL_CMD'} -oi -t"
- 	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
+    open MAIL_HOT, "| $config{'MAIL_CMD'} -oi -t"
+ 	or die "can't fork mailer \"$config{'MAIL_CMD'}\": $!";
     
     print MAIL_HOT "To: $config{'MAILTO'}\n";
     if ($config{'UPDATE_MAIL'} eq "single") {
@@ -1149,8 +1157,8 @@ sub open_hot
 sub open_new
 {
     my $subject = $_[0];
-    open MAIL_NEW, "| $config->{'MAIL_CMD'} -oi -t"
- 	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
+    open MAIL_NEW, "| $config{'MAIL_CMD'} -oi -t"
+ 	or die "can't fork mailer \"$config{'MAIL_CMD'}\": $!";
     
     print MAIL_NEW "To: $config{'MAILTO'}\n";
     print MAIL_NEW $subject;

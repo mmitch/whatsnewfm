@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.74 2003/01/11 15:31:23 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.75 2003/02/03 22:14:58 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.1  2003-01-11";
+my $id="whatsnewfm.pl  v0.6.2-pre  2003-01-11";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.6.1  2003-01-11";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# 2003/02/03--> Use %hashes instead of @arrays for configuration file keys.
 #
 # v0.6.1
 # 2003/01/05--> BUGFIX: Number of added projects to old database in
@@ -172,7 +174,7 @@ my $id="whatsnewfm.pl  v0.6.1  2003-01-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.74 2003/01/11 15:31:23 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.75 2003/02/03 22:14:58 mastermitch Exp $
 #
 #
 #############################################################################
@@ -323,20 +325,20 @@ my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file
-my $cfg_allowed_keys  = [
-			 "DB_NAME",
-			 "EXPIRE",
-			 "LIST_SKIPPED",
-			 "MAILTO",
-			 "MAIL_CMD",
-			 "SCORE_MIN",
-			 "SUMMARY_AT",
-			 "UPDATE_MAIL"
-			 ];
-my $cfg_optional_keys = [
-			 "LIST_SKIPPED",
-			 "SUMMARY_AT"
-			 ];
+my $cfg_allowed_keys  = {
+    "DB_NAME"      => 0,
+    "EXPIRE"       => 0,
+    "LIST_SKIPPED" => 0,
+    "MAILTO"       => 0,
+    "MAIL_CMD"     => 0,
+    "SCORE_MIN"    => 0,
+    "SUMMARY_AT"   => 0,
+    "UPDATE_MAIL"  => 0,
+};
+my $cfg_optional_keys = {
+    "LIST_SKIPPED" => 0,
+    "SUMMARY_AT"   => 0,
+};
 my $cfg_warnings = [];
 
 my $skipped_already_seen = [];
@@ -1170,7 +1172,7 @@ sub read_config()
 			push @{$cfg_warnings}, "SCORE value not numeric at line $.";
 		    }
 		    
-		} elsif (grep {$_ eq $key} @{$cfg_allowed_keys}) {
+		} elsif ( exists $cfg_allowed_keys->{$key} ) {
 		    $config->{$key} = $value;
 		} else {
 		    warn "$0 warning:\n";
@@ -1188,9 +1190,9 @@ sub read_config()
     close CONF or die "could not close configuration file \"$config_file\": $!";
 
 ### is the config file complete?
-    foreach my $key (@{$cfg_allowed_keys}) {
+    foreach my $key (keys %{$cfg_allowed_keys}) {
 	if (! exists $config->{$key}) {
-	    if ( (grep { $_ eq $key } @{$cfg_optional_keys}) == 0) {
+	    if ( exists $cfg_optional_keys->{$key} ) {
 		warn "$0 fatal error:\n";
 		die  "keyword \"$key\" is missing in configuration file \"$config_file\"\n";
 	    } else {

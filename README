@@ -1,9 +1,10 @@
-<<$Id: README,v 1.55 2002/12/27 00:19:12 mastermitch Exp $>>
+<<$Id: README,v 1.56 2002/12/27 12:53:56 mastermitch Exp $>>
 
 
-  |"""""""""""""""""""""""""""""""""""""""""""""""|
-  |  This is a development release, so watch out! |
-  |_______________________________________________|
+  !!  When upgrading from a 0.4.x version, be sure to remove
+  !!  the DATE_CMD option from your configuration file.  See
+  ..  section [6] for how to import your data.
+
 
 
   whatsnewfm 0.5.2
@@ -25,7 +26,7 @@
   Usage . . . . . . . . . . . . . . . . .  3
   The configuration file  . . . . . . . .  4
   The "hot" database  . . . . . . . . . .  5
-  Data import from 0.4.x  . . . . . . . .  6
+  Data import from v0.4.x . . . . . . . .  6
   Manpage . . . . . . . . . . . . . . . .  7
   Download  . . . . . . . . . . . . . . .  8
   Thanks  . . . . . . . . . . . . . . . .  9
@@ -242,8 +243,8 @@ separated by whitespaces.
 
 
 
-  [6] Data import from 0.4.x
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+  [6] Data import from v0.4.x
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To import your "hot" database from an older version, run this small
 shell script.  Replace ~/.whatsnewfm.db.hot with the filename of your

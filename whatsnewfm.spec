@@ -1,13 +1,16 @@
+%define	name	whatsnewfm
 %define version 0.4.8
+%define release 1
 
-Summary: A utility to filter the daily newsletter from freshmeat.net
-Name: whatsnewfm
-Version: %{version}
-Release: 1
-Copyright: GPL
-Group: Applications/Databases
-Source: whatsnewfm-%{version}.tar.gz
-BuildArchitectures: noarch
+Summary:	A utility to filter the daily newsletter from freshmeat.net
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Copyright:	GPL
+Group:		Applications/Databases
+Source:		%{name}-%{version}.tar.gz
+BuildRoot:	/var/tmp/%{name}-%{version}
+BuildArchitectures:	noarch
 %description
 whatsnewfm is a utility to filter the daily newsletter from freshmeat.net
 

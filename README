@@ -1,4 +1,4 @@
-<<$Id: README,v 1.64 2003/08/07 10:30:00 mastermitch Exp $>>
+<<$Id: README,v 1.65 2003/08/07 10:34:00 mastermitch Exp $>>
 
 
 
@@ -150,6 +150,9 @@ You need to specify the following keywords:
 * MAIL_CMD=/usr/lib/sendmail
   This is the location of your sendmail command (or any command
   that can be called in the same way as sendmail).
+
+* MAIL_OPT=-oi -t
+  Your sendmail command is called with these parameters.
 
 * SCORE=<score> <TAB> <regexp>
   This enables scoring of newsletter items (release text and

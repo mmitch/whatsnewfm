@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.69 2002/12/29 15:57:59 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.70 2002/12/29 16:15:22 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.3-pre1  2002-12-29";
+my $id="whatsnewfm.pl  v0.5.3  2002-12-29";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,7 @@ my $id="whatsnewfm.pl  v0.5.3-pre1  2002-12-29";
 #
 #############################################################################
 #
+# v0.5.3
 # 2002/12/29--> Configuration file can be selected.
 #
 # v0.5.2
@@ -163,7 +164,7 @@ my $id="whatsnewfm.pl  v0.5.3-pre1  2002-12-29";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.69 2002/12/29 15:57:59 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.70 2002/12/29 16:15:22 mastermitch Exp $
 #
 #
 #############################################################################
@@ -309,7 +310,8 @@ $config->{CONFIGFILE} = "~/.whatsnewfmrc";
 # information
 my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
 			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html",
-			     "http://sourceforge.net/projects/whatsnewfm" ];
+			     "http://sourceforge.net/projects/whatsnewfm",
+			     "http://home.t-online.de/home/dietmar.garbs/download/whatsnewfm/" ];
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.44 2002/11/21 17:08:26 mitch Exp $>>
+<<$Id: README,v 1.45 2002/11/21 17:11:18 mitch Exp $>>
 
 
   whatsnewfm 0.4.11
@@ -40,12 +40,12 @@ http://freshmeat.net
 The main purpose is to cut the huge newsletter to a smaller size by
 only showing items that you didn't see before.
 
-The items already seen will be stored in a database. After some time,
+The items already seen will be stored in a database.  After some time,
 the items expire and will be shown again the next time they are
 included in a newsletter.
 
 If you find an item that you consider particularly useful, you can add
-it to a "hot" list. Items in the hot list are checked for updates so
+it to a "hot" list.  Items in the hot list are checked for updates so
 that you don't miss anything about your favourite programs.
 
 
@@ -66,10 +66,10 @@ that you don't miss anything about your favourite programs.
 1) Extract the archive to a directory of your favour.
 
 2) Copy the file "whatsnewfmrc.sample" to "~/.whatsnewfmrc" and edit
-   it to your needs. See [4] for details.
+   it to your needs.  See [4] for details.
 
 3) Create the empty databases with "touch /path/to/database-hot" and
-   "touch /path/to/database-old". Use the filenames specified in your
+   "touch /path/to/database-old".  Use the filenames specified in your
    configuration file.
 
 4) Add the following lines to your .procmailrc to send all newsletters
@@ -88,7 +88,7 @@ that you don't miss anything about your favourite programs.
      mail -s "[fm-news] newsletter TEST" your@email < welcome
 
    You should then receive an update information for the whatsnewfm
-   application. This is good. Otherwise, there is an error in your
+   application.  This is good.  Otherwise, there is an error in your
    setup.
 
 7) If you're not yet subscribed to the freshmeat newsletter, do so at
@@ -103,8 +103,8 @@ that you don't miss anything about your favourite programs.
   ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The configuration file is a plain text file in your home directory
-named "./whatsnewfmrc". Lines beginning with "#" are treated as
-comments. Other lines consist of keywords and values:
+named "./whatsnewfmrc".  Lines beginning with "#" are treated as
+comments.  Other lines consist of keywords and values:
 
   KEYWORD=VALUE
 
@@ -125,11 +125,11 @@ You need to specify the following keywords:
 
 * UPDATE_MAIL=single
   All updates of "hot" applications from one newsletter are sent
-  in one single eMail. If you would like to have a unique eMail for
+  in one single eMail.  If you would like to have a unique eMail for
   every application, set this key to "multiple" instead of "single".
 
 * SUMMARY_AT=bottom
-  Prints the summary at the bottom of a processed newsletter. If you
+  Prints the summary at the bottom of a processed newsletter.  If you
   want the summary to be printed at the top, set this to "top".
   Default value is 'bottom'.
 
@@ -147,14 +147,14 @@ You need to specify the following keywords:
 
 * SCORE=<score> <TAB> <regexp>
   This enables scoring of newsletter items (release text and
-  articles). This keyword can appear multiple times (it may also be
-  omitted). Each value consists of a score (either a negative or
+  articles).  This keyword can appear multiple times (it may also be
+  omitted).  Each value consists of a score (either a negative or
   positive integer value) and a regular expression, both separated by
-  a tabulator (\t). If the regular expression is found within the
+  a tabulator (\t).  If the regular expression is found within the
   descriptive text of a news item, the score value is added to the
-  score of that news item. Regular expressions are matched
-  case-insensitive. The news items then are listed according to their
-  score values. To learn more about perl regexps, confer the
+  score of that news item.  Regular expressions are matched
+  case-insensitive.  The news items then are listed according to their
+  score values.  To learn more about perl regexps, confer the
   "perldoc perlre" help page.
 
 * CATSCORE=<score> <TAB> <regexp>
@@ -171,17 +171,17 @@ You need to specify the following keywords:
   [5] The "hot" database
   ~~~~~~~~~~~~~~~~~~~~~~
 
-This database contains the applications that you are interested
-in. You will be informed of every update within these applications.
-The applications are identified by the "project id" that is shown in
-the parsed freshmeat newsletter.
+This database contains the applications that you are interested in.
+You will be informed of every update within these applications.  The
+applications are identified by the "project id" that is shown in the
+parsed freshmeat newsletter.
 
 To see what is in the database, just may use "less" or "cat" on the
 database file (although the 'view' command (see below) should be used,
 that's what I wrote it for).
 
 To edit the database, please use the whatsnewfm commands as shown
-below - DON'T edit the files with a text editor. Some strange things
+below - DON'T edit the files with a text editor.  Some strange things
 might happen when you edit the database while whatsnewfm is running in
 the background (your text editor won't recognize a lock on the
 database).
@@ -195,7 +195,7 @@ To view all applications that are in the database, just type this:
 
   whatsnewfm.pl view
 
-This just prints the whole database file on stdout. If you want to
+This just prints the whole database file on stdout.  If you want to
 cut the output down to some entries, you can add a regular expression
 to the view command (instead of using grep):
 
@@ -221,15 +221,15 @@ this:
 
   whatsnewfm.pl add
 
-whatsnewfm.pl then reads from stdin. Every line must begin with a
-project id. Comments might follow after a whitespace character (space,
-tab or the like). If you're finished, press CTRL-D. All entered
-applications will be added to the "hot" database.
+whatsnewfm.pl then reads from stdin.  Every line must begin with a
+project id.  Comments might follow after a whitespace character
+(space, tab or the like).  If you're finished, press CTRL-D.  All
+entered applications will be added to the "hot" database.
 
 
 
-Deleting applications is as easy as adding applications. You can give
-the project id's directly (just one or even more):
+Deleting applications is as easy as adding applications.  You can give
+the project ids directly (just one or even more):
 
   whatsnewfm.pl del whatsnewfm
 
@@ -274,7 +274,7 @@ separated by whitespaces.
   newsletter summary to the top of the mail (included in v0.4.3).
 
 * Eugen Dedu <dedu@ese-metz.fr> reported the missing Project ID in
-  "hot" mails (fixed in v0.4.3). He also suggested to include the
+  "hot" mails (fixed in v0.4.3).  He also suggested to include the
   comments from the "hot" database in an update notification.
 
 * Dominik Brettnacher <dominik@brettnacher.org> sent a patch to
@@ -285,16 +285,16 @@ separated by whitespaces.
   warnings with Perl 5.6 (fixed in v0.2.4).
 
 * Piotr Sieklucki <psiekl@venus.ci.uw.edu.pl> provided the initial
-  version of the whatsnewfm RPM and .deb packages. He also suggested
+  version of the whatsnewfm RPM and .deb packages.  He also suggested
   the SCORE_MIN feature and maintained the mirror at wombat.eu.org for
   some time.
 
 * All those people who told me that whatsnewfm didn't work any more
-  when freshmeat changed the newsletter format. Apparently someone
+  when freshmeat changed the newsletter format.  Apparently someone
   really uses this piece of software :-)
 
 * Michael Reinsch <mr@uue.org> for keeping on asking and not being
-  convinced by my wrong thoughts. Only because of him versions beyond
+  convinced by my wrong thoughts.  Only because of him versions beyond
   v0.0.1 do exist.
   
 
@@ -302,7 +302,7 @@ separated by whitespaces.
   [8] Future Plans
   ~~~~~~~~~~~~~~~~
 
-Items marked with ? mean "Does anybody need this?". If you want to
+Items marked with ? mean "Does anybody need this?".  If you want to
 have this feature, then please contact me and I'll include it in one
 of the next versions.
 

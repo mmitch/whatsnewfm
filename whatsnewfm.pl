@@ -86,7 +86,7 @@ my $id="whatsnewfm.pl  v0.4.0  2001-01-31";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.28 2001/01/31 22:46:18 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.29 2001/02/01 10:59:58 mitch Exp $
 #
 #
 #############################################################################
@@ -782,7 +782,8 @@ sub close_new
 {
     my ($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
-    my $difference=($releases-$releases_new);
+    my $difference=$releases-$releases_new;
+    my $remaining=$releases_new+$articles-$score_killed;
     print MAIL_NEW << "EOF";
 	
     This newsletter has been filtered by:
@@ -796,6 +797,8 @@ EOF
 	print MAIL_NEW << "EOF";
     $difference releases have been filtered out as 'already seen'.
     $score_killed articles or releases have been filtered out as 'low score'.
+    $remaining articles and releases are shown in this mail.
+
 EOF
     ;
 	

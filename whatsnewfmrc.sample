@@ -37,6 +37,14 @@ SUMMARY_AT=bottom
 
 
 #
+# *==> Where in the mail message should we place the list of skipped items?
+#
+LIST_SKIPPED=no
+# LIST_SKIPPED=bottom
+# LIST_SKIPPED=top
+
+
+#
 # *==> Scoring (release text): score_value <TAB> regexp
 #      (see "perldoc perlre" for help on regexp's)
 #
@@ -48,7 +56,8 @@ SUMMARY_AT=bottom
 # *==> Category Scoring: score_value <TAB> regexp
 #      (see "perldoc perlre" for help on regexp's)
 #
-#CATSCORE=+50	Multimedia
+#CATSCORE=+150	Editorial
+#CATSCORE=+050	Multimedia
 #CATSCORE=-999	WWW
 
 
@@ -64,11 +73,3 @@ SCORE_MIN=-999
 DATE_CMD=/bin/date
 MAIL_CMD=/usr/lib/sendmail
 COPY_CMD=/bin/cp
-
-
-#
-# *==> Show list of skipped items?
-#
-LIST_SKIPPED=no
-# LIST_SKIPPED=bottom
-# LIST_SKIPPED=top

@@ -1,10 +1,8 @@
-<<$Id: README,v 1.48 2002/11/25 23:04:01 mitch Exp $>>
+<<$Id: README,v 1.49 2002/11/25 23:20:55 mitch Exp $>>
 
 
   |"""""""""""""""""""""""""""""""""""""""""""""""|
   |  This is a development release, so watch out! |
-  |  There is currently no way to import your     |
-  |  databases from older versions.               |
   |_______________________________________________|
 
 
@@ -27,9 +25,10 @@
   Usage . . . . . . . . . . . . . . . . .  3
   The configuration file  . . . . . . . .  4
   The "hot" database  . . . . . . . . . .  5
-  Download  . . . . . . . . . . . . . . .  6
-  Thanks  . . . . . . . . . . . . . . . .  7
-  Future Plans  . . . . . . . . . . . . .  8
+  Data import from 0.4.x  . . . . . . . .  6
+  Download  . . . . . . . . . . . . . . .  7
+  Thanks  . . . . . . . . . . . . . . . .  8
+  Future Plans  . . . . . . . . . . . . .  9
 
 
 
@@ -242,7 +241,24 @@ separated by whitespaces.
 
 
 
-  [6] Download
+  [6] Data import from 0.4.x
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To import your "hot" database from an older version, run this small
+shell script.  Replace ~/.whatsnewfm.db.hot with the filename of your
+hot database.
+
+  while read LINE ; do
+    ./whatsnewfm.pl add $LINE
+  done < ~/.whatsnewfm.db.hot
+
+
+To import your "old" database, SOMEBODY HAS TO WRITE A SCRIPT AND PUT
+IT HERE :-)
+
+
+
+  [7] Download
   ~~~~~~~~~~~~
 
 * The homepage of whatsnewfm is here:
@@ -252,7 +268,7 @@ separated by whitespaces.
 
 
 
-  [7] Thanks
+  [8] Thanks
   ~~~~~~~~~~
 
 * Matthias Kluwe <mkluwe@web.de> discovered and fixed the warnings
@@ -299,7 +315,7 @@ separated by whitespaces.
   
 
 
-  [8] Future Plans
+  [9] Future Plans
   ~~~~~~~~~~~~~~~~
 
 Items marked with ? mean "Does anybody need this?".  If you want to

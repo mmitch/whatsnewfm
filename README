@@ -1,4 +1,4 @@
-<<$Id: README,v 1.51 2002/12/03 09:02:51 mastermitch Exp $>>
+<<$Id: README,v 1.52 2002/12/03 09:04:59 mastermitch Exp $>>
 
 
   |"""""""""""""""""""""""""""""""""""""""""""""""|
@@ -160,7 +160,7 @@ You need to specify the following keywords:
 * CATSCORE=<score> <TAB> <regexp>
   This works exactly like the SCORE keyword, except that not the
   release text but the Freshmeat Category fields are scored.
-  Try "CATSCORE=+100<TAB>Editorial" so mark all editorial articles.
+  Try "CATSCORE=+100<TAB>Editorial" to mark all editorial articles.
 
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be

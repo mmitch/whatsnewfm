@@ -22,11 +22,18 @@ my $id="whatsnewfm.pl  v0.0.3  2000-08-04";
 #
 #############################################################################
 #
+# v0.0.3
+# 2000/08/04 -> BUGFIX: No empty mails are sent any more.
+#            -> Display of help text
 # 2000/08/03 -> BUGFIX: Comments in the "hot" database were deleted
 #               after every run.
+#            -> Major code cleanup.
+#            -> You can "add" and "del" entries from the hot database.
+# v0.0.2
 # 2000/08/03 -> A list of interesting applications is kept and you are
 #               informed of updates of these applications.
 #            -> Databases are locked properly.
+# v0.0.1
 # 2000/07/17 -> generated Appindex link is wrong, thus it is removed.
 #               The link can't be generated offline, because there is not
 #               enough information contained in the newsletter.

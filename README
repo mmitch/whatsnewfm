@@ -1,10 +1,10 @@
-<<$Id: README,v 1.29 2001/05/31 20:10:33 mitch Exp $>>
+<<$Id: README,v 1.30 2001/06/23 15:12:24 mitch Exp $>>
 
 
-  whatsnewfm 0.4.3
+  whatsnewfm 0.4.4
   ~~~~~~~~~~~~~~~~
 
- 2001/02/11
+ 2001/06/23
 
  (c) 2000-2001 by Christian Garbs <mitch@uni.de>
 
@@ -35,7 +35,7 @@
   ~~~~~~~~~~~~~~~
 
 whatsnewfm is a utility to filter the daily newsletter from
-www.freshmeat.net
+http://freshmeat.net
 
 The main purpose is to cut the hughe newsletter to a smaller size by
 only showing items that you didn't see before.
@@ -92,7 +92,7 @@ that you don't miss anything about your favourite programs.
    setup.
 
 7) If you're not yet subscribed to the freshmeat newsletter, do so at
-   http://www.freshmeat.net 
+   http://freshmeat.net 
 
 8) If one of the new applications is interesting to you, then add
    it to your "hot" database. See [5] for details.
@@ -146,8 +146,9 @@ You need to specify the following keywords:
   integer value) and a regular expression, both separated by a
   tabulator (\t). If the regular expression is found within the
   descriptive text of a news item, the score value is added to the
-  score of that news item. The news items then are listed according
-  to their score values. To learn more about perl regexps, confer the
+  score of that news item. Regular expressions are matched
+  case-insensitive. The news items then are listed according to their
+  score values. To learn more about perl regexps, confer the
   "perldoc perlre" help page.
 
 * SCORE_MIN=-999
@@ -245,8 +246,11 @@ separated by whitespaces.
   [7] Thanks
   ~~~~~~~~~~
 
+* Matthias Kluwe <mkluwe@web.de> made some annotations to the README
+  (included in v0.4.4).
+
 * Pedro Melo Cunha <melo@isp.novis.pt> send a patch to move the
-  newsletter summary to the top of the mail (included in v.0.4.3).
+  newsletter summary to the top of the mail (included in v0.4.3).
 
 * Eugen Dedu <dedu@ese-metz.fr> reported the missing Project ID in
   "hot" mails (fixed in v0.4.3). He also suggested to include the

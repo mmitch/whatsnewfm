@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
+my $id="whatsnewfm.pl  v0.5.0  2002-11-24";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -25,6 +25,7 @@ my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
 #
 #############################################################################
 #
+# v0.5.0
 # 2002/11/24--> Removed file locking code.
 #           |-> Changed all @arrays and %hashs to corresponding $references.
 #           |-> Using BerkeleyDB::Hash for storage of databases.
@@ -151,7 +152,7 @@ my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.59.2.6 2002/11/24 20:50:45 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59.2.7 2002/11/24 23:04:46 mitch Exp $
 #
 #
 #############################################################################

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.62.2.10 2003/04/23 21:38:22 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.62.2.11 2003/04/27 09:24:08 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.14-pre  2003-04-22";
+my $id="whatsnewfm.pl  v0.4.14  2003-04-27";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -26,6 +26,9 @@ my $id="whatsnewfm.pl  v0.4.14-pre  2003-04-22";
 #
 #############################################################################
 #
+# v0.4.14
+# 2003/04/27--> Changed expiration algorithm for 'old' entries.
+#               Expiration after one day is not possible any more.
 # 2003/04/23--> BUGFIX: Multiline release subjects were not handled
 #                       correctly (Sourceforge bug #726261).
 # 2003/04/22--> Call sendmail(1) as advised in `perldoc -q "send mail"`.
@@ -158,7 +161,7 @@ my $id="whatsnewfm.pl  v0.4.14-pre  2003-04-22";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.62.2.10 2003/04/23 21:38:22 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.62.2.11 2003/04/27 09:24:08 mastermitch Exp $
 #
 #
 #############################################################################
@@ -547,6 +550,11 @@ sub parse_newsletter
 
     my $timestamp = ($mon+1) + ($year+1900)*12;
 
+    # Move comparison timestamp half a month into the past.  This way
+    # an item added on 31.01. won't be expired on 01.02. if the
+    # expiration is set to 1 month.  It will be expired on
+    # 16.02. instead, which is better (error distribution).
+    my $timestamp_cmp = $timestamp - ($mday < 16);
 
 ### lock databases
 
@@ -565,7 +573,7 @@ sub parse_newsletter
 
     
     foreach my $number (keys %database) {
-	if (($database{$number}+$config{'EXPIRE'}) < $timestamp) {
+	if (($database{$number}+$config{'EXPIRE'}) < $timestamp_cmp) {
 	    $db_expired++;
 	    delete $database{$number};
 	}

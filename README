@@ -1,4 +1,4 @@
-<<$Id: README,v 1.19 2000/11/27 17:30:30 mitch Exp $>>
+<<$Id: README,v 1.20 2001/01/10 13:30:52 mitch Exp $>>
 
 
   whatsnewfm 0.2.5
@@ -115,7 +115,7 @@ comments. Other lines consist of keywords and values:
 
   KEYWORD=VALUE
 
-You need to specify the following keyswords:
+You need to specify the following keywords:
 
 * MAILTO=email@address
   This is the eMail address to which the filtered newsletter and the

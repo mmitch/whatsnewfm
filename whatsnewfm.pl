@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
+my $id="whatsnewfm.pl  v0.5.0-pre  2002-11-24";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -24,6 +24,10 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# 2002/11/24--> Removed file locking code.
+#           |-> Changed all @arrays and %hashs to corresponding $references.
+#           `-> Using BerkeleyDB::Hash for storage of databases.
 #
 #   DEVELOPMENT BRANCH TO 0.5.x
 #
@@ -145,7 +149,7 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.59.2.3 2002/11/24 19:56:46 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.59.2.4 2002/11/24 20:15:33 mitch Exp $
 #
 #
 #############################################################################
@@ -156,6 +160,7 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 
 
 use strict;                     # strict syntax checking
+use BerkeleyDB::Hash;           # Database access
 
 
 #####################[ declare global variables ]############################
@@ -174,14 +179,19 @@ my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file
 my $cfg_allowed_keys  = [
-			 "MAILTO",      "DB_OLD",
-			 "DB_HOT",      "EXPIRE",
-			 "DATE_CMD",    "MAIL_CMD",
-			 "UPDATE_MAIL", "SCORE_MIN",
-			 "SUMMARY_AT",  "LIST_SKIPPED"
+			 "DATE_CMD",
+			 "DB_NAME",
+			 "EXPIRE",
+			 "LIST_SKIPPED",
+			 "MAILTO",
+			 "MAIL_CMD",
+			 "SCORE_MIN",
+			 "SUMMARY_AT",
+			 "UPDATE_MAIL"
 			 ];
 my $cfg_optional_keys = [
-			 "LIST_SKIPPED", "SUMMARY_AT"
+			 "LIST_SKIPPED",
+			 "SUMMARY_AT"
 			 ];
 my $cfg_warnings = [];
 
@@ -758,18 +768,15 @@ sub parse_newsletter
 
 sub read_hot
 {
-    my $db;
-    open DB, "<$config->{'DB_HOT'}" or die "couldn't open 'hot' database \"$config->{'DB_HOT'}\": $!";
-    while (my $line=<DB>) {
-	chomp $line;
-	my ($project, $comment) = split /\s/, $line, 2;
-	if (defined $project) {
-	    $db->{lc $project} = $comment;
-	}
-    }
-    close DB or die "couldn't close 'hot' database \"$config->{'DB_HOT'}\": $!";
+    my %hash;
 
-    return $db;
+    tie %hash, 'BerkeleyDB::Hash',
+    { -Filename => $config->{DB_NAME},
+      -Subname => "hot",
+      -Flags => BerkeleyDB::Hash::DB_CREATE
+      };
+
+    return \%hash;
 }
 
 
@@ -778,19 +785,15 @@ sub read_hot
 
 sub read_old
 {
-    my $db = {};
+    my %hash;
 
-    open DB, "<$config->{'DB_OLD'}" or die "couldn't open 'old' database \"$config->{'DB_OLD'}\": $!";
-    while (my $line=<DB>) {
-	chomp $line;
-	my ($project, $addition) = split /\s/, $line;
-	if (defined $project) {
-	    $db->{lc $project} = $addition;
-	}
-    }
-    close DB or die "couldn't close 'old' database \"$config->{'DB_OLD'}\": $!";
+    tie %hash, 'BerkeleyDB::Hash',
+    { -Filename => $config->{DB_NAME},
+      -Subname => "old",
+      -Flags => BerkeleyDB::Hash::DB_CREATE
+      };
 
-    return $db;
+    return \%hash;
 }
 
 
@@ -799,15 +802,9 @@ sub read_old
 
 sub write_old
 {
-    my $written = 0;
     my $db = shift;
-    rename $config->{'DB_OLD'}, "$config->{'DB_OLD'}~" or die "couldn't back up 'old' database \"$config->{'DB_OLD'}\": $!";
-    open DB, ">$config->{'DB_OLD'}" or die "couldn't open 'old' database \"$config->{'DB_OLD'}\": $!";
-    foreach my $key (sort keys %{$db}) {
-	print DB (lc $key) . "\t$db->{$key}\n";
-	$written++;
-    }
-    close DB or die "couldn't close 'old' database \"$config->{'DB_OLD'}\": $!";
+    my $written = keys %{$db};
+    untie %{$db};
     return $written;
 }
 
@@ -817,16 +814,9 @@ sub write_old
 
 sub write_hot
 {
-    my $written = 0;
     my $db = shift;
-    rename $config->{'DB_HOT'}, "$config->{'DB_HOT'}~" or die "couldn't back up 'hot' database \"$config->{'DB_HOT'}\": $!";
-    open DB, ">$config->{'DB_HOT'}" or die "couldn't open 'hot' database \"$config->{'DB_HOT'}\": $!";
-    foreach my $key (sort { $db->{$a} cmp $db->{$b} } keys %{$db}) {
-	$key = lc $key;
-	print DB (lc $key) . "\t$db->{$key}\n";
-	$written++;
-    }
-    close DB or die "couldn't close 'hot' database \"$config->{'DB_HOT'}\": $!";
+    my $written = keys %{$db};
+    untie %{$db};
     return $written;
 }
 
@@ -1073,8 +1063,7 @@ sub read_config($)
 
 
 ### expand ~ to home directory
-    $config->{'DB_HOT'}   =~ s/^~/$ENV{'HOME'}/;
-    $config->{'DB_OLD'}   =~ s/^~/$ENV{'HOME'}/;
+    $config->{'DB_NAME'}  =~ s/^~/$ENV{'HOME'}/;
     $config->{'DATE_CMD'} =~ s/^~/$ENV{'HOME'}/;
     $config->{'MAIL_CMD'} =~ s/^~/$ENV{'HOME'}/;
 

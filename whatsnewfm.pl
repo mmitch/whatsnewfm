@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
+my $id="whatsnewfm.pl  v0.4.4  2001-06-23";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2001  Christian Garbs <mitch@uni.de>
@@ -25,6 +25,7 @@ my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 #
 #############################################################################
 #
+# v0.4.4
 # 2001/05/31--> "view" accepts optional regexp to filter the output
 #
 # v0.4.3
@@ -108,7 +109,7 @@ my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.38 2001/05/31 20:10:33 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.39 2001/06/23 15:11:45 mitch Exp $
 #
 #
 #############################################################################

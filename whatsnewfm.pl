@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.80 2003/04/27 09:15:04 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.81 2003/04/27 09:22:53 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
@@ -182,7 +182,7 @@ my $id="whatsnewfm.pl  v0.6.2  2003-04-27";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.80 2003/04/27 09:15:04 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.81 2003/04/27 09:22:53 mastermitch Exp $
 #
 #
 #############################################################################
@@ -559,7 +559,7 @@ sub parse_newsletter()
 
     my $timestamp = ($mon+1) + ($year+1900)*12;
 
-    # Move comparison timestanp half a month into the past.  This way
+    # Move comparison timestamp half a month into the past.  This way
     # an item added on 31.01. won't be expired on 01.02. if the
     # expiration is set to 1 month.  It will be expired on
     # 16.02. instead, which is better (error distribution).
@@ -577,7 +577,7 @@ sub parse_newsletter()
 
     
     foreach my $number (keys %{$database}) {
-	if (($database->{$number}+$config->{'EXPIRE'}) < $timestamp) {
+	if (($database->{$number}+$config->{'EXPIRE'}) < $timestamp_cmp) {
 	    $db_expired++;
 	    delete $database->{$number};
 	}

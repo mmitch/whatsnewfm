@@ -22,6 +22,7 @@ my $id="whatsnewfm.pl  v0.2.1  2000-09-10";
 #
 #############################################################################
 #
+# 2000/09/19 -> "add" and "del" produce affirmative messages.
 # v0.2.1
 # 2000/09/08 -> BUGFIX: Statistic calculations at the end of a
 #               newsletter were broken.
@@ -55,7 +56,7 @@ my $id="whatsnewfm.pl  v0.2.1  2000-09-10";
 # 2000/07/06 -> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.16 2000/09/10 14:56:49 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.17 2000/09/19 16:12:11 mitch Exp $
 #
 #
 #############################################################################
@@ -188,9 +189,11 @@ sub add_entry
 	
     }
     
-    write_hot(%hot);
+    my $hot_written = write_hot(%hot);
 
     release_hot();
+
+    print "add OK. You now have $hot_written entries in your hot database.\n";
 }
 
 
@@ -221,9 +224,11 @@ sub remove_entry
 
     }
 
-    write_hot(%hot);
+    my $hot_written = write_hot(%hot);
 
     release_hot();
+
+    print "del OK. You now have $hot_written entries in your hot database.\n";
 }
 
 

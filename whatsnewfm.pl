@@ -25,6 +25,8 @@ my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
 #
 #############################################################################
 #
+# 2001/07/21--> Updated help text.
+#
 # v0.4.5
 # 2001/07/19--> BUGFIX: Newsletter format has changed.
 #
@@ -114,7 +116,7 @@ my $id="whatsnewfm.pl  v0.4.5  2001-07-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.43 2001/07/19 19:58:25 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.44 2001/07/22 10:02:21 mitch Exp $
 #
 #
 #############################################################################
@@ -201,12 +203,12 @@ print the "hot" list to stdout:
     whatsnewfm.pl view [regexp]
 
 add one new application to the "hot" list:
-    whatsnewfm.pl add <magic-id> [comment]
+    whatsnewfm.pl add <project id> [comment]
 add multiple new applications to the "hot" list (from stdin):
     whatsnewfm.pl add
 
 remove applications from the "hot" list:
-    whatsnewfm.pl del <magic-id> [magic-id2] [magic-id3] [...]
+    whatsnewfm.pl del <project id> [project id] [project id] [...]
 or a list from stdin:
     whatsnewfm.pl del
 EOF

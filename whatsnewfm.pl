@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.67 2002/12/03 09:10:21 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.68 2002/12/04 08:55:06 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.1  2002-12-03";
+my $id="whatsnewfm.pl  v0.5.2  2002-12-04";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -25,6 +25,9 @@ my $id="whatsnewfm.pl  v0.5.1  2002-12-03";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.5.2
+# 2002/12/04--> BUGFIX: 0.5.1 didn't run at all.  Silly mistake :-(
 #
 # v0.5.1
 # 2002/12/03--> Inclusion of manpage from Debian package.
@@ -156,7 +159,7 @@ my $id="whatsnewfm.pl  v0.5.1  2002-12-03";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.67 2002/12/03 09:10:21 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.68 2002/12/04 08:55:06 mastermitch Exp $
 #
 #
 #############################################################################
@@ -295,9 +298,9 @@ my $config;
 my $db_env;
 
 # information
-my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
+my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
 			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html",
-			     "http://sourceforge.net/projects/whatsnewfm");
+			     "http://sourceforge.net/projects/whatsnewfm" ];
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file

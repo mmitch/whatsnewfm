@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
+my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
@@ -24,8 +24,6 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
-#
-#   DEVELOPMENT BRANCH TO 0.5.x
 #
 # 2002/11/23--> Help text updates.
 #
@@ -145,7 +143,7 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.60 2002/11/24 19:17:45 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.61 2002/11/24 19:20:31 mitch Exp $
 #
 #
 #############################################################################
@@ -156,13 +154,14 @@ my $id="whatsnewfm.pl  v0.5.0  2002-11-21";
 
 
 use strict;                     # strict syntax checking
+use Fcntl ':flock';             # import LOCK_* constants
 
 
 #####################[ declare global variables ]############################
 
 
 # where to look for the configuration file:
-my $configfile = "~/.whatsnewfmrc-dev";
+my $configfile = "~/.whatsnewfmrc";
 
 # global configuration hash:
 my %config;
@@ -279,6 +278,7 @@ sub do_scoring($)
 
 sub add_entry
 {
+    lock_hot();
 
     my %hot = read_hot();
 
@@ -324,6 +324,7 @@ sub add_entry
 
 sub remove_entry
 {
+    lock_hot();
 
     my %hot = read_hot();
 
@@ -395,7 +396,6 @@ sub parse_newsletter
     my @hot_applications = ();
     my @new_applications = ();
 
-
 ### generate current timestamp
 
 
@@ -412,6 +412,13 @@ sub parse_newsletter
     chomp $month;
 
     my $timestamp = $month + $year*12;
+
+
+### lock databases
+
+
+    lock_old();
+    lock_hot();
 
 
 ### read databases
@@ -749,11 +756,74 @@ sub parse_newsletter
     $hot_written = write_hot(%interesting);
     
 
+### unlock databases
+
+
+    release_hot();
+    release_old();
+
+
 ### send mails
 
     mail_hot_apps(@hot_applications);
     mail_new_apps($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications);
 
+}
+
+
+#####################[ lock the 'old' database ]#############################
+
+
+sub lock_old
+{
+    open LOCK_OLD, ">$config{'DB_OLD'}.LOCK" or die "can't create lockfile \"$config{'DB_OLD'}.LOCK\": $!";
+    if (! flock(LOCK_OLD,LOCK_EX | LOCK_NB)) {
+	print STDERR "Some other process has locked the 'old' database. I'll wait for my turn...\n";
+	flock(LOCK_OLD,LOCK_EX) or die "can't lock lockfile: $!";
+	print STDERR "...I\'ve got my lock, here we go\n";
+    }
+    seek(LOCK_OLD, 0, 2);
+    select((select(LOCK_OLD), $| = 1)[0]);
+    print LOCK_OLD "$$\n";
+}
+
+
+#####################[ lock the 'hot' database ]#############################
+
+
+sub lock_hot
+{
+    open LOCK_HOT, ">$config{'DB_HOT'}.LOCK" or die "can't create lockfile\"$config{'DB_HOT'}.LOCK\": $!";
+    if (! flock(LOCK_HOT,LOCK_EX | LOCK_NB)) {
+	print STDERR "Some other process has locked the 'hot' database. I'll wait for my turn...\n";
+	flock(LOCK_HOT,LOCK_EX) or die "can't lock lockfile: $!";
+	print STDERR "...I\'ve got my lock, here we go\n";
+    }
+    seek(LOCK_HOT, 0, 2);
+    select((select(LOCK_HOT), $| = 1)[0]);
+    print LOCK_HOT "$$\n";
+}
+
+
+####################[ unlock the 'hot' database ]############################
+
+
+sub release_hot
+{
+    flock(LOCK_HOT,LOCK_UN)          or die "can't unlock lockfile: $!";
+    close LOCK_HOT                   or die "can't close lockfile: $!";
+    unlink "$config{'DB_HOT'}.LOCK"  or die "can't remove lockfile: $!";
+}
+
+
+####################[ unlock the 'old' database ]############################
+
+
+sub release_old
+{
+    flock(LOCK_OLD,LOCK_UN)          or die "can't unlock lockfile: $!";
+    close LOCK_OLD                   or die "can't close lockfile: $!";
+    unlink "$config{'DB_OLD'}.LOCK"  or die "can't remove lockfile: $!";
 }
 
 

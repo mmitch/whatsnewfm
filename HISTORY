@@ -1,7 +1,14 @@
-<<$Id: HISTORY,v 1.23 2001/11/07 22:03:59 mitch Exp $>>
+<<$Id: HISTORY,v 1.24 2002/11/21 17:13:46 mitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2002/11/21  -  0.4.11
+~~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Perl 5.8 showed some warnings on startup.
+- Some minor changes in README file.
+
 
 
 2001/11/07  -  0.4.10

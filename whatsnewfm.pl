@@ -1,10 +1,10 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.11-pre1  2002-11-19";
+my $id="whatsnewfm.pl  v0.4.11  2002-11-21";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
-#   Copyright (C) 2000-2001  Christian Garbs <mitch@cgarbs.de>
+#   Copyright (C) 2000-2002  Christian Garbs <mitch@cgarbs.de>
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
@@ -25,6 +25,7 @@ my $id="whatsnewfm.pl  v0.4.11-pre1  2002-11-19";
 #
 #############################################################################
 #
+# v0.4.11
 # 2002/11/19--> Removed warnings under Perl 5.8.0
 #
 # v0.4.10
@@ -140,7 +141,7 @@ my $id="whatsnewfm.pl  v0.4.11-pre1  2002-11-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.57 2002/11/19 21:54:57 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.58 2002/11/21 17:13:46 mitch Exp $
 #
 #
 #############################################################################

@@ -96,7 +96,7 @@ my $id="whatsnewfm.pl  v0.4.2  2001-02-05";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.32 2001/02/05 21:30:14 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.33 2001/02/07 22:11:56 mitch Exp $
 #
 #
 #############################################################################
@@ -441,7 +441,7 @@ sub parse_newsletter
 	    # text
 	    $line =~ s/^\.$/. /; # sendmail fix
 	    $new_app{'description'} = $line;
-	    while (my $line=<STDIN>) {
+	    while ($line=<STDIN>) {
 		last if $line =~ /^\s$/;
 		$line =~ s/^\.$/. /; # sendmail fix
 		$new_app{'description'} .= $line;
@@ -454,8 +454,8 @@ sub parse_newsletter
 	    next unless defined $line;
 
 	    # URL
-	    if ($line =~ /^URL: /) {
-		$line =~ s/^URL: //;
+	    if ($line =~ /^\s*URL: /) {
+		$line =~ s/^\s*URL: //;
 		chomp $line;
 		$new_app{'newslink'} = $line;
 		$line=<STDIN>;
@@ -570,8 +570,8 @@ sub parse_newsletter
 	    next unless defined $line;
 
 	    # License
-	    if ($line =~ /^License: /) {
-		$line =~ s/^License: //;
+	    if ($line =~ /^\s*License: /) {
+		$line =~ s/^\s*License: //;
 		chomp $line;
 		$new_app{'license'} = $line unless $line =~ /^\s*$/;
 		$line=<STDIN>;
@@ -585,8 +585,8 @@ sub parse_newsletter
 	    next unless defined $line;
 
 	    # URL
-	    if ($line =~ /^URL: /) {
-		$line =~ s/^URL: //;
+	    if ($line =~ /^\s*URL: /) {
+		$line =~ s/^\s*URL: //;
 		chomp $line;
 		$new_app{'project_link'} = $line;
 		$line =~ s!/$!!;
@@ -1057,6 +1057,10 @@ sub mail_hot_apps()
 	    print MAIL_HOT "     license: $new_app{'license'}\n";
 	}
 	
+	if (defined $new_app{'project_id'}) {
+	    print MAIL_HOT "  project id: $new_app{'project_id'}\n";
+	}
+
 	print MAIL_HOT "\n*" . "=" x 76 . "*\n";
 
 	if ($config{'UPDATE_MAIL'} ne "single") {

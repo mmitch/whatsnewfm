@@ -1,14 +1,15 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.88 2003/08/24 12:54:39 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.89 2004/02/13 21:35:09 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
+my $id="whatsnewfm.pl  v0.6.4pre  2004-02-13";
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
-#   Copyright (C) 2000-2003  Christian Garbs <mitch@cgarbs.de>
+#   Copyright (C) 2000-2004  Christian Garbs <mitch@cgarbs.de>
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
+#                            Matthew Gabeler-Lee <cheetah@sourceforge.net>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -26,6 +27,8 @@ my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 #
 #############################################################################
 #
+# 2004/02/13--> Copy Content-type etc. to output mails as proposed in
+#               Sourceforge bug #891520.
 # 2003/08/24--> Fix typo in manpage.
 #
 # v0.6.3
@@ -188,7 +191,7 @@ my $id="whatsnewfm.pl  v0.6.3  2003-08-18";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.88 2003/08/24 12:54:39 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.89 2004/02/13 21:35:09 mastermitch Exp $
 #
 #
 #############################################################################
@@ -538,6 +541,7 @@ sub parse_newsletter()
     my $this_time_new;
 
     my $subject      = "Subject: Freshmeat Newsletter (no subject?)\n";
+    my $encoding     = '';
     my $position     = 3;
     # 3-> after mail header
     # 2-> within articles
@@ -598,6 +602,12 @@ sub parse_newsletter()
 	last if /^$/;
 	if (/^Subject:\s/) {
 	    $subject=$_;
+	} elsif (/^MIME-version:\s/) {
+	    $encoding .= $_;
+	} elsif (/^Content-type:\s/) {
+	    $encoding .= $_;
+	} elsif (/^Content-transfer-encoding:\s/) {
+	    $encoding .= $_;
 	}
     }
 
@@ -908,8 +918,8 @@ sub parse_newsletter()
 
 ### send mails
 
-    mail_hot_apps($hot_applications);
-    mail_new_apps($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications);
+    mail_hot_apps($hot_applications, $encoding);
+    mail_new_apps($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications, $encoding);
 
 }
 
@@ -1084,9 +1094,9 @@ EOF
 ######################[ open an "update" mail ]##############################
 
 
-sub open_hot_mail($)
+sub open_hot_mail($$)
 {
-    my $new_app = shift;
+    my ($new_app, $encoding) = @_;
 
     open MAIL_HOT, "| $config->{'MAIL_CMD'} $config->{'MAIL_OPT'}"
 	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
@@ -1098,6 +1108,7 @@ sub open_hot_mail($)
 	print MAIL_HOT "Subject: whatsnewfm.pl: Update: $new_app->{'subject'}\n";
     }
     print MAIL_HOT "X-Loop: sent by whatsnewfm.pl script\n";
+    print MAIL_HOT $encoding;
     print MAIL_HOT "\n";
     print MAIL_HOT "$separator";
 }
@@ -1106,15 +1117,16 @@ sub open_hot_mail($)
 ########################[ open a "new" mail ]################################
 
 
-sub open_new_mail($)
+sub open_new_mail($$)
 {
-    my $subject = $_[0];
+    my ($subject, $encoding) = @_;
     open MAIL_NEW, "| $config->{'MAIL_CMD'} $config->{'MAIL_OPT'}"
 	or die "can't fork mailer \"$config->{'MAIL_CMD'}\": $!";
     
     print MAIL_NEW "To: $config->{'MAILTO'}\n";
     print MAIL_NEW $subject;
     print MAIL_NEW "X-Loop: sent by whatsnewfm.pl daemon\n";
+    print MAIL_NEW $encoding;
     print MAIL_NEW "\n";
     print MAIL_NEW "$separator";
 }
@@ -1247,9 +1259,9 @@ sub read_config()
 ######################[ mail all 'hot' entries ]#############################
 
 
-sub mail_hot_apps()
+sub mail_hot_apps($$)
 {
-    my $hot_applications = shift;
+    my ($hot_applications, $encoding) = @_;
     my $new_app;
     my $first_hot = 1;
 
@@ -1260,7 +1272,7 @@ sub mail_hot_apps()
 	
 	if ($first_hot == 1) {
 	    $first_hot=0;
-	    open_hot_mail($new_app);
+	    open_hot_mail($new_app, $encoding);
 	}
 	
 	if (defined $new_app->{'subject'}) {
@@ -1392,9 +1404,9 @@ sub get_warnings()
 ######################[ mail all 'new' entries ]#############################
 
 
-sub mail_new_apps($$$$$$$$$)
+sub mail_new_apps($$$$$$$$$$)
 {
-    my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications) = @_;
+    my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications, $encoding) = @_;
     my $new_app;
 
 ### only keep applications with at least minimum score
@@ -1421,7 +1433,7 @@ sub mail_new_apps($$$$$$$$$)
 
 
 ### open mailer
-    open_new_mail($subject);
+    open_new_mail($subject, $encoding);
 
 
 ### print warnings (if any)

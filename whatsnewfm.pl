@@ -105,7 +105,7 @@ my $id="whatsnewfm.pl  v0.4.3  2001-02-11";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.35 2001/02/11 11:37:58 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.36 2001/02/12 17:32:35 mitch Exp $
 #
 #
 #############################################################################
@@ -129,7 +129,10 @@ my $configfile = "~/.whatsnewfmrc";
 my %config;
 
 # information
-my $whatsnewfm_homepage = "http://www.cgarbs.de/whatsnewfm.en.html";
+my @whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
+			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html" ,
+			     "http://wombat.eu.org/linux/whatsnewfm/" ];
+
 my $whatsnewfm_author = "Christian Garbs <mitch\@uni.de>";
 
 sub read_config ($);
@@ -871,8 +874,17 @@ EOF
  !! the error is already being fixed, please inform the author of
  !! the error you encountered.
  !!
- !! homepage: $whatsnewfm_homepage
- !! author:   $whatsnewfm_author
+ !! homepage:
+EOF
+    ;
+	
+	foreach my $whatsnewfm_homepage (@whatsnewfm_homepages) {
+	    print " !!     $whatsnewfm_homepage\n";
+	}
+
+	$summary .= << "EOF";
+ !! author:
+ !!     $whatsnewfm_author
 
 EOF
     ;

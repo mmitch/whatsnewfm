@@ -49,13 +49,13 @@ my $id="whatsnewfm.pl  v0.2.0  2000-08-22";
 # 2000/07/06 -> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.13 2000/09/08 19:27:02 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.14 2000/09/08 21:12:16 mitch Exp $
 #
 #
 #############################################################################
 
 
-<<<<<<<<<<<<<< variant A
+
 ##########################[ import modules ]#################################
 
 
@@ -704,7 +704,7 @@ sub close_new
 
     $db_expired entries from your 'old' database have expired,
     while $db_new items were added.
-    Your 'old' now has $db_written entries.
+    Your 'old' database now has $db_written entries.
 EOF
 	    
     print MAIL_NEW "\n*" . "=" x 76 . "*\n";

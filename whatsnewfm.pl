@@ -24,11 +24,15 @@ my $id="whatsnewfm.pl  v0.4.0  2001-01-31";
 #
 #############################################################################
 #
+# 2001/01/31--> Changes in the newsletter format should be detected and
+#               the user gets a warning mail telling him to update
+#               whatsnewfm.
+#
 # v0.4.0
-# 2000/01/31--> BUGFIX: freshmeat has changed the newsletter format.
+# 2001/01/31--> BUGFIX: freshmeat has changed the newsletter format.
 #
 # v0.2.6
-# 2000/01/30--> New items with less than a specified score will not be shown.
+# 2001/01/30--> New items with less than a specified score will not be shown.
 #
 # v0.2.5
 # 2000/11/25--> Freshmeat editorials are included in the list of new
@@ -82,7 +86,7 @@ my $id="whatsnewfm.pl  v0.4.0  2001-01-31";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.27 2001/01/31 15:47:59 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.28 2001/01/31 22:46:18 mitch Exp $
 #
 #
 #############################################################################
@@ -104,6 +108,10 @@ my $configfile = "~/.whatsnewfmrc";
 
 # global configuration hash:
 my %config;
+
+# information
+my $whatsnewfm_homepage = "http://www.cgarbs.de/whatsnewfm.en.html";
+my $whatsnewfm_author = "Christian Garbs <mitch\@uni.de>";
 
 sub read_config ($);
 
@@ -781,9 +789,40 @@ sub close_new
     $id
 
     It contained $articles articles and $releases releases.
+EOF
+    
+    if ($releases + $articles > 0) {
+
+	print MAIL_NEW << "EOF";
     $difference releases have been filtered out as 'already seen'.
     $score_killed articles or releases have been filtered out as 'low score'.
+EOF
+    ;
 	
+    } else {
+	print MAIL_NEW << "EOF";
+
+ !! This is looks like an error.
+ !! Perhaps the processed mail was no newsletter at all?
+ !!
+ !! If this error repeats within the next days then most likely the
+ !! newsletter format has changed (or whatsnewfm is broken).
+ !!
+ !! Please visit the whatsnewfm homepage and look for an updated
+ !! version of whatsnewfm.
+ !!
+ !! If there is neither a new version available nor a message that
+ !! the error is already being fixed, please inform the author of
+ !! the error you encountered.
+ !!
+ !! homepage: $whatsnewfm_homepage
+ !! author:   $whatsnewfm_author
+
+EOF
+    ;
+    }
+	
+    print MAIL_NEW << "EOF";
     Your \'hot\' database has $hot_written entries.
 
     $db_expired entries from your 'old' database have expired,
@@ -996,7 +1035,6 @@ sub mail_new_apps()
 
     my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
     my %new_app;
-    my $first_new = 1;
 
 ### do the scoring
     foreach my $app (@new_applications) {
@@ -1023,15 +1061,14 @@ sub mail_new_apps()
 ### sort by score
     @new_applications = sort { %{$a}->{'score'} <=> %{$b}->{'score'} } @new_applications;
 
+
+### open mailer
+    open_new($subject);
+
     while (@new_applications) {
 	
 	%new_app = %{pop @new_applications};
 	
-	if ($first_new == 1) {
-	    $first_new = 0;
-	    open_new($subject);
-	}
-
 	if (defined $new_app{'subject'}) {
 	    print MAIL_NEW "\n   $new_app{'subject'}\n\n";
 	}
@@ -1081,8 +1118,6 @@ sub mail_new_apps()
     }
     
 ### close mailer
-    if ($first_new == 0) {
-	close_new($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
-    }
+    close_new($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
 
 }

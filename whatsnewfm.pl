@@ -107,6 +107,22 @@ exit 0;
 
 sub display_help
 {
+    print << "EOF";
+$id
+
+filter mode for newsletters (stdin -> stdout):
+    whatsnewfm.pl
+
+add one new application to the "hot" list:
+    whatsnewfm.pl add <magic-id> [comment]
+add multiple new applications to the "hot" list (from stdin):
+    whatsnewfm.pl add
+
+remove applications from the "hot" list:
+    whatsnewfm.pl del <magic-id> [magic-id2] [magic-id3] [...]
+or a list from stdin:
+    whatsnewfm.pl del
+EOF
 }
 
 

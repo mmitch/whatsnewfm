@@ -1,5 +1,12 @@
 whatsnewfm HISTORY
 
+2000/10/30  -  0.2.3
+~~~~~~~~~~~~~~~~~~~~
+- Reacted to a change in the newsletter format (item name).
+- "add" and "del" give more verbose messages.
+
+
+
 2000/09/22  -  0.2.2
 ~~~~~~~~~~~~~~~~~~~~
 - Added scoring of newsletter items.

@@ -1,4 +1,4 @@
-<<$Id: README,v 1.35 2001/08/15 20:24:47 mitch Exp $>>
+<<$Id: README,v 1.36 2001/10/13 16:10:13 mitch Exp $>>
 
 
   whatsnewfm 0.4.8
@@ -37,7 +37,7 @@
 whatsnewfm is a utility to filter the daily newsletter from
 http://freshmeat.net
 
-The main purpose is to cut the hughe newsletter to a smaller size by
+The main purpose is to cut the huge newsletter to a smaller size by
 only showing items that you didn't see before.
 
 The items already seen will be stored in a database. After some time,
@@ -131,6 +131,12 @@ You need to specify the following keywords:
 * SUMMARY_AT=bottom
   Prints the summary at the bottom of a processed newsletter. If you
   want the summary to be printed at the top, set this to "top".
+  Default value is 'bottom'.
+
+* LIST_SKIPPED=no
+  Show a list the skipped news items (low score and already seen).
+  Possible values are 'no' (no list), 'bottom' or 'top'.
+  Default value is 'no'.
 
 * MAIL_CMD=/usr/lib/sendmail
   This is the location of your sendmail command (or any command
@@ -158,6 +164,7 @@ You need to specify the following keywords:
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be
   displayed.
+
 
 
   [5] The "hot" database

@@ -32,10 +32,13 @@ that you don't miss anything about your favourite programs.
 %install
 mkdir -p $RPM_BUILD_ROOT/usr/bin/
 cp whatsnewfm.pl $RPM_BUILD_ROOT/usr/bin/
+mkdir -p $RPM_BUILD_ROOT/usr/man/man1/
+pod2man whatsnewfm.pl | gzip -9 > $RPM_BUILD_ROOT/usr/man/man1/whatsnewfm.pl.1.gz
 
 %files
 %doc README COPYING HISTORY whatsnewfmrc.sample welcome
 /usr/bin/whatsnewfm.pl
+/usr/man/man1/whatsnewfm.pl.1.gz
 
 %clean
 rm -rf $RPM_BUILD_ROOT

@@ -1,4 +1,5 @@
 #!/usr/bin/perl -w
+# $Id: whatsnewfm.pl,v 1.66 2002/12/03 08:49:07 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.5.1-pre  2002-11-24";
@@ -25,11 +26,12 @@ my $id="whatsnewfm.pl  v0.5.1-pre  2002-11-24";
 #
 #############################################################################
 #
+# 2002/12/03--> Inclusion of manpage from Debian package.
 # 2002/11/26--> Removed DATE_CMD backwards compatibility.
 #
 # v0.5.0
 # 2002/11/24--> Removed file locking code.
-#           |-> Changed all @arrays and %hashs to corresponding $references.
+#           |-> Changed all @arrays and %hashes to corresponding $references.
 #           |-> Using BerkeleyDB::Hash for storage of databases.
 #           |-> Added function prototypes.
 #           `-> Added BerkeleyDB locking method.
@@ -153,10 +155,121 @@ my $id="whatsnewfm.pl  v0.5.1-pre  2002-11-24";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.65 2002/12/02 21:55:13 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.66 2002/12/03 08:49:07 mastermitch Exp $
 #
 #
 #############################################################################
+
+
+
+##########################[ documentation ]##################################
+
+
+
+=head1 NAME
+
+whatsnewfm - filter the daily newsletter from freshmeat.net
+
+=head1 SYNOPSIS
+
+B<whatsnewfm.pl>
+
+B<whatsnewfm.pl> B<view> [ I<regexp> ]
+
+B<whatsnewfm.pl> B<add> [ I<project id> [ I<comment> ] ]
+
+B<whatsnewfm.pl> B<del> [ I<project id> ] [ I<project id> ] [ ... ]
+
+=head1 DESCRIPTION
+
+whatsnewfm is a utility to filter the daily newsletter from
+freshmeat.net
+
+The main purpose is to cut the huge newsletter to a smaller size by
+only showing items that you didn't see before.
+
+The items already seen will be stored in a database. After some time,
+the items expire and will be shown again the next time they are
+included in a newsletter.
+
+If you find an item that you consider particularly useful, you can add
+it to a "hot" list. Items in the hot list are checked for updates so
+that you don't miss anything about your favourite programs.
+
+=head1 OPTIONS
+
+=over 5
+
+=item B<whatsnewfm.pl>
+
+Standard mode of operation.  A mail containing a newsletter will be
+read from stdin, parsed and the results mailed.
+
+=item B<whatsnewfm.pl> B<view> [ I<regexp> ]
+
+Prints the "hot" database.  If I<regexp> is given, only entries
+matching that regular expression are printed.  Pattern matches are
+always case-insensitive.
+
+=item B<whatsnewfm.pl> B<add> [ I<project id> [ I<comment> ] ]
+
+Adds I<project id> to the "hot" database.  An optional I<comment>
+describing the project may be given.
+
+If no I<project id> is given on the command line, data will be read
+from stdin.  Each line must consist of a I<project id> optionally
+followed by a whitespace and a I<comment>.
+
+=item B<whatsnewfm.pl> B<del> [ I<project id> ] [ I<project id> ] [ ... ]
+
+Removes I<project id> from the "hot" database.  Multiple I<project
+id>s may be given.
+
+If no I<project id> is given on the command line, data will be read
+from stdin.  Each line must consist of one or more I<project id>s
+(separated by whitespace) to be deleted.
+
+=back
+
+=head1 FILES
+
+=over 5
+
+=item I<~/.whatsnewfmrc>
+
+Personal whatsnewfm configuration file.
+
+=item I<~/.whatsnewfm.db.old>
+
+Personal database with "old" entries.
+
+=item I<~/.whatsnewfm.db.hot>
+
+Personal database with "hot" entries.
+
+=item I<~/.whatsnewfm.db.old.LOCK>, I<~/.whatsnewfm.db.hot.LOCK>
+
+Lock files for personal databases.
+
+=back
+
+=head1 BUGS
+
+Please report bugs to <F<whatsnewfm-bugs@cgarbs.de>>.
+
+=head1 AUTHOR
+
+whatsnewfm was written by Christian Garbs <F<mitch@cgarbs.de>>.
+
+=head1 AVAILABILITY
+
+Look for updates at <F<http://www.cgarbs.de/whatsnewfm.en.html>>.
+
+=head1 COPYRIGHT
+
+whatsnewfm is licensed under the GNU GPL.
+
+=cut
 
 
 
@@ -181,8 +294,9 @@ my $config;
 my $db_env;
 
 # information
-my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
-			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html" ];
+my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
+			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html",
+			     "http://sourceforge.net/projects/whatsnewfm");
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file

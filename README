@@ -1,4 +1,4 @@
-<<$Id: README,v 1.41 2002/11/19 22:47:47 mitch Exp $>>
+<<$Id: README,v 1.42 2002/11/20 17:22:02 mitch Exp $>>
 
 
   whatsnewfm 0.4.11
@@ -273,7 +273,7 @@ separated by whitespaces.
 * Francisco <frandebo@latt.if.usp.br> suggested the scoring of
   Freshmeat categories (included in v0.4.6).
 
-* Pedro Melo Cunha <melo@isp.novis.pt> send a patch to move the
+* Pedro Melo Cunha <melo@isp.novis.pt> sent a patch to move the
   newsletter summary to the top of the mail (included in v0.4.3).
 
 * Eugen Dedu <dedu@ese-metz.fr> reported the missing Project ID in

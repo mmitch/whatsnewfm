@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.4.1  2001-02-02";
+my $id="whatsnewfm.pl  v0.4.2  2001-02-05";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000,2001  Christian Garbs <mitch@uni.de>
@@ -23,6 +23,10 @@ my $id="whatsnewfm.pl  v0.4.1  2001-02-02";
 #   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #
 #############################################################################
+#
+# v0.4.2
+# 2001/02/05--> BUGFIX: freshmeat has changed the newsletter format.
+#           `-> Improved detection of changes in newsletter format.
 #
 # v0.4.1
 # 2001/02/02--> BUGFIX: A line with a single dot "." within freetext
@@ -90,7 +94,7 @@ my $id="whatsnewfm.pl  v0.4.1  2001-02-02";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.30 2001/02/02 20:06:47 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.31 2001/02/05 21:26:17 mitch Exp $
 #
 #
 #############################################################################
@@ -303,6 +307,7 @@ sub parse_newsletter
     my %database;
     my %new_app;
     my %interesting;
+    my %this_time_new;
 
     my $subject      = "Freshmeat Newsletter (no subject?)";
     my $position     = 3;
@@ -489,9 +494,12 @@ sub parse_newsletter
 	    }
 	    next unless defined $line;
 
+	    my $release_nr;
+
 	    # title
 	    if ($line =~ /^\[\d+\] - /) {
-		$line =~ s/^\[\d+\] - //;
+		$line =~ s/^(\[\d+\]) - //;
+		$release_nr = $1;
 		chomp $line;
 		$new_app{'subject'} = $line;
 		$line=<STDIN>;
@@ -499,8 +507,8 @@ sub parse_newsletter
 	    }
 	    
 	    # from
-	    if ($line =~ /^by /) {
-		$line =~ s/^by //;
+	    if ($line =~ /^\s+by /) {
+		$line =~ s/^\s+by //;
 		chomp $line;
 		$new_app{'author'} = $line;
 		$line=<STDIN>;
@@ -509,6 +517,13 @@ sub parse_newsletter
 
 	    # date
 	    chomp $line;
+	    while ((defined $line) && ($line =~ /\(http:\/\/.*\)/ )) {
+		# This is no date, but a multi-line "by" field!
+		$new_app{'author'} .= "\n              $line";
+		$line=<STDIN>;
+		chomp $line;
+	    }
+	    next unless defined $line;
 	    $new_app{'date'} = $line;
 	    $line=<STDIN>;
 	    next unless defined $line;
@@ -552,6 +567,21 @@ sub parse_newsletter
 	    }
 	    next unless defined $line;
 
+	    # License
+	    if ($line =~ /^License: /) {
+		$line =~ s/^License: //;
+		chomp $line;
+		$new_app{'license'} = $line unless $line =~ /^\s*$/;
+		$line=<STDIN>;
+		next unless defined $line;
+	    }
+
+	    # empty line
+	    while ((defined $line) and ($line =~ /^\s*$/)) {
+		$line=<STDIN>;
+	    }
+	    next unless defined $line;
+
 	    # URL
 	    if ($line =~ /^URL: /) {
 		$line =~ s/^URL: //;
@@ -569,37 +599,33 @@ sub parse_newsletter
 	    ### save a 'hot' entry
 	    
 	    if (($new_app{'project_id'}) and (exists $interesting{$new_app{'project_id'}})) {
-		
+
 		push @hot_applications, { %new_app };
 		
 	    }
 	    
 	    ### save a 'new' entry if it is not already in the 'hot' list
+	    ### if the same project appears twice in a newsletter, it is found
+	    ### with %this_time_new (although %database is already set)
 	    
-	    elsif ((! $new_app{'project_id'}) or ((! defined $database{$new_app{'project_id'}}) and (! exists $interesting{$new_app{'project_id'}}))) {
+	    elsif (((! exists $database{$new_app{'project_id'}}) or (exists $this_time_new{$new_app{'project_id'}})) and (! exists $interesting{$new_app{'project_id'}})) {
 		
 		$releases_new++;
-		
-		if (defined $new_app{'project_id'}) {
-		    $db_new++;
-		    $database{$new_app{'project_id'}} = $timestamp;
-		    push @new_applications, { %new_app };
-		}
-		
+		$db_new++;
+		$database{$new_app{'project_id'}} = $timestamp;
+		$this_time_new{$new_app{'project_id'}} = $timestamp;
+		push @new_applications, { %new_app };
+	    
 	    }
 	    
 	    # wait for separator  (UGLY, change this routine somehow)
 	    my $end = 0;
 	    while ($end == 0) {
 		chomp $line;
-		if ($line =~ /- % -/) {
-		    $end = 1;
-		} else {
-		    if ($line !~ /^\s*$/) {
-			if (($line =~ tr/. -//c) == 0) {
-			    $position = 1;
-			    $end = 1;
-			}		    }
+		if ($line !~ /^\s*$/) {
+		    if (($line =~ tr/- %//c) == 0) {
+			$end = 1;
+		    }	
 		}
 		$line=<STDIN>;
 		$end = 1 unless defined $line;
@@ -802,7 +828,7 @@ sub close_new
     It contained $articles articles and $releases releases.
 EOF
     
-    if ($releases + $articles > 0) {
+    if ($releases > 1) {    # 1 release is not enough to ensure proper operation!
 
 	print MAIL_NEW << "EOF";
     $difference releases have been filtered out as 'already seen'.
@@ -815,6 +841,7 @@ EOF
     } else {
 	print MAIL_NEW << "EOF";
 
+ !! This mail did not contain more than 1 release.
  !! This is looks like an error.
  !! Perhaps the processed mail was no newsletter at all?
  !!
@@ -1008,10 +1035,6 @@ sub mail_hot_apps()
 	    print MAIL_HOT "    added by: $new_app{'author'}\n";
 	}
 	
-	if (defined $new_app{'date'}) {
-	    print MAIL_HOT "        date: $new_app{'date'}\n";
-	}
-	
 	if (defined $new_app{'category'}) {
 	    print MAIL_HOT "    category: $new_app{'category'}\n";
 	}
@@ -1022,6 +1045,14 @@ sub mail_hot_apps()
 
 	if (defined $new_app{'newslink'}) {
 	    print MAIL_HOT "     details: $new_app{'newslink'}\n";
+	}
+	
+	if (defined $new_app{'date'}) {
+	    print MAIL_HOT "        date: $new_app{'date'}\n";
+	}
+	
+	if (defined $new_app{'license'}) {
+	    print MAIL_HOT "     license: $new_app{'license'}\n";
 	}
 	
 	print MAIL_HOT "\n*" . "=" x 76 . "*\n";
@@ -1102,10 +1133,6 @@ sub mail_new_apps()
 	    print MAIL_NEW "    added by: $new_app{'author'}\n";
 	}
 
-	if (defined $new_app{'date'}) {
-	    print MAIL_NEW "        date: $new_app{'date'}\n";
-	}
-	
 	if (defined $new_app{'category'}) {
 	    print MAIL_NEW "    category: $new_app{'category'}\n";
 	}
@@ -1118,6 +1145,14 @@ sub mail_new_apps()
 	    print MAIL_NEW "   news item: $new_app{'newslink'}\n";
 	}
 
+	if (defined $new_app{'date'}) {
+	    print MAIL_NEW "        date: $new_app{'date'}\n";
+	}
+	
+	if (defined $new_app{'license'}) {
+	    print MAIL_NEW "     license: $new_app{'license'}\n";
+	}
+	
 	if (defined $new_app{'project_id'}) {
 	    print MAIL_NEW "  project id: $new_app{'project_id'}\n";
 	}

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id="watchfm_convert.pl  v0.0.3  2000-08-03";
+my $id="watchfm_convert.pl  v0.0.3  2000-08-04";
 #   Converts a watchfm database into a whatsnewfm "hot" database.
 #   
 #   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
@@ -22,6 +22,7 @@ my $id="watchfm_convert.pl  v0.0.3  2000-08-03";
 #
 #############################################################################
 #
+# v0.0.3
 # 2000/08/03 -> First piece of code.
 #
 #############################################################################

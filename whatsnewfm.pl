@@ -25,6 +25,10 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 #
 #############################################################################
 #
+# 2001/10/13--> Configuration file warnings are included in 'new' mails.
+# 2001/10/01--> A news item that got filtered out because of a low score
+#               is not added to the 'old' database so it will "reappear"
+#               with the next release if you change your scoring rules.
 # 2001/09/07--> BUGFIX: Test message didn't work.
 #
 # v0.4.8
@@ -126,7 +130,7 @@ my $id="whatsnewfm.pl  v0.4.8  2001-08-15";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.48 2001/09/07 14:41:38 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.49 2001/10/13 16:07:34 mitch Exp $
 #
 #
 #############################################################################
@@ -153,49 +157,26 @@ my %config;
 my @whatsnewfm_homepages = ( "http://www.cgarbs.de/whatsnewfm.en.html" ,
 			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html" ,
 			     "http://wombat.eu.org/linux/whatsnewfm/" );
-
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
-sub read_config ($);
+# configuration file
+my @cfg_allowed_keys  = (
+			 "MAILTO",      "DB_OLD",
+			 "DB_HOT",      "EXPIRE",
+			 "DATE_CMD",    "MAIL_CMD",
+			 "UPDATE_MAIL", "SCORE_MIN",
+			 "SUMMARY_AT",  "LIST_SKIPPED"
+			 );
+my @cfg_optional_keys = (
+			 "LIST_SKIPPED", "SUMMARY_AT"
+			 );
+my @cfg_warnings;
 
+my @skipped_items;
 
-###########################[ main routine ]##################################
+my $separator = "*" . "="x76 . "*\n";
 
-
-if ($ARGV[0]) {
-
-    if ($ARGV[0] eq "add") {
-
-	shift @ARGV;
-	read_config($configfile);
-	add_entry(@ARGV);
-
-    } elsif ($ARGV[0] eq "del") {
-
-	shift @ARGV;
-	read_config($configfile);
-	remove_entry(@ARGV);
-
-    } elsif ($ARGV[0] eq "view") {
-
-	shift @ARGV;
-	read_config($configfile);
-	view_entries(@ARGV);
-
-    } else {
-
-	display_help();
-
-    }
-
-} else {
-
-    read_config($configfile);
-    parse_newsletter();
-
-}
-
-exit 0;
+# main routine now at the bottom!
 
 
 ########################[ display help text ]################################
@@ -249,6 +230,33 @@ sub view_entries
 
     }
 
+}
+
+
+###############[ calculate the score for a news item ]#######################
+
+
+sub do_scoring($)
+{
+    my $app = shift;
+
+    $app->{'score'} = 0;
+
+    if (defined $app->{'description'}) {
+	foreach my $score ( @{$config{'SCORE'}}) {
+	    if ($app->{'description'} =~ /$score->{'regexp'}/i) {
+		$app->{'score'} += $score->{'score'};
+	    }
+	}
+    }
+    
+    if (defined $app->{'category'}) {
+	foreach my $score ( @{$config{'CATSCORE'}}) {
+	    if ($app->{'category'} =~ /$score->{'regexp'}/i) {
+		$app->{'score'} += $score->{'score'};
+	    }
+	}
+    }
 }
 
 
@@ -670,6 +678,7 @@ sub parse_newsletter
 	    }
 
 	    $releases++;
+	    do_scoring(\%new_app);
 	    
 	    ### save a 'hot' entry
 	    
@@ -692,8 +701,11 @@ sub parse_newsletter
 		
 		$releases_new++;
 		$db_new++;
-		$database{$new_app{'project_id'}} = $timestamp;
-		$this_time_new{$new_app{'project_id'}} = $timestamp;
+		if ($new_app{'score'} >= $config{'SCORE_MIN'}) {
+		    # only add when not scored out
+		    $database{$new_app{'project_id'}} = $timestamp;
+		    $this_time_new{$new_app{'project_id'}} = $timestamp;
+		}
 		push @new_applications, { %new_app };
 	    
 	    }
@@ -891,7 +903,7 @@ EOF
 }
 
 
-########################[ close a "new" mail ]###############################
+##################[ format summary of a "new" mail ]#########################
 
 
 sub get_summary
@@ -958,7 +970,7 @@ EOF
     Your 'old' database now has $db_written entries.
 EOF
 	    
-    $summary .= "\n*" . "=" x 76 . "*\n";
+    $summary .= "\n$separator";
     
 
     return $summary
@@ -982,7 +994,7 @@ sub open_hot
     }
     print MAIL_HOT "X-Loop: sent by whatsnewfm.pl script\n";
     print MAIL_HOT "\n";
-    print MAIL_HOT "*" . "=" x 76 . "*\n";
+    print MAIL_HOT "$separator";
 }
 
 
@@ -998,7 +1010,7 @@ sub open_new
     print MAIL_NEW $subject;
     print MAIL_NEW "X-Loop: sent by whatsnewfm.pl daemon\n";
     print MAIL_NEW "\n";
-    print MAIL_NEW "*" . "=" x 76 . "*\n";
+    print MAIL_NEW "$separator";
 }
 
 
@@ -1008,8 +1020,6 @@ sub open_new
 sub read_config($)
 {
     my $config_file = $_[0];
-    my @allowed_keys = ("MAILTO", "DB_OLD", "DB_HOT", "EXPIRE", "DATE_CMD",
-			"MAIL_CMD", "UPDATE_MAIL", "SCORE_MIN", "SUMMARY_AT");
     my @scores = ();
     my @catscores = ();
 
@@ -1032,6 +1042,7 @@ sub read_config($)
 	    if (exists $config{$key}) {
 		warn "$0 warning:\n";
 		warn "duplicate keyword \"$key\" in configuration file at line $.\n";
+		push @cfg_warnings, "duplicate keyword \"$key\" at line $.";
 	    }
 	    if (defined $value) {
 		$key = uc $key;
@@ -1042,12 +1053,14 @@ sub read_config($)
 		    if ((! defined $regexp) or ($regexp eq "")) {
 			warn "$0 warning:\n";
 			warn "no REGEXP given in configuration file at line $.\n";
+			push @cfg_warnings, "no REGEXP given at line $.";
 		    }
 		    elsif ($score =~ /[+-]\d+/) {
 			push @scores, { 'score' => $score, 'regexp' => $regexp };
 		    } else {
 			warn "$0 warning:\n";
 			warn "SCORE value not numeric in configuration file at line $.\n";
+			push @cfg_warnings, "SCORE value not numeric at line $.";
 		    }
 		    
 		} elsif ($key eq "CATSCORE") {
@@ -1056,19 +1069,22 @@ sub read_config($)
 		    if ((! defined $regexp) or ($regexp eq "")) {
 			warn "$0 warning:\n";
 			warn "no REGEXP given in configuration file at line $.\n";
+			push @cfg_warnings, "no REGEXP given at line $.";
 		    }
 		    elsif ($score =~ /[+-]\d+/) {
 			push @catscores, { 'score' => $score, 'regexp' => $regexp };
 		    } else {
 			warn "$0 warning:\n";
 			warn "SCORE value not numeric in configuration file at line $.\n";
+			push @cfg_warnings, "SCORE value not numeric at line $.";
 		    }
 		    
-		} elsif (grep {/$key/} @allowed_keys) {
+		} elsif (grep {/$key/} @cfg_allowed_keys) {
 		    $config{$key} = $value;
 		} else {
 		    warn "$0 warning:\n";
 		    warn "unknown keyword \"$key\" in configuration file at line $.\n";
+		    push @cfg_warnings, "unknown keyword \"$key\" at line $.";
 		}
 	    } else {
 		warn "$0 fatal error:\n";
@@ -1080,21 +1096,35 @@ sub read_config($)
 
     close CONF or die "could not close configuration file \"$config_file\": $!";
 
+### is the config file complete?
+    foreach my $key (@cfg_allowed_keys) {
+	if (! exists $config{$key}) {
+	    if ( (grep { $_ eq $key } @cfg_optional_keys) == 0) {
+		warn "$0 fatal error:\n";
+		die  "keyword \"$key\" is missing in configuration file \"$config_file\"\n";
+	    } else {
+		warn "$0 warning:\n";
+		warn "using default value for \"$key\"\n";
+		push @cfg_warnings, "using default value for \"$key\"";
+	    }
+	}
+    }
+
 ### default values
     $config{'SUMMARY_AT'} = 'bottom' unless exists $config{'SUMMARY_AT'}
                                                 && $config{'SUMMARY_AT'} 
                                                 && lc($config{'SUMMARY_AT'}) eq 'top';
+    $config{'LIST_SKIPPED'} = 'no'   unless exists $config{'LIST_SKIPPED'}
+                                                && $config{'LIST_SKIPPED'} 
+                                                && (
+						    lc($config{'LIST_SKIPPED'}) eq 'top' ||
+						    lc($config{'LIST_SKIPPED'}) eq 'bottom'
+						    );
 
-### lowercase some value
+### lowercase some values
     $config{'SUMMARY_AT'} = lc $config{'SUMMARY_AT'};
+    $config{'LIST_SKIPPED'} = lc $config{'LIST_SKIPPED'};
 
-### is the config file complete?
-    foreach my $key (@allowed_keys) {
-	if (! exists $config{$key}) {
-	    warn "$0 fatal error:\n";
-	    die  "keyword \"$key\" is missing in configuration file \"$config_file\"\n";
-	}
-    }
 
 ### expand ~ to home directory
     $config{'DB_HOT'}   =~ s/^~/$ENV{'HOME'}/;
@@ -1182,7 +1212,7 @@ sub mail_hot_apps()
 	    print MAIL_HOT "your comment: $new_app{'comments'}\n";
 	}
 
-	print MAIL_HOT "\n*" . "=" x 76 . "*\n";
+	print MAIL_HOT "\n$separator";
 
 	if ($config{'UPDATE_MAIL'} ne "single") {
 	    close_hot();
@@ -1198,6 +1228,51 @@ sub mail_hot_apps()
 }
 
 
+###################[ format list of skipped items ]##########################
+
+
+sub get_skipped()
+{
+    my $skipped = "";
+
+    if (@skipped_items > 0) {
+
+	$warnings .= "\n These news items are not shown in this mail:\n\n";
+
+	foreach my $item (@skipped_items) {
+	    $warnings .= " *  $item\n";
+	}
+
+	$warnings .= "\n$separator";
+    }
+
+    return $skipped;
+}
+
+
+########[ format configuration file warnings for "new" mail ]################
+
+sub get_warnings()
+{
+    my $warnings = "";
+
+    if (@cfg_warnings > 0) {
+
+	$warnings .= "\n Your configuration file ~/.whatsnewfmrc "
+	    . "produced the following warnings:\n\n";
+
+	foreach my $warn (@cfg_warnings) {
+	    $warnings .= " *  $warn\n";
+	}
+
+	$warnings .= "\n Please see the whatsnewfm documentation "
+	    . "for details.\n\n$separator";
+    }
+
+    return $warnings;
+}
+
+
 ######################[ mail all 'new' entries ]#############################
 
 
@@ -1206,28 +1281,6 @@ sub mail_new_apps()
 
     my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, @new_applications) = @_;
     my %new_app;
-
-### do the scoring
-    foreach my $app (@new_applications) {
-
-	$app->{'score'} = 0;
-
-	if (defined $app->{'description'}) {
-	    foreach my $score ( @{$config{'SCORE'}}) {
-		if ($app->{'description'} =~ /$score->{'regexp'}/i) {
-		    $app->{'score'} += $score->{'score'};
-		}
-	    }
-	}
-
-	if (defined $app->{'category'}) {
-	    foreach my $score ( @{$config{'CATSCORE'}}) {
-		if ($app->{'category'} =~ /$score->{'regexp'}/i) {
-		    $app->{'score'} += $score->{'score'};
-		}
-	    }
-	}
-    }
 
 ### only keep applications with at least minimum score
     my $score_killed = @new_applications;
@@ -1243,12 +1296,26 @@ sub mail_new_apps()
     my $summary = get_summary($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
 
 
+### get warnings
+    my $warnings = get_warnings();
+
+
+### get skipped list
+    my $skipped = get_skipped();
+
+
 ### open mailer
     open_new($subject);
 
 
+### print warnings (if any)
+    print MAIL_NEW $warnings;
+
 ### print summary if you want it at the beggining
     print MAIL_NEW $summary if $config{'SUMMARY_AT'} eq 'top';
+
+### list skipped items if you want them at the beggining
+    print MAIL_NEW $skipped if $config{'LIST_SKIPPED'} eq 'top';
 
 
     while (@new_applications) {
@@ -1309,10 +1376,13 @@ sub mail_new_apps()
 	    print MAIL_NEW "       score: $new_app{'score'}\n";
 	}
 
-	print MAIL_NEW "\n*" . "=" x 76 . "*\n";
+	print MAIL_NEW "\n$separator";
 	     
     }
     
+### list skipped items if you want them at the bottom
+    print MAIL_NEW $skipped if $config{'LIST_SKIPPED'} eq 'bottom';
+
 ### print summary if you want it at the end
     print MAIL_NEW $summary if $config{'SUMMARY_AT'} eq 'bottom';
 
@@ -1320,3 +1390,42 @@ sub mail_new_apps()
 ### close mailer
     close MAIL_NEW or die "can't close mailer \"$config{'MAIL_CMD'}\": $!";
 }
+
+
+###########################[ main routine ]##################################
+
+
+if ($ARGV[0]) {
+
+    if ($ARGV[0] eq "add") {
+
+	shift @ARGV;
+	read_config($configfile);
+	add_entry(@ARGV);
+
+    } elsif ($ARGV[0] eq "del") {
+
+	shift @ARGV;
+	read_config($configfile);
+	remove_entry(@ARGV);
+
+    } elsif ($ARGV[0] eq "view") {
+
+	shift @ARGV;
+	read_config($configfile);
+	view_entries(@ARGV);
+
+    } else {
+
+	display_help();
+
+    }
+
+} else {
+
+    read_config($configfile);
+    parse_newsletter();
+
+}
+
+exit 0;

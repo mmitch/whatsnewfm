@@ -4,9 +4,9 @@
 my $id="whatsnewfm.pl  v0.2.6  2001-01-30";
 #   Filters the fresmeat newsletter for 'new' or 'interesting' entries.
 #   
-#   Copyright (C) 2000  Christian Garbs <mitch@uni.de>
-#                       Joerg Plate <Joerg@Plate.cx>
-#                       Dominik Brettnacher <dominik@brettnacher.org>
+#   Copyright (C) 2000,2001  Christian Garbs <mitch@uni.de>
+#                            Joerg Plate <Joerg@Plate.cx>
+#                            Dominik Brettnacher <dominik@brettnacher.org>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -79,7 +79,7 @@ my $id="whatsnewfm.pl  v0.2.6  2001-01-30";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.25 2001/01/30 22:10:16 mitch Exp $
+# $Id: whatsnewfm.pl,v 1.26 2001/01/30 22:12:47 mitch Exp $
 #
 #
 #############################################################################

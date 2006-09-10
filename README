@@ -1,4 +1,4 @@
-<<$Id: README,v 1.70 2004/04/13 15:14:18 mastermitch Exp $>>
+<<$Id: README,v 1.71 2006/09/10 21:27:54 mastermitch Exp $>>
 
 
 
@@ -11,12 +11,12 @@
 
 
 
-  whatsnewfm 0.6.5
+  whatsnewfm 0.6.6
   ~~~~~~~~~~~~~~~~
 
- 2004/04/13
+ 2006/09/10
 
- (c) 2000-2004 by Christian Garbs <mitch@cgarbs.de>
+ (c) 2000-2006 by Christian Garbs <mitch@cgarbs.de>
 
  Licensed under GNU GPL (see COPYING for details)
 
@@ -65,11 +65,10 @@ that you don't miss anything about your favourite programs.
   [2] Requirements
   ~~~~~~~~~~~~~~~~
 
-* procmail or something else (otherwise you will have to send every
-                              newsletter through the filter by hand)
+* procmail, maildrop or something else (otherwise you will have to
+  send every newsletter through the filter by hand)
 
-* perl, sendmail
-
+* perl, sendmail or sendmail-compatible mailer
 
 * BerkeleyDB Perl module
 
@@ -83,13 +82,21 @@ that you don't miss anything about your favourite programs.
 2) Copy the file "whatsnewfmrc.sample" to "~/.whatsnewfmrc" and edit
    it to your needs.  See [4] for details.
 
-3) Add the following lines to your .procmailrc to send all newsletters
-   through the whatsnewfm filter:
+3) Add the following lines to your ~/.procmailrc to send all
+   newsletters through the whatsnewfm filter:
 
 :0 w :
 * ^Subject:.\[fm-news\].newsletter
 * !^X-Loop:.*whatsnewfm
 | /path/to/whatsnewfm.pl
+
+   Alternatively, if you are using maildrop, you need to add something
+   like to in your ~/.mailfilter:
+
+if (/^Subject:.\[fm-news\].newsletter/ && !/^X-Loop:.*whatsnewfm/)
+{
+  xfilter "/path/to/whatsnewfm.pl"
+}
 
 4) Add whatsnewfm to your hot database: "whatsnewfm.pl add whatsnewfm"
 

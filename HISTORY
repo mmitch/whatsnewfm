@@ -1,10 +1,10 @@
-<<$Id: HISTORY,v 1.38 2006/09/10 21:27:54 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.39 2006/09/13 17:30:57 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
 
 
-2006/09/10  -  0.6.6
+2006/09/13  -  0.6.6
 ~~~~~~~~~~~~~~~~~~~~
 - Describe maildrop integration.
   (by Josip Rodin, see http://bugs.debian.org/385764)

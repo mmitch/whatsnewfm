@@ -1,4 +1,4 @@
-<<$Id: README,v 1.71 2006/09/10 21:27:54 mastermitch Exp $>>
+<<$Id: README,v 1.72 2006/09/13 17:30:57 mastermitch Exp $>>
 
 
 
@@ -14,7 +14,7 @@
   whatsnewfm 0.6.6
   ~~~~~~~~~~~~~~~~
 
- 2006/09/10
+ 2006/09/13
 
  (c) 2000-2006 by Christian Garbs <mitch@cgarbs.de>
 
@@ -91,7 +91,7 @@ that you don't miss anything about your favourite programs.
 | /path/to/whatsnewfm.pl
 
    Alternatively, if you are using maildrop, you need to add something
-   like to in your ~/.mailfilter:
+   like this to your ~/.mailfilter:
 
 if (/^Subject:.\[fm-news\].newsletter/ && !/^X-Loop:.*whatsnewfm/)
 {

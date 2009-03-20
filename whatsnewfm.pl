@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.97 2009/03/19 20:27:06 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.98 2009/03/20 22:19:11 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -203,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.97 2009/03/19 20:27:06 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.98 2009/03/20 22:19:11 mastermitch Exp $
 #
 #
 #############################################################################
@@ -653,8 +653,8 @@ sub parse_newsletter()
 	    # title
 	    while ((defined $line) and ($line !~ /^\[\d+\] /)) {
 		$line=<STDIN>;
-		next unless defined $line;
 	    }
+	    next unless defined $line;
 	    $line =~ s/^(\[\d+\]) //;
 	    $release_nr = $1;
 	    chomp $line;

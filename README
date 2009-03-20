@@ -1,4 +1,4 @@
-<<$Id: README,v 1.72 2006/09/13 17:30:57 mastermitch Exp $>>
+<<$Id: README,v 1.73 2009/03/20 22:08:20 mastermitch Exp $>>
 
 
 
@@ -86,14 +86,14 @@ that you don't miss anything about your favourite programs.
    newsletters through the whatsnewfm filter:
 
 :0 w :
-* ^Subject:.\[fm-news\].newsletter
+* ^Subject: freshmeat.net Daily Update:
 * !^X-Loop:.*whatsnewfm
 | /path/to/whatsnewfm.pl
 
    Alternatively, if you are using maildrop, you need to add something
    like this to your ~/.mailfilter:
 
-if (/^Subject:.\[fm-news\].newsletter/ && !/^X-Loop:.*whatsnewfm/)
+if (/^Subject: freshmeat.net Daily Update:/ && !/^X-Loop:.*whatsnewfm/)
 {
   xfilter "/path/to/whatsnewfm.pl"
 }

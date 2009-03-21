@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.98 2009/03/20 22:19:11 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.99 2009/03/21 09:00:25 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -32,6 +32,8 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # (v0.7.0)
 # 2009/03/19--> BUGFIX: Newsletter format has changed. 
 #		Now it works with the new FM3 Newsletter
+# TODO: -remove references to $articles (no articles in new newsletter?)
+#       -look for other things that are missing in the new newsletter
 #
 # v0.6.6
 # v0.6.5
@@ -203,7 +205,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.98 2009/03/20 22:19:11 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.99 2009/03/21 09:00:25 mastermitch Exp $
 #
 #
 #############################################################################

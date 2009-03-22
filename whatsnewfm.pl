@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.99 2009/03/21 09:00:25 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.100 2009/03/22 16:08:55 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -32,7 +32,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # (v0.7.0)
 # 2009/03/19--> BUGFIX: Newsletter format has changed. 
 #		Now it works with the new FM3 Newsletter
-# TODO: -remove references to $articles (no articles in new newsletter?)
+# TODO: 
 #       -look for other things that are missing in the new newsletter
 #
 # v0.6.6
@@ -205,7 +205,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.99 2009/03/21 09:00:25 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.100 2009/03/22 16:08:55 mastermitch Exp $
 #
 #
 #############################################################################
@@ -567,7 +567,6 @@ sub parse_newsletter()
     my $db_expired   = 0;
     my $db_new       = 0;
 
-    my $articles     = 0;
     my $releases     = 0;
     my $releases_new = 0;
 
@@ -829,7 +828,7 @@ sub parse_newsletter()
 ### send mails
 
     mail_hot_apps($hot_applications, $encoding);
-    mail_new_apps($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications, $encoding);
+    mail_new_apps($subject, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications, $encoding);
 
 }
 
@@ -928,27 +927,27 @@ EOF
 ##################[ format summary of a "new" mail ]#########################
 
 
-sub get_summary($$$$$$$$)
+sub get_summary($$$$$$$)
 {
-    my ($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
+    my ($releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
     my $already_seen=@{$skipped_already_seen};
     my $difference=$releases-$releases_new-$already_seen;
-    my $remaining=$releases_new+$articles-$score_killed;
+    my $remaining=$releases_new-$score_killed;
     my $summary = << "EOF";
 	
     This newsletter has been filtered by:
     $id
 
-    It contained $articles articles and $releases releases.
+    It contained $releases releases.
 EOF
     
     if ($releases > 1) {    # 1 release is not enough to ensure proper operation!
 
 	$summary .= << "EOF";
     $already_seen releases have been skipped as 'already seen'.
-    $score_killed articles or releases have been skipped as 'low score'.
-    $remaining articles and releases are shown in this mail,
+    $score_killed releases have been skipped as 'low score'.
+    $remaining releases are shown in this mail,
     while $difference releases have been sent separately as 'hot'.
 
 EOF
@@ -1314,9 +1313,9 @@ sub get_warnings()
 ######################[ mail all 'new' entries ]#############################
 
 
-sub mail_new_apps($$$$$$$$$$)
+sub mail_new_apps($$$$$$$$$)
 {
-    my ($subject, $articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications, $encoding) = @_;
+    my ($subject, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $new_applications, $encoding) = @_;
     my $new_app;
 
 ### only keep applications with at least minimum score
@@ -1331,7 +1330,7 @@ sub mail_new_apps($$$$$$$$$$)
 
 
 ### get summary
-    my $summary = get_summary($articles, $releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
+    my $summary = get_summary($releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
 
 
 ### get warnings

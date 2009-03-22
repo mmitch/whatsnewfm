@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.100 2009/03/22 16:08:55 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.101 2009/03/22 16:10:12 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -205,7 +205,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.100 2009/03/22 16:08:55 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.101 2009/03/22 16:10:12 mastermitch Exp $
 #
 #
 #############################################################################
@@ -556,10 +556,8 @@ sub parse_newsletter()
 
     my $subject      = "Subject: Freshmeat Newsletter (no subject?)\n";
     my $encoding     = '';
-    my $position     = 3;
-    # 3-> after mail header
-#    # 2-> within articles
-#    # 1-> after articles
+    my $position     = 1;
+    # 1-> after mail header
     # 0-> within releases
 
     my $hot_written  = 0;

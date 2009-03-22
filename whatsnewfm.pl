@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.101 2009/03/22 16:10:12 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.102 2009/03/22 16:14:44 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -32,8 +32,6 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # (v0.7.0)
 # 2009/03/19--> BUGFIX: Newsletter format has changed. 
 #		Now it works with the new FM3 Newsletter
-# TODO: 
-#       -look for other things that are missing in the new newsletter
 #
 # v0.6.6
 # v0.6.5
@@ -205,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.101 2009/03/22 16:10:12 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.102 2009/03/22 16:14:44 mastermitch Exp $
 #
 #
 #############################################################################
@@ -712,13 +710,14 @@ sub parse_newsletter()
 		$new_app->{'license'} = $line unless $line =~ /^\s*$/;
 		$line=<STDIN>;
 		next unless defined $line;
+
+		# empty line
+		while ((defined $line) and ($line =~ /^\s*$/)) {
+		    $line=<STDIN>;
+		}
+		next unless defined $line;
 	    }
 
-	    # empty line
-	    while ((defined $line) and ($line =~ /^\s*$/)) {
-		$line=<STDIN>;
-	    }
-	    next unless defined $line;
 
 	    # Category
 	    if ($line =~ /^Project Tags:/) {

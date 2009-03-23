@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.104 2009/03/23 21:02:05 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.105 2009/03/23 21:05:31 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -203,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.104 2009/03/23 21:02:05 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.105 2009/03/23 21:05:31 mastermitch Exp $
 #
 #
 #############################################################################
@@ -1238,13 +1238,9 @@ sub format_application($)
 sub mail_hot_apps($$)
 {
     my ($hot_applications, $encoding) = @_;
-    my $new_app;
     my $first_hot = 1;
 
-    while (@{$hot_applications}) {
-	
-	$new_app = pop @{$hot_applications};
-    
+    foreach my $new_app (@{$hot_applications}) {
 	
 	if ($first_hot == 1) {
 	    $first_hot=0;
@@ -1368,10 +1364,8 @@ sub mail_new_apps($$$$$$$$$)
     print MAIL_NEW $skipped if $config->{'LIST_SKIPPED'} eq 'top';
 
 
-    while (@{$new_applications}) {
-	
-	$new_app = pop @{$new_applications};
-	
+### print application entries
+    foreach my $new_app (@{$new_applications}) {
 	print MAIL_NEW format_application($new_app);
     }
     

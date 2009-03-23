@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.105 2009/03/23 21:05:31 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.106 2009/03/23 21:06:46 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -203,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.105 2009/03/23 21:05:31 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.106 2009/03/23 21:06:46 mastermitch Exp $
 #
 #
 #############################################################################
@@ -924,7 +924,7 @@ EOF
 ##################[ format summary of a "new" mail ]#########################
 
 
-sub get_summary($$$$$$$)
+sub format_summary($$$$$$$)
 {
     my ($releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed) = @_;
 
@@ -1266,7 +1266,7 @@ sub mail_hot_apps($$)
 ###################[ format list of skipped items ]##########################
 
 
-sub get_skipped()
+sub format_skipped()
 {
     my $skipped = "";
 
@@ -1298,7 +1298,7 @@ sub get_skipped()
 
 ########[ format configuration file warnings for "new" mail ]################
 
-sub get_warnings()
+sub format_warnings()
 {
     my $warnings = "";
 
@@ -1339,15 +1339,15 @@ sub mail_new_apps($$$$$$$$$)
 
 
 ### get summary
-    my $summary = get_summary($releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
+    my $summary = format_summary($releases, $releases_new, $hot_written, $db_new, $db_written, $db_expired, $score_killed);
 
 
 ### get warnings
-    my $warnings = get_warnings();
+    my $warnings = format_warnings();
 
 
 ### get skipped list
-    my $skipped = get_skipped();
+    my $skipped = format_skipped();
 
 
 ### open mailer

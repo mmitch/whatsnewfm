@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.103 2009/03/23 20:53:05 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.104 2009/03/23 21:02:05 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -203,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.103 2009/03/23 20:53:05 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.104 2009/03/23 21:02:05 mastermitch Exp $
 #
 #
 #############################################################################
@@ -1162,6 +1162,76 @@ sub read_config()
 }
 
 
+#####################[ format application entry ]############################
+
+
+sub format_application($)
+{
+    my ($app) = (@_);
+
+    my $text = '';
+
+    if (defined $app->{'subject'}) {
+	$text .= "\n   $app->{'subject'}\n\n";
+    }
+	
+    if (defined $app->{'description'}) {
+	$text .= "$app->{'description'}\n";
+    }
+	
+    if (defined $app->{'changes'}) {
+	$text .= "     changes:";
+	if (defined $app->{'urgency'}) {
+	    $text .= " ($app->{'urgency'} urgency)";
+	}
+	$text .= "\n$app->{'changes'}\n";
+    }
+    
+    if (defined $app->{'author'}) {
+	$text .= "    added by: $app->{'author'}\n";
+    }
+	
+    if (defined $app->{'category'}) {
+	my @categories = split /,/, $app->{'category'};
+	my $category = shift @categories;
+	$text .= "    category: $category\n";
+	foreach my $category ( @categories ) {
+	    $category =~ s/^\s+//;
+	    $text .= "              $category\n";
+	}
+    }
+	
+    if (defined $app->{'project_link'}) {
+	$text .= "project page: $app->{'project_link'}\n";
+    }
+
+    if (defined $app->{'newslink'}) {
+	$text .= "     details: $app->{'newslink'}\n";
+    }
+	
+    if (defined $app->{'date'}) {
+	$text .= "        date: $app->{'date'}\n";
+    }
+	
+    if (defined $app->{'license'}) {
+	$text .= "     license: $app->{'license'}\n";
+    }
+	
+    if (defined $app->{'project_id'}) {
+	$text .= "  project id: $app->{'project_id'}\n";
+    }
+
+    if (defined $app->{'comments'}) {
+	$text .= "your comment: $app->{'comments'}\n";
+    }
+
+    $text .= "\n$separator";
+
+    return $text;
+
+}
+
+
 ######################[ mail all 'hot' entries ]#############################
 
 
@@ -1180,63 +1250,9 @@ sub mail_hot_apps($$)
 	    $first_hot=0;
 	    open_hot_mail($new_app, $encoding);
 	}
-	
-	if (defined $new_app->{'subject'}) {
-	    print MAIL_HOT "\n   $new_app->{'subject'}\n\n";
-	}
-	
-	if (defined $new_app->{'description'}) {
-	    print MAIL_HOT "$new_app->{'description'}\n";
-	}
-	
-	if (defined $new_app->{'changes'}) {
-	    print MAIL_HOT "     changes:";
-	    if (defined $new_app->{'urgency'}) {
-		print MAIL_HOT " ($new_app->{'urgency'} urgency)";
-	    }
-	    print MAIL_HOT "\n$new_app->{'changes'}\n";
-	}
-	
-	if (defined $new_app->{'author'}) {
-	    print MAIL_HOT "    added by: $new_app->{'author'}\n";
-	}
-	
-	if (defined $new_app->{'category'}) {
-	    my @categories = split /,/, $new_app->{'category'};
-	    my $category = shift @categories;
-	    print MAIL_HOT "    category: $category\n";
-	    foreach my $category ( @categories ) {
-		$category =~ s/^\s+// ;
-		print MAIL_HOT "              $category\n";
-	    }
-	}
-	
-	if (defined $new_app->{'project_link'}) {
-	    print MAIL_HOT "project page: $new_app->{'project_link'}\n";
-	}
 
-	if (defined $new_app->{'newslink'}) {
-	    print MAIL_HOT "     details: $new_app->{'newslink'}\n";
-	}
+	print MAIL_HOT format_application($new_app);
 	
-	if (defined $new_app->{'date'}) {
-	    print MAIL_HOT "        date: $new_app->{'date'}\n";
-	}
-	
-	if (defined $new_app->{'license'}) {
-	    print MAIL_HOT "     license: $new_app->{'license'}\n";
-	}
-	
-	if (defined $new_app->{'project_id'}) {
-	    print MAIL_HOT "  project id: $new_app->{'project_id'}\n";
-	}
-
-	if (defined $new_app->{'comments'}) {
-	    print MAIL_HOT "your comment: $new_app->{'comments'}\n";
-	}
-
-	print MAIL_HOT "\n$separator";
-
 	if ($config->{'UPDATE_MAIL'} ne "single") {
 	    close_hot();
 	    $first_hot=1;
@@ -1356,65 +1372,7 @@ sub mail_new_apps($$$$$$$$$)
 	
 	$new_app = pop @{$new_applications};
 	
-	if (defined $new_app->{'subject'}) {
-	    print MAIL_NEW "\n   $new_app->{'subject'}\n\n";
-	}
-
-	if (defined $new_app->{'description'}) {
-	    print MAIL_NEW "$new_app->{'description'}\n";
-	}
-
-	if (defined $new_app->{'changes'}) {
-	    print MAIL_NEW "     changes:";
-	    if (defined $new_app->{'urgency'}) {
-		print MAIL_NEW " ($new_app->{'urgency'} urgency)";
-	    }
-	    print MAIL_NEW "\n$new_app->{'changes'}\n";
-	}
-
-	if (defined $new_app->{'author'}) {
-	    print MAIL_NEW "    added by: $new_app->{'author'}\n";
-	}
-
-
-	if (defined $new_app->{'category'}) {
-	    warn $new_app->{'category'};
-	    my @categories = split /,/, $new_app->{'category'};
-	    warn "@categories";
-	    my $category = shift @categories;
-	    print MAIL_NEW "    category: $category\n";
-	    foreach my $category ( @categories ) {
-		$category =~ s/^\s+// ;
-		print MAIL_NEW "              $category\n";
-	    }
-	}
-	
-	if (defined $new_app->{'project_link'}) {
-	    print MAIL_NEW "project page: $new_app->{'project_link'}\n";
-	}
-
-	if (defined $new_app->{'newslink'}) {
-	    print MAIL_NEW "   news item: $new_app->{'newslink'}\n";
-	}
-
-	if (defined $new_app->{'date'}) {
-	    print MAIL_NEW "        date: $new_app->{'date'}\n";
-	}
-	
-	if (defined $new_app->{'license'}) {
-	    print MAIL_NEW "     license: $new_app->{'license'}\n";
-	}
-	
-	if (defined $new_app->{'project_id'}) {
-	    print MAIL_NEW "  project id: $new_app->{'project_id'}\n";
-	}
-
-	if (defined $new_app->{'score'}) {
-	    print MAIL_NEW "       score: $new_app->{'score'}\n";
-	}
-
-	print MAIL_NEW "\n$separator";
-	     
+	print MAIL_NEW format_application($new_app);
     }
     
 ### list skipped items if you want them at the bottom

@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.107 2009/03/23 21:46:26 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.108 2009/03/23 21:52:38 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -203,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.107 2009/03/23 21:46:26 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.108 2009/03/23 21:52:38 mastermitch Exp $
 #
 #
 #############################################################################
@@ -729,6 +729,7 @@ sub parse_newsletter()
 		    chomp $line;
 		    $new_app->{'category'} .= "," . $line;
 		}
+		delete $new_app->{'category'} if $new_app->{'category'} eq '';
 		$line=<STDIN>;
 		next unless defined $line;
 

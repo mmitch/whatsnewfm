@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.108 2009/03/23 21:52:38 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.109 2009/03/23 22:03:33 mastermitch Exp $
 #############################################################################
 #
-my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
+my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2009  Christian Garbs <mitch@cgarbs.de>
@@ -11,6 +11,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
 #                            Matthew Gabeler-Lee <msg2@po.cwru.edu>
 #                            Bernd Rilling <brilling@ifsw.uni-stuttgart.de>
+#                            Jost Krieger <Jost.Krieger@ruhr-uni-bochum.de>
 #
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -30,6 +31,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 #############################################################################
 #
 # (v0.7.0)
+# 2009/03/23--> Add scoring of licenses via LICSCORE
 # 2009/03/19--> BUGFIX: Newsletter format has changed. 
 #		Now it works with the new FM3 Newsletter
 #
@@ -203,7 +205,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.108 2009/03/23 21:52:38 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.109 2009/03/23 22:03:33 mastermitch Exp $
 #
 #
 #############################################################################
@@ -450,6 +452,14 @@ sub do_scoring($)
     if (defined $app->{'category'}) {
 	foreach my $score ( @{$config->{'CATSCORE'}}) {
 	    if ($app->{'category'} =~ /$score->{'regexp'}/is) {
+		$app->{'score'} += $score->{'score'};
+	    }
+	}
+    }
+
+    if (defined $app->{'license'}) {
+	foreach my $score ( @{$config->{'LICSCORE'}}) {
+	    if ($app->{'license'} =~ /$score->{'regexp'}/is) {
 		$app->{'score'} += $score->{'score'};
 	    }
 	}
@@ -1082,6 +1092,7 @@ sub read_config()
     my $config_file = $config->{CONFIGFILE};
     my @scores = ();
     my @catscores = ();
+    my @licscores = ();
 
 ### look for config file
     $config_file =~ s/^~/$ENV{'HOME'}/;
@@ -1133,6 +1144,22 @@ sub read_config()
 		    }
 		    elsif ($score =~ /[+-]\d+/) {
 			push @catscores, { 'score' => $score, 'regexp' => $regexp };
+		    } else {
+			warn "$0 warning:\n";
+			warn "SCORE value not numeric in configuration file at line $.\n";
+			push @{$cfg_warnings}, "SCORE value not numeric at line $.";
+		    }
+		    
+		} elsif ($key eq "LICSCORE") {
+		    
+		    my ($score, $regexp) = split /\t/, $value, 2;
+		    if ((! defined $regexp) or ($regexp eq "")) {
+			warn "$0 warning:\n";
+			warn "no REGEXP given in configuration file at line $.\n";
+			push @{$cfg_warnings}, "no REGEXP given at line $.";
+		    }
+		    elsif ($score =~ /[+-]\d+/) {
+			push @licscores, { 'score' => $score, 'regexp' => $regexp };
 		    } else {
 			warn "$0 warning:\n";
 			warn "SCORE value not numeric in configuration file at line $.\n";
@@ -1194,6 +1221,7 @@ sub read_config()
 
     $config->{'SCORE'}    = \@scores;
     $config->{'CATSCORE'} = \@catscores;
+    $config->{'LICSCORE'} = \@licscores;
 
 }
 

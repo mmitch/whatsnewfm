@@ -1,4 +1,4 @@
-<<$Id: README,v 1.74 2009/03/21 08:57:29 mastermitch Exp $>>
+<<$Id: README,v 1.75 2009/03/23 22:03:33 mastermitch Exp $>>
 
 
 
@@ -168,6 +168,12 @@ You need to specify the following keywords:
   This works exactly like the SCORE keyword, except that not the
   release text but the Freshmeat Category fields are scored.
   Try "CATSCORE=+100<TAB>Editorial" to mark all editorial articles.
+
+* LICSCORE=<score> <TAB> <regexp>
+  This works exactly like the SCORE keyword, except that not the
+  release text but the Freshmeat License fields are scored.
+  Try "LICSCORE=-50<TAB>Proprietary" to score down all proprietary
+  software.
 
 * SCORE_MIN=-999
   Newsletter items with a score lower than this value will not be

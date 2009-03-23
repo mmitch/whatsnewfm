@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.102 2009/03/22 16:14:44 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.103 2009/03/23 20:53:05 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -203,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.102 2009/03/22 16:14:44 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.103 2009/03/23 20:53:05 mastermitch Exp $
 #
 #
 #############################################################################
@@ -706,7 +706,7 @@ sub parse_newsletter()
 	    # License
 	    if ($line =~ /^License:/) {
 		chomp $line;
-		$line =~ s/^License://;
+		$line =~ s/^License: //;
 		$new_app->{'license'} = $line unless $line =~ /^\s*$/;
 		$line=<STDIN>;
 		next unless defined $line;
@@ -1228,7 +1228,7 @@ sub mail_hot_apps($$)
 	}
 	
 	if (defined $new_app->{'project_id'}) {
-	    print MAIL_HOT "     project id: $new_app->{'project_id'}\n";
+	    print MAIL_HOT "  project id: $new_app->{'project_id'}\n";
 	}
 
 	if (defined $new_app->{'comments'}) {
@@ -1378,11 +1378,19 @@ sub mail_new_apps($$$$$$$$$)
 
 
 	if (defined $new_app->{'category'}) {
-	    print MAIL_NEW "     category: $new_app->{'category'}\n";
+	    warn $new_app->{'category'};
+	    my @categories = split /,/, $new_app->{'category'};
+	    warn "@categories";
+	    my $category = shift @categories;
+	    print MAIL_NEW "    category: $category\n";
+	    foreach my $category ( @categories ) {
+		$category =~ s/^\s+// ;
+		print MAIL_NEW "              $category\n";
+	    }
 	}
 	
 	if (defined $new_app->{'project_link'}) {
-	    print MAIL_NEW "     project page: $new_app->{'project_link'}\n";
+	    print MAIL_NEW "project page: $new_app->{'project_link'}\n";
 	}
 
 	if (defined $new_app->{'newslink'}) {
@@ -1398,11 +1406,11 @@ sub mail_new_apps($$$$$$$$$)
 	}
 	
 	if (defined $new_app->{'project_id'}) {
-	    print MAIL_NEW "     project id: $new_app->{'project_id'}\n";
+	    print MAIL_NEW "  project id: $new_app->{'project_id'}\n";
 	}
 
 	if (defined $new_app->{'score'}) {
-	    print MAIL_NEW "     score: $new_app->{'score'}\n";
+	    print MAIL_NEW "       score: $new_app->{'score'}\n";
 	}
 
 	print MAIL_NEW "\n$separator";

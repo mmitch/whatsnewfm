@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.106 2009/03/23 21:06:46 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.107 2009/03/23 21:46:26 mastermitch Exp $
 #############################################################################
 #
 my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
@@ -203,7 +203,7 @@ my $id="whatsnewfm.pl  v0.7.0beta  2009-03-19";
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.106 2009/03/23 21:06:46 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.107 2009/03/23 21:46:26 mastermitch Exp $
 #
 #
 #############################################################################
@@ -1038,6 +1038,41 @@ sub open_new_mail($$)
 }
 
 
+###########################[ fold a line ]##################################
+
+
+sub fold_line($$$$)
+{
+    my ($string, $max, $separator, $prefix) = (@_);
+    
+    my $ret = ''; 
+
+    while (length $string > $max) {
+        my $pos = $max;
+        while ($pos > 0) {
+            if ( substr($string, $pos, 1) eq $separator ) {
+                $ret .= substr($string, 0, $pos+1) . "\n" . $prefix;
+                $string = substr($string, $pos+1);
+                last;
+            }
+            $pos--;
+        }  
+        if ($pos == 0) {
+          $pos = index($string, $separator);
+          if ( $pos > 0) {
+                $ret .= substr($string, 0, $pos+1) . "\n" . $prefix;
+                $string = substr($string, $pos+1);
+          } else {
+            last;
+            }
+        }
+    }
+     
+    return $ret . $string;
+
+}
+
+
 ###################[ read the configuration file ]###########################
 
 
@@ -1192,13 +1227,7 @@ sub format_application($)
     }
 	
     if (defined $app->{'category'}) {
-	my @categories = split /,/, $app->{'category'};
-	my $category = shift @categories;
-	$text .= "    category: $category\n";
-	foreach my $category ( @categories ) {
-	    $category =~ s/^\s+//;
-	    $text .= "              $category\n";
-	}
+	$text .= "    category: " . fold_line($app->{'category'}, 57, ',', '             ') . "\n";
     }
 	
     if (defined $app->{'project_link'}) {

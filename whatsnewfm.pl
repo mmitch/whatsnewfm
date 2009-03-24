@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.110 2009/03/24 18:26:31 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.111 2009/03/24 18:26:58 mastermitch Exp $
 #############################################################################
 #
 my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
@@ -205,7 +205,7 @@ my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.110 2009/03/24 18:26:31 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.111 2009/03/24 18:26:58 mastermitch Exp $
 #
 #
 #############################################################################
@@ -1400,7 +1400,7 @@ sub mail_new_apps($$$$$$$$$)
 
 
 ### sort by score
-    $new_applications = [ sort { $a->{'score'} <=> $b->{'score'} } @{$new_applications} ];
+    $new_applications = [ sort { $b->{'score'} <=> $a->{'score'} } @{$new_applications} ];
 
 
 ### get summary

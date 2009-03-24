@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.109 2009/03/23 22:03:33 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.110 2009/03/24 18:26:31 mastermitch Exp $
 #############################################################################
 #
 my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
@@ -205,7 +205,7 @@ my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.109 2009/03/23 22:03:33 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.110 2009/03/24 18:26:31 mastermitch Exp $
 #
 #
 #############################################################################
@@ -1279,9 +1279,13 @@ sub format_application($)
 	$text .= "  project id: $app->{'project_id'}\n";
     }
 
+    if (defined $app->{'score'}) {
+	$text .= "       score: $app->{'score'}\n";
+    }
+
     if (defined $app->{'comments'}) {
 	$text .= "your comment: $app->{'comments'}\n";
-    }
+    }                                                                                                                                                                   
 
     $text .= "\n$separator";
 
@@ -1304,6 +1308,9 @@ sub mail_hot_apps($$)
 	    $first_hot=0;
 	    open_hot_mail($new_app, $encoding);
 	}
+
+	# don't show a score on hot entries
+	delete $new_app->{'score'};
 
 	print MAIL_HOT format_application($new_app);
 	

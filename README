@@ -1,4 +1,4 @@
-<<$Id: README,v 1.77 2009/03/26 21:13:20 mastermitch Exp $>>
+<<$Id: README,v 1.78 2009/03/26 21:19:38 mastermitch Exp $>>
 
 
 
@@ -339,6 +339,17 @@ it with the pod2* commands.  For example:
 
   [9] Thanks
   ~~~~~~~~~~
+
+* Again many thanks to everybody who informed me when the newsletter
+  format changed again in March 2009.  As I lost my newsletter
+  subscription during the Freshmeat relaunch, I really didn't notice
+  myself.
+
+* Bernd Rilling sent a patch for the newletter format mentioned above
+  (sourceforge bug #2691997, fixed in v0.7.0).
+
+* Jost Krieger sent a patch to score the license of releases
+  (included in v0.7.0).
 
 * Dave Woolaway suggested the use of multiline regexp matches for
   scoring (sourceforge feature request #930403, included in v0.6.5).

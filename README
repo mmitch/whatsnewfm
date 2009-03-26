@@ -1,13 +1,19 @@
-<<$Id: README,v 1.76 2009/03/26 21:04:02 mastermitch Exp $>>
+<<$Id: README,v 1.77 2009/03/26 21:13:20 mastermitch Exp $>>
 
 
 
-  whatsnewfm 0.6.6
+  whatsnewfm 0.7.0
   ~~~~~~~~~~~~~~~~
 
- 2006/09/13
+ 2009/03/26
 
- (c) 2000-2006 by Christian Garbs <mitch@cgarbs.de>
+ (c) 2000-2009 by Christian Garbs <mitch@cgarbs.de>
+                  Joerg Plate <Joerg@Plate.cx>
+                  Dominik Brettnacher <dominik@brettnacher.org>
+                  Pedro Melo Cunha <melo@isp.novis.pt>
+                  Matthew Gabeler-Lee <msg2@po.cwru.edu>
+                  Bernd Rilling <brilling@ifsw.uni-stuttgart.de>
+                  Jost Krieger <Jost.Krieger@ruhr-uni-bochum.de>
 
  Licensed under GNU GPL (see COPYING for details)
 

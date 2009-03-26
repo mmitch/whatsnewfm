@@ -1,4 +1,4 @@
-<<$Id: README,v 1.75 2009/03/23 22:03:33 mastermitch Exp $>>
+<<$Id: README,v 1.76 2009/03/26 21:04:02 mastermitch Exp $>>
 
 
 
@@ -92,9 +92,9 @@ if (/^Subject: freshmeat.net Daily Update:/ && !/^X-Loop:.*whatsnewfm/)
 4) Add whatsnewfm to your hot database: "whatsnewfm.pl add whatsnewfm"
 
 5) Check your setup by mailing the file "welcome" to yourself with
-   "[fm-news] newsletter TEST" as subject:
+   "freshmeat.net Daily Update: TEST" as subject:
 
-     mail -s "[fm-news] newsletter TEST" your@email < welcome
+     mail -s "freshmeat.net Daily Update: TEST" your@email < welcome
 
    You should then receive an update information for the whatsnewfm
    application.  This is good.  Otherwise, there is an error in your

@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# $Id: whatsnewfm.pl,v 1.111 2009/03/24 18:26:58 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.112 2009/03/26 20:55:14 mastermitch Exp $
 #############################################################################
 #
-my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
+my $id='whatsnewfm.pl  v0.7.0  2009-03-26';
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2009  Christian Garbs <mitch@cgarbs.de>
@@ -30,10 +30,9 @@ my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
 #
 #############################################################################
 #
-# (v0.7.0)
-# 2009/03/23--> Add scoring of licenses via LICSCORE
-# 2009/03/19--> BUGFIX: Newsletter format has changed. 
-#		Now it works with the new FM3 Newsletter
+# v0.7.0
+# 2009/03/23--> Add scoring of licenses via LICSCORE.
+# 2009/03/19--> BUGFIX: Support the new Newsletter format of FM3
 #
 # v0.6.6
 # v0.6.5
@@ -205,7 +204,7 @@ my $id='whatsnewfm.pl  v0.7.0beta  2009-03-23';
 # 2000/07/06--> first piece of code
 #
 #
-# $Id: whatsnewfm.pl,v 1.111 2009/03/24 18:26:58 mastermitch Exp $
+# $Id: whatsnewfm.pl,v 1.112 2009/03/26 20:55:14 mastermitch Exp $
 #
 #
 #############################################################################

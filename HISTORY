@@ -1,7 +1,16 @@
-<<$Id: HISTORY,v 1.39 2006/09/13 17:30:57 mastermitch Exp $>>
+<<$Id: HISTORY,v 1.40 2009/03/26 21:11:59 mastermitch Exp $>>
 
 
 whatsnewfm HISTORY
+
+
+2009/03/26  -  0.7.0
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: support the new newsletter format of the FM3 relaunch.
+  (patch by by Bernd Rilling)
+- Releases can be scored by license, see the LICSCORE parameter.
+  (patch by Jost Krieger)
+
 
 
 2006/09/13  -  0.6.6
@@ -45,8 +54,8 @@ whatsnewfm HISTORY
 
 2003/01/11  -  0.6.1
 ~~~~~~~~~~~~~~~~~~~~
-- BUGFIX:  Number of projects added to the old database shown in the
-           newsletter statistics was wrong.
+- BUGFIX: Number of projects added to the old database shown in the
+          newsletter statistics was wrong.
 
 
 
@@ -65,7 +74,7 @@ whatsnewfm HISTORY
 
 2002/12/04  -  0.5.2
 ~~~~~~~~~~~~~~~~~~~~
-- BUGFIX:  v0.5.2 didn't run at all.
+- BUGFIX: v0.5.2 didn't run at all.
 
 
 

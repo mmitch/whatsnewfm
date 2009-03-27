@@ -1,0 +1,22 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: switch issue/bug tracker
+desc: move issue and bug tracker from Sourceforge to ditz in cgarbs.de
+type: :task
+component: whatsnewfm
+release: 
+reporter: Christian Garbs <mitch@cgarbs.de>
+status: :in_progress
+disposition: 
+creation_time: 2009-03-27 23:42:34.043899 Z
+references: []
+
+id: 65fabd50c4543c5180b2dedfb8f7d8e31ee498df
+log_events: 
+- - 2009-03-27 23:42:36.566892 Z
+  - Christian Garbs <mitch@cgarbs.de>
+  - created
+  - ""
+- - 2009-03-27 23:42:55.543775 Z
+  - Christian Garbs <mitch@cgarbs.de>
+  - changed status from unstarted to in_progress
+  - ""

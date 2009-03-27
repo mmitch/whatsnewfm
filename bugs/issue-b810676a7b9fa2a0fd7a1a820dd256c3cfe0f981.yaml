@@ -1,0 +1,18 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: switch from CVS to git
+desc: move away from Sourceforge CVS to git on cgarbs.de
+type: :task
+component: whatsnewfm
+release: 
+reporter: Christian Garbs <mitch@cgarbs.de>
+status: :unstarted
+disposition: 
+creation_time: 2009-03-27 23:41:07.148752 Z
+references: []
+
+id: b810676a7b9fa2a0fd7a1a820dd256c3cfe0f981
+log_events: 
+- - 2009-03-27 23:41:08.248144 Z
+  - Christian Garbs <mitch@cgarbs.de>
+  - created
+  - ""

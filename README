@@ -309,7 +309,6 @@ print "$count old projects imported.\n";
 
 
 
-
   [7] Manpage
   ~~~~~~~~~~~
 
@@ -329,9 +328,13 @@ it with the pod2* commands.  For example:
   locations:
 
   http://www.cgarbs.de/whatsnewfm.en.html
-  http://sourceforge.net/projects/whatsnewfm/
   http://whatsnewfm.sourceforge.net/
-  http://home.t-online.de/home/dietmar.garbs/download/whatsnewfm/
+
+* Unreleased development versions are available from the git
+  repository:
+
+  web:    http://www.cgarbs.de/cgi-bin/gitweb.cgi/whatsnewfm.git
+  clone:  http://www.cgarbs.de/git/whatsnewfm.git
 
 
 

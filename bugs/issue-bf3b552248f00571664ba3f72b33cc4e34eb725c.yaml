@@ -1,0 +1,22 @@
+--- !ditz.rubyforge.org,2008-03-06/issue 
+title: clarify copyright
+desc: whatsnewfm.pl contains "GPL v2 or later", while README does not mention the version.  Clarify the README.
+type: :task
+component: whatsnewfm
+release: 0.7.1
+reporter: Christian Garbs <mitch@cgarbs.de>
+status: :unstarted
+disposition: 
+creation_time: 2009-03-29 08:53:22.957686 Z
+references: []
+
+id: bf3b552248f00571664ba3f72b33cc4e34eb725c
+log_events: 
+- - 2009-03-29 08:53:26.239923 Z
+  - Christian Garbs <mitch@cgarbs.de>
+  - created
+  - ""
+- - 2009-03-29 08:54:01.296156 Z
+  - Christian Garbs <mitch@cgarbs.de>
+  - assigned to release 0.7.1 from unassigned
+  - ""

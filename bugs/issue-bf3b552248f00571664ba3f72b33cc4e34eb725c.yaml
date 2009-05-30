@@ -3,7 +3,7 @@ title: clarify copyright
 desc: whatsnewfm.pl contains "GPL v2 or later", while README does not mention the version.  Clarify the README.
 type: :task
 component: whatsnewfm
-release: 0.7.1
+release: 0.7.2
 reporter: Christian Garbs <mitch@cgarbs.de>
 status: :unstarted
 disposition: 
@@ -19,4 +19,8 @@ log_events:
 - - 2009-03-29 08:54:01.296156 Z
   - Christian Garbs <mitch@cgarbs.de>
   - assigned to release 0.7.1 from unassigned
+  - ""
+- - 2009-05-30 19:40:35.329591 Z
+  - Christian Garbs <mitch@cgarbs.de>
+  - assigned to release 0.7.2 from 0.7.1
   - ""

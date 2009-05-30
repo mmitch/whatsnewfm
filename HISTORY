@@ -3,6 +3,12 @@
 whatsnewfm HISTORY
 
 
+2009/05/30  -  0.7.1
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Newsletter format has changed.
+
+
+
 2009/03/26  -  0.7.0
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: support the new newsletter format of the FM3 relaunch.

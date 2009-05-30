@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id='whatsnewfm.pl  v0.7.0  2009-03-26';
+my $id='whatsnewfm.pl  v0.7.1  2009-05-30';
 #   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2009  Christian Garbs <mitch@cgarbs.de>
@@ -28,6 +28,9 @@ my $id='whatsnewfm.pl  v0.7.0  2009-03-26';
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 #############################################################################
+#
+# v0.7.1
+# 2009/05/30--> BUGFIX: Newsletter format has changed.
 #
 # v0.7.0
 # 2009/03/23--> Add scoring of licenses via LICSCORE.
@@ -663,9 +666,10 @@ sub parse_newsletter()
 	    $line =~ s/^(\[\d+\]) //;
 	    $release_nr = $1;
 	    chomp $line;
+
 	    $new_app->{'subject'} = $line;
 	    $line=<STDIN>;
-	    while ((defined $line) and ($line !~ /^\s/)) {
+	    while ((defined $line) and ($line !~ /^\s*$/)) {
 		# multiline subject field!
 		chomp $line;
 		$new_app->{'subject'} .= ' ' . $line;
@@ -673,102 +677,65 @@ sub parse_newsletter()
 	    }
 	    next unless defined $line;
 	    
-	    # empty line
-	    while ((defined $line) and ($line =~ /^\s*$/)) {
-		$line=<STDIN>;
-	    }
-	    next unless defined $line;
 
-	    # about
-	    if ($line =~ /^Description:/) {
-		$line=<STDIN>;
-		$new_app->{'description'} = $line;
-		while ($line=<STDIN>) {
-		    last if $line =~ /^\s*$/;
-		    $new_app->{'description'} .= $line;
+
+	    ### body: general tag-based parser ahead:
+
+	    my %tags = ();
+	    my $tag = undef;
+	    my $text = '';
+
+	    # read
+	    while ($line = <STDIN>) {
+		# skip empty lines
+		next if $line =~ /^\s*$/;     
+	      
+		# check for new tag
+		if ($line =~ /^(Changes|Description|License|Project Tags|Release Tags):\s*(.*)$/) {
+		    # save old tag
+		    $tags{$tag} = $text if defined $tag;
+		    # start new tag
+		    $tag = $1;
+		    $text = defined $2 ? $2 : '';
 		}
-	    }
 
-	    # empty line
-	    while ((defined $line) and ($line =~ /^\s*$/)) {
-		$line=<STDIN>;
-	    }
-	    next unless defined $line;
-
-	    # changes
-	    if ($line =~ /^Changes:/) {
-		$line=<STDIN>;
-		$new_app->{'changes'} = $line;
-		while ($line=<STDIN>) {
-		    last if $line =~ /^\s*$/;
-		    $new_app->{'changes'} .= $line;
-		}
-	    }
-
-	    # empty line
-	    while ((defined $line) and ($line =~ /^\s*$/)) {
-		$line=<STDIN>;
-	    }
-	    next unless defined $line;
-
-	    # License
-	    if ($line =~ /^License:/) {
-		chomp $line;
-		$line =~ s/^License: //;
-		$new_app->{'license'} = $line unless $line =~ /^\s*$/;
-		$line=<STDIN>;
-		next unless defined $line;
-
-		# empty line
-		while ((defined $line) and ($line =~ /^\s*$/)) {
-		    $line=<STDIN>;
-		}
-		next unless defined $line;
-	    }
-
-
-	    # Category
-	    if ($line =~ /^Project Tags:/) {
-		chomp $line;
-		$line =~ s/^Project Tags: //;
-		$new_app->{'category'} = $line;
-		while ($line=<STDIN>) {
-		    last if (($line =~ /^\s*$/) || ($line =~ /Release Tags:/)) ;
+		# check for project url (last tag)
+		elsif ($line =~ m!^http://freshmeat.net/projects/(.+)$!) {
+		    # save old tag
+		    $tags{$tag} = $text if defined $tag;
+		    # save url
 		    chomp $line;
-		    $new_app->{'category'} .= "," . $line;
+		    $tags{'URL'} = $line;
+		    # save project id
+		    $tags{'ID'} = $1;
+		    # and break the loop
+		    last;
 		}
+
+		# or just save the line
+		else {
+		    $text .= $line;
+		}
+	    }
+
+	    # map known tags to new_app hash
+	    $new_app->{'changes'} = $tags{'Changes'};
+	    $new_app->{'description'} = $tags{'Description'};
+	    $new_app->{'license'} = $tags{'License'};
+	    $new_app->{'project_id'} = $tags{'ID'};
+	    $new_app->{'project_link'} = $tags{'URL'};
+	    # unused: $tags{'Release Tags'};
+
+	    if (defined $tags{'Project Tags'}) {
+		$new_app->{'category'} = $tags{'Project Tags'};
+		$new_app->{'category'} =~ s/\n/,/g;
 		delete $new_app->{'category'} if $new_app->{'category'} eq '';
-		$line=<STDIN>;
-		next unless defined $line;
-
-		# empty line
-		while ((defined $line) and ($line =~ /^\s*$/)) {
-		    $line=<STDIN>;
-		}
-		next unless defined $line;
 	    }
 
-	    if ($line =~ /^Release Tags:/) {
-		chomp $line;
-		next unless defined $line;
 
-		# empty line
-		while ((defined $line) and ($line =~ /^\s*$/)) {
-		    $line=<STDIN>;
-		}
-		next unless defined $line;
-	    }
 
-	    # URL
-	    if ($line =~ /^http:/) {
-		chomp $line;
-		$new_app->{'project_link'} = $line;
-		$line =~ s!/$!!;
-		$line =~ s!^http://freshmeat.net/projects/!!;
-		$new_app->{'project_id'} = $line;
-		$line=<STDIN>;
-		next unless defined $line;
-	    }
+
+	    ### count it and do the scoring
 
 	    $releases++;
 	    do_scoring($new_app);

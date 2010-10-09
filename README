@@ -345,11 +345,12 @@ it with the pod2* commands.  For example:
 * Unreleased development versions are available from the git
   repository:
 
-  web:    http://www.cgarbs.de/cgi-bin/gitweb.cgi/whatsnewfm.git
-  clone:  http://www.cgarbs.de/git/whatsnewfm.git
+  web:    http://github.com/mmitch/whatsnewfm
+  clone:  git://github.com/mmitch/whatsnewfm.git
 
-* The issue tracker should also be mentioned:
+* Issue tracking is currently switchen over from ditz to github:
 
+  http://github.com/mmitch/whatsnewfm/issues
   http://www.cgarbs.de/ditz/whatsnewfm/
 
 

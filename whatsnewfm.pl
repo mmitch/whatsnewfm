@@ -2,7 +2,7 @@
 #############################################################################
 #
 my $id='whatsnewfm.pl  v0.7.1  2009-05-30';
-#   Filters the freshmeat newsletter for 'new' or 'interesting' entries.
+#   Filters the freecode newsletter for 'new' or 'interesting' entries.
 #   
 #   Copyright (C) 2000-2009  Christian Garbs <mitch@cgarbs.de>
 #                            Joerg Plate <Joerg@Plate.cx>
@@ -219,7 +219,7 @@ my $id='whatsnewfm.pl  v0.7.1  2009-05-30';
 
 =head1 NAME
 
-whatsnewfm - filter the daily newsletter from freshmeat.net
+whatsnewfm - filter the daily newsletter from freecode.com
 
 =head1 SYNOPSIS
 
@@ -234,7 +234,7 @@ B<whatsnewfm.pl> [ B<-c> F<config file> ] B<del> [ I<project id> ] [ I<project i
 =head1 DESCRIPTION
 
 whatsnewfm is a utility to filter the daily newsletter from
-freshmeat.net
+freecode.com
 
 The main purpose is to cut the huge newsletter to a smaller size by
 only showing items that you didn't see before.
@@ -563,7 +563,7 @@ sub parse_newsletter()
     my $interesting;
     my $this_time_new;
 
-    my $subject      = "Subject: Freshmeat Newsletter (no subject?)\n";
+    my $subject      = "Subject: Freecode Newsletter (no subject?)\n";
     my $encoding     = '';
     my $position     = 1;
     # 1-> after mail header
@@ -700,7 +700,7 @@ sub parse_newsletter()
 		}
 
 		# check for project url (last tag)
-		elsif ($line =~ m!^http://freshmeat.net/projects/(.+)$!) {
+		elsif ($line =~ m!^http://freecode.com/projects/(.+)$!) {
 		    # save old tag
 		    $tags{$tag} = $text if defined $tag;
 		    # save url

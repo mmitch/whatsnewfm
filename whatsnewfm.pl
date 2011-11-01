@@ -343,9 +343,8 @@ $config->{CONFIGFILE} = "~/.whatsnewfmrc";
 
 # information
 my $whatsnewfm_homepages = [ "http://www.cgarbs.de/whatsnewfm.en.html" ,
-			     "http://www.h.shuttle.de/mitch/whatsnewfm.en.html",
-			     "http://sourceforge.net/projects/whatsnewfm/",
-			     "http://whatsnewfm.sourceforge.net/" ];
+			     "http://github.com/mmitch/whatsnewfm",
+			     "http://sourceforge.net/projects/whatsnewfm/" ];
 my $whatsnewfm_author = "Christian Garbs <mitch\@cgarbs.de>";
 
 # configuration file

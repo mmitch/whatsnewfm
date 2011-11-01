@@ -13,20 +13,20 @@ Congratulations!
 
 Changes:
 whatsnewfm.pl and your .procmailrc have been installed properly.
-Once you have subscribed to the freshmeat newsletter, you will be
+Once you have subscribed to the freecode newsletter, you will be
 informed of any updates concerning whatsnewfm.
 Don't forget to add whatsnewfm to your 'hot' database!
 
 License: GPL
 
-http://freshmeat.net/projects/whatsnewfm/
+http://freecode.com/projects/whatsnewfm/
 
 ========================================================================
 
 [002] whatsnewfm (2nd Welcome message)
 
 Description:
-This is a second welcome message because a freshmeat newsletter
+This is a second welcome message because a freecode newsletter
 with less than two releases is considered broken and will bring up an
 error message.
 
@@ -35,12 +35,12 @@ none :-)
 
 License: GPL
 
-http://freshmeat.net/projects/whatsnewfm/
+http://freecode.com/projects/whatsnewfm/
 
 ========================================================================
 
 Today's news on the web:
-http://freshmeat.net/today
+http://freecode.com/today
 
 Change your subscription:
-http://freshmeat.net/account/edit
+http://freecode.com/account/edit

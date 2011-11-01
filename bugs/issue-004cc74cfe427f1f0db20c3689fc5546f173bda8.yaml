@@ -5,7 +5,7 @@ desc: |-
   based on an idea in the patch at https://sourceforge.net/tracker/index.php?func=detail&aid=2797110&group_id=68034&atid=519822
 type: :feature
 component: whatsnewfm
-release: 0.7.2
+release: 0.7.3
 reporter: Christian Garbs <mitch@cgarbs.de>
 status: :unstarted
 disposition: 
@@ -17,4 +17,8 @@ log_events:
 - - 2009-05-30 20:34:12.951670 Z
   - Christian Garbs <mitch@cgarbs.de>
   - created
+  - ""
+- - 2011-11-01 12:04:37.044256 Z
+  - Christian Garbs <mitch@cgarbs.de>
+  - assigned to release 0.7.3 from 0.7.2
   - ""

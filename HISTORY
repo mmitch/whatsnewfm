@@ -3,6 +3,13 @@
 whatsnewfm HISTORY
 
 
+2011/11/01  -  0.7.2
+~~~~~~~~~~~~~~~~~~~~
+- BUGFIX: Newsletter format has changed:
+          Freshmeat has become Freecode.
+
+
+
 2009/05/30  -  0.7.1
 ~~~~~~~~~~~~~~~~~~~~
 - BUGFIX: Newsletter format has changed.

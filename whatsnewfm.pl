@@ -1,16 +1,17 @@
 #!/usr/bin/perl -w
 #############################################################################
 #
-my $id='whatsnewfm.pl  v0.7.1  2009-05-30';
+my $id='whatsnewfm.pl  v0.7.2  2011-11-01';
 #   Filters the freecode newsletter for 'new' or 'interesting' entries.
 #   
-#   Copyright (C) 2000-2009  Christian Garbs <mitch@cgarbs.de>
+#   Copyright (C) 2000-2011  Christian Garbs <mitch@cgarbs.de>
 #                            Joerg Plate <Joerg@Plate.cx>
 #                            Dominik Brettnacher <dominik@brettnacher.org>
 #                            Pedro Melo Cunha <melo@isp.novis.pt>
 #                            Matthew Gabeler-Lee <msg2@po.cwru.edu>
 #                            Bernd Rilling <brilling@ifsw.uni-stuttgart.de>
 #                            Jost Krieger <Jost.Krieger@ruhr-uni-bochum.de>
+#                            Francois Marier <francois@debian.org>
 #
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -28,6 +29,10 @@ my $id='whatsnewfm.pl  v0.7.1  2009-05-30';
 #   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 #############################################################################
+#
+# v0.7.2
+# 2011/11/01--> BUGFIX: Newsletter format has changed:
+#                       Freshmeat has become Freecode.
 #
 # v0.7.1
 # 2009/05/30--> BUGFIX: Newsletter format has changed.

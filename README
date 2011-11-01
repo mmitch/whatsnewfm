@@ -1,17 +1,18 @@
 
 
-  whatsnewfm 0.7.1
+  whatsnewfm 0.7.2
   ~~~~~~~~~~~~~~~~
 
- 2009/05/30
+ 2011/11/01
 
- (c) 2000-2009 by Christian Garbs <mitch@cgarbs.de>
+ (c) 2000-2011 by Christian Garbs <mitch@cgarbs.de>
                   Joerg Plate <Joerg@Plate.cx>
                   Dominik Brettnacher <dominik@brettnacher.org>
                   Pedro Melo Cunha <melo@isp.novis.pt>
                   Matthew Gabeler-Lee <msg2@po.cwru.edu>
                   Bernd Rilling <brilling@ifsw.uni-stuttgart.de>
                   Jost Krieger <Jost.Krieger@ruhr-uni-bochum.de>
+                  Francois Marier <francois@debian.org>
 
  Licensed under GNU GPL (see COPYING for details)
 
@@ -348,7 +349,7 @@ it with the pod2* commands.  For example:
   web:    http://github.com/mmitch/whatsnewfm
   clone:  git://github.com/mmitch/whatsnewfm.git
 
-* Issue tracking is currently switchen over from ditz to github:
+* Issue tracking is currently moving from ditz to github:
 
   http://github.com/mmitch/whatsnewfm/issues
   http://www.cgarbs.de/ditz/whatsnewfm/
@@ -358,6 +359,10 @@ it with the pod2* commands.  For example:
   [10] Thanks
   ~~~~~~~~~~~
 
+* Francois Marier identified the renaming of Freshmeat to Freecode and
+  provided a patch at https://github.com/mmitch/whatsnewfm/pull/1
+  (fixed in v0.7.2).
+ 
 * Again many thanks to everybody who informed me when the newsletter
   format changed again in March 2009.  As I lost my newsletter
   subscription during the Freshmeat relaunch, I really didn't notice
